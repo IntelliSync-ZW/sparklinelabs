@@ -91,7 +91,7 @@ export function Products() {
         <div className="text-center">
           <Button
             variant="outline"
-            className="group text-base bg-transparent px-8 py-6"
+            className="group text-base bg-transparent border-accent hover:bg-accent px-8 py-6"
             asChild
           >
             <Link href="/products">

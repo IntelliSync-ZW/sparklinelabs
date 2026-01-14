@@ -52,7 +52,7 @@ export function Header() {
             >
               Process
             </Link>
-            <Button className="ml-4">Start a Project</Button>
+            <Button className="ml-4 bg-accent text-accent-foreground hover:bg-accent/90">Start a Project</Button>
           </div>
 
           {/* Mobile Menu Button */}

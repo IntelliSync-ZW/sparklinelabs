@@ -58,7 +58,7 @@ export function WhySparkline() {
                   }`}
                 >
                   <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
-                    <reason.icon className="w-5 h-5" />
+                    <reason.icon className="size-5 stroke-accent" />
                   </div>
                   <h3 className="text-lg md:text-xl font-medium mb-2">
                     {reason.title}

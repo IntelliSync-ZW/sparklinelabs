@@ -20,7 +20,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="text-base px-8 py-6 group">
+            <Button size="lg" className="text-base px-8 py-6 group bg-accent text-accent-foreground hover:bg-accent/90">
               Start a Project
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
