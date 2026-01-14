@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const products = [
   {
-    name: "FlowSync",
-    tagline: "Automate your repetitive tasks",
-    description: "Connect apps. Save hours weekly.",
+    name: "propertyzone",
+    tagline: "List, manage and discover properties",
+    description: "Connect buyers, renters and landlords in one platform.",
     color: "bg-neutral-100",
     textColor: "text-neutral-900",
     image: "/workflow-automation-dashboard-clean-minimal-light.jpg",

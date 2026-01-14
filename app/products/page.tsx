@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, Zap, BarChart3, Rocket } from "lucide-react";
+import { ArrowRight, Check, Zap, BarChart3, Rocket, Home } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "workflow automation",
     "analytics dashboard",
     "MVP toolkit",
-    "FlowSync",
+    "propertyzone",
     "DataPulse",
     "LaunchKit",
   ],
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: "Our Products | Sparkline Labs",
     description:
       "SaaS tools we built and run. Automate workflows, gain insights, and launch faster.",
-    url: "https://sparklinelabs.com/products",
+    url: "https://sparklinelabs.co.zw/products",
     type: "website",
     images: [
       {
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     images: ["/og-products.jpg"],
   },
   alternates: {
-    canonical: "https://sparklinelabs.com/products",
+    canonical: "https://sparklinelabs.co.zw/products",
   },
   robots: {
     index: true,
@@ -49,24 +49,24 @@ export const metadata: Metadata = {
 
 const products = [
   {
-    id: "flowsync",
-    name: "FlowSync",
-    tagline: "Automate your repetitive tasks",
-    description:
-      "Stop wasting hours on manual work. FlowSync connects your apps and automates workflows so you can focus on what matters.",
-    icon: Zap,
-    color: "bg-neutral-100",
-    textColor: "text-neutral-900",
-    image: "/workflow-automation-dashboard-clean-minimal-light.jpg",
-    features: [
-      "Connect 200+ apps instantly",
-      "Visual workflow builder",
-      "Real-time sync & triggers",
-      "Custom logic & conditions",
-    ],
-    cta: "Start Automating",
-    href: "#",
-  },
+  id: "propertyzone",
+  name: "propertyzone",
+  tagline: "Only serious property buyers and renters",
+  description:
+    "propertyzone connects verified buyers, renters, agents, and sellers in one focused marketplace — built to surface real intent, not empty enquiries.",
+  icon: Home,
+  color: "bg-neutral-100",
+  textColor: "text-neutral-900",
+  image: "/workflow-automation-dashboard-clean-minimal-light.jpg",
+  features: [
+    "Intent-based enquiries (buy, rent, invest)",
+    "Verified buyer & renter profiles",
+    "Direct agent–client messaging",
+    "Lead qualification & engagement tracking",
+  ],
+  cta: "Explore Properties",
+  href: "https://propzone.co.zw",
+},
   {
     id: "datapulse",
     name: "DataPulse",
