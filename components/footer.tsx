@@ -33,19 +33,19 @@ export function Footer() {
             <div className="flex items-center gap-6 text-base text-muted-foreground">
               <Link
                 href={getLink("#services")}
-                className="hover:text-foreground transition-colors"
+                className="hover:text-accent transition-colors"
               >
                 Services
               </Link>
               <Link
                 href="/products"
-                className="hover:text-foreground transition-colors"
+                className="hover:text-accent transition-colors"
               >
                 Products
               </Link>
               <Link
                 href={getLink("#process")}
-                className="hover:text-foreground transition-colors"
+                className="hover:text-accent transition-colors"
               >
                 Process
               </Link>
@@ -55,7 +55,7 @@ export function Footer() {
           <div className="flex items-center gap-6 text-base text-muted-foreground">
             <Link
               href="mailto:hello@sparklinelabs.com"
-              className="hover:text-foreground transition-colors"
+              className="hover:text-accent transition-colors"
             >
               hello@sparklinelabs.com
             </Link>

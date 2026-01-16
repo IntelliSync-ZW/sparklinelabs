@@ -272,7 +272,7 @@ export default function ProductsPage() {
             <Button
               size="lg"
               variant="outline"
-              className="group text-base px-8 bg-transparent border-background text-background hover:bg-background hover:text-foreground"
+              className="group text-base px-8 bg-transparent border-accent text-background hover:bg-accent"
               asChild
             >
               <Link href="/#services">
@@ -282,7 +282,7 @@ export default function ProductsPage() {
             </Button>
             <Button
               size="lg"
-              className="group text-base px-8 bg-background text-foreground hover:bg-background/90"
+              className="group text-base px-8 bg-accent text-accent-foreground hover:bg-accent/90"
             >
               Start a Project
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

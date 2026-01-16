@@ -41,7 +41,7 @@ export function Services() {
           {services.map((service, index) => (
             <div
               key={index}
-              className={`group relative ${service.color} rounded-2xl min-h-[380px] flex flex-col overflow-hidden transition-transform hover:-translate-y-1`}
+              className={`group relative ${service.color} hover:border-accent rounded-2xl min-h-[380px] flex flex-col overflow-hidden transition-transform hover:-translate-y-1`}
             >
               <div className="relative z-10 p-6 pb-0">
                 <h3
