@@ -96,7 +96,7 @@ export default function ProductsPage() {
           <div className="flex items-center gap-2 mb-4">
             <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600">
               <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-              Live - launched 2025
+              Live - launched 2026
             </span>
           </div>
 

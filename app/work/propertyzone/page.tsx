@@ -107,7 +107,7 @@ export default function PropertyzoneCaseStudy() {
             </h2>
             <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
               <p>
-                By late 2024, the two dominant property portals in Zimbabwe had
+                By late 2025, the two dominant property portals in Zimbabwe had
                 captured most of the listing inventory but were optimised for
                 impressions, not intent. Agents got dozens of enquiries a day,
                 most of them from people who weren&apos;t actually buying or
@@ -146,7 +146,7 @@ export default function PropertyzoneCaseStudy() {
             </h2>
             <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
               <p>
-                Propertyzone shipped to production in 2025. The core
+                Propertyzone shipped to production in late February 2026. The core
                 components:
               </p>
 
@@ -254,8 +254,8 @@ export default function PropertyzoneCaseStudy() {
                   value:
                     "Sparkline Labs founders (product strategy + frontend, backend infrastructure, financial and legal)",
                 },
-                { label: "Started", value: "2024" },
-                { label: "Live", value: "2025" },
+                { label: "Started", value: "2025" },
+                { label: "Live", value: "2026" },
               ].map((item) => (
                 <div key={item.label}>
                   <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-1">
