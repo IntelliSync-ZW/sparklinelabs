@@ -49,11 +49,11 @@ export const metadata: Metadata = {
       "We build custom software for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design. We built Propertyzone.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Sparkline Labs - Custom software for African businesses",
-        type: "image/jpeg",
+        type: "image/png",
       },
     ],
   },
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     title: "Sparkline Labs - Custom software for African businesses",
     description:
       "Custom software for Zimbabwean and African businesses. Outcome-tied pricing. We built Propertyzone.",
-    images: ["/og-image.jpg"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,

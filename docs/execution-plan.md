@@ -824,11 +824,11 @@ export const metadata: Metadata = {
       "We build custom software for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design. We built Propertyzone.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Sparkline Labs — Custom software for African businesses",
-        type: "image/jpeg",
+        type: "image/png",
       },
     ],
   },
@@ -837,7 +837,7 @@ export const metadata: Metadata = {
     title: "Sparkline Labs — Custom software for African businesses",
     description:
       "Custom software for Zimbabwean and African businesses. Outcome-tied pricing. We built Propertyzone.",
-    images: ["/og-image.jpg"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -1266,7 +1266,7 @@ Referenced in the copy and metadata but don't exist in the repo today. Generate 
 
 | Path | Purpose | Spec |
 |------|---------|------|
-| `/og-image.jpg` | Site-wide OG | 1200×630, brand colours, Sparkline lockup, tagline |
+| `/og-image.png` | Site-wide OG | 1200×630, brand colours, Sparkline lockup, tagline |
 | `/og-products.jpg` | Products page OG | 1200×630, "Products" treatment |
 | `/og-propertyzone-case-study.jpg` | Case study OG | 1200×630, Propertyzone screenshot composite |
 | `/og-blog-default.jpg` | Blog index + post fallback | 1200×630, "Notes" treatment |
