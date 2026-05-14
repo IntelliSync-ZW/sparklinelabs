@@ -11,7 +11,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sparklinelabs.co.zw"),
+  metadataBase: new URL("https://www.sparklinelabs.co.zw"),
   title: {
     default: "Sparkline Labs - Custom software for African businesses",
     template: "%s | Sparkline Labs",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     "Propertyzone",
     "Sparkline Labs",
   ],
-  authors: [{ name: "Sparkline Labs", url: "https://sparklinelabs.co.zw" }],
+  authors: [{ name: "Sparkline Labs", url: "https://www.sparklinelabs.co.zw" }],
   creator: "Sparkline Labs",
   publisher: "Sparkline Labs",
   category: "Technology",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_ZW",
-    url: "https://sparklinelabs.co.zw",
+    url: "https://www.sparklinelabs.co.zw",
     siteName: "Sparkline Labs",
     title: "Sparkline Labs - Custom software for African businesses",
     description:
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://sparklinelabs.co.zw",
+    canonical: "https://www.sparklinelabs.co.zw",
   },
   manifest: "/manifest.json",
   icons: {
@@ -103,28 +103,46 @@ export const viewport: Viewport = {
   colorScheme: "light dark",
 };
 
-const organizationSchema = {
+const linkedSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Sparkline Labs",
-  url: "https://sparklinelabs.co.zw",
-  logo: "https://sparklinelabs.co.zw/icon.svg",
-  foundingDate: "2024",
-  description:
-    "We build custom software, internal tools, and SaaS products for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design.",
-  contactPoint: [
+  "@graph": [
     {
-      "@type": "ContactPoint",
-      contactType: "sales",
-      email: "sales@sparklinelabs.co.zw",
-      availableLanguage: ["English"],
+      "@type": "WebSite",
+      "@id": "https://sparklinelabs.co.zw/#website",
+      "url": "https://sparklinelabs.co.zw",
+      "name": "Sparkline Labs", // This is the trigger for the Site Name
+      "publisher": {
+        "@id": "https://sparklinelabs.co.zw/#organization"
+      },
+      "alternateName": ["Sparkline"], // Optional: Helps Google understand shorthand
     },
-  ],
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Harare",
-    addressCountry: "ZW",
-  },
+    {
+      "@type": "Organization",
+      "@id": "https://sparklinelabs.co.zw/#organization",
+      "name": "Sparkline Labs",
+      "url": "https://sparklinelabs.co.zw",
+      "logo": "https://sparklinelabs.co.zw/icon.svg",
+      "foundingDate": "2024",
+      "description": "We build custom software, internal tools, and SaaS products for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design.",
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "email": "sales@sparklinelabs.co.zw",
+          "availableLanguage": ["English"],
+        },
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Harare",
+        "addressCountry": "ZW",
+      },
+      // Add social links here if you have them for the agency
+      "sameAs": [
+        "https://www.linkedin.com/company/sparklinelabszw", 
+      ],
+    }
+  ]
 };
 
 export default function RootLayout({
@@ -138,7 +156,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
+            __html: JSON.stringify(linkedSchema),
           }}
         />
       </head>
