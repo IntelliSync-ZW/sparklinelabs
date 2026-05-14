@@ -30,7 +30,7 @@ const propertyZoneFeatures = [
   "Verified buyer and renter profiles, reducing time-waster enquiries.",
   "Direct agent-client messaging routed to WhatsApp.",
   "Lead qualification and engagement tracking dashboards.",
-  "Suburb-level content depth (Pamusha) with neighbourhood reviews, school proximity, security info, and a growing real estate glossary.",
+  "Suburb-level content depth with neighbourhood reviews, school proximity, security info, and a growing real estate glossary.",
   "SEO-optimised listing pages with JSON-LD, OG image generation, and structured data for buy/rent intent.",
 ];
 
@@ -48,7 +48,7 @@ const productsSchema = {
           "A property listing and lead management platform connecting verified buyers, renters, agents, and landlords in Zimbabwe.",
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
-        url: "https://propzone.co.zw",
+        url: "https://www.propzone.co.zw/en/",
       },
     },
   ],
@@ -104,7 +104,7 @@ export default function ProductsPage() {
             Propertyzone
           </h2>
           <a
-            href="https://propzone.co.zw"
+            href="https://www.propzone.co.zw/en/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-lg text-muted-foreground hover:text-accent transition-colors underline underline-offset-4 block mb-4"
@@ -160,7 +160,7 @@ export default function ProductsPage() {
               asChild
             >
               <a
-                href="https://propzone.co.zw"
+                href="https://www.propzone.co.zw/en/"
                 target="_blank"
                 rel="noopener noreferrer"
               >

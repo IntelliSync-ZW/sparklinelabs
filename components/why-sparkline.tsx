@@ -40,7 +40,7 @@ export function WhySparkline() {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] mb-6">
               We built{" "}
               <a
-                href="https://propzone.co.zw"
+                href="https://www.propzone.co.zw/en/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline underline-offset-4"
@@ -54,7 +54,7 @@ export function WhySparkline() {
               deliverable for a fixed price, on a fixed timeline. That&apos;s
               the same commercial model we use for{" "}
               <a
-                href="https://propzone.co.zw"
+                href="https://www.propzone.co.zw/en/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline underline-offset-2"

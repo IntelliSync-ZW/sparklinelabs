@@ -58,7 +58,7 @@ const articleSchema = {
   about: {
     "@type": "SoftwareApplication",
     name: "Propertyzone",
-    url: "https://propzone.co.zw",
+    url: "https://www.propzone.co.zw/en/",
     applicationCategory: "BusinessApplication",
   },
 };
@@ -146,11 +146,8 @@ export default function PropertyzoneCaseStudy() {
             </h2>
             <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
               <p>
-                Propertyzone shipped to production in 2025, built on Next.js App
-                Router, TypeScript, Tailwind CSS, shadcn/ui, Clerk for auth, and
-                React Hook Form plus Zod for form handling. The full stack is
-                deliberately boring and operator-friendly: no exotic frameworks,
-                no fragile dependencies, easy to extend.
+                Propertyzone shipped to production in 2025. The core
+                components:
               </p>
 
               <div className="space-y-6 mt-6">
@@ -168,16 +165,16 @@ export default function PropertyzoneCaseStudy() {
                     body: "Every direct enquiry routes to the agent's WhatsApp with the listing reference, intent tag, and qualification data already in the message. The agent never has to ask \"which property?\" on their first reply.",
                   },
                   {
-                    title: "Where to Live (Pamusha)",
-                    body: "Suburb-level content depth: neighbourhood reviews covering security, schools, water reliability, ZESA reliability, distance to CBD, and amenities. Plus an 80-plus term Zimbabwe real estate glossary with alphabet navigation, JSON-LD structured data, and client-side search. This is the SEO content moat.",
+                    title: "Where to Live",
+                    body: "Suburb-level content depth: neighbourhood reviews covering security, schools, water reliability, ZESA reliability, distance to CBD, and amenities. Plus an 80-plus term Zimbabwe real estate glossary with alphabet navigation, JSON-LD structured data, and client-side search.",
                   },
                   {
                     title: "Performance",
-                    body: "The mobile PageSpeed score moved meaningfully across both the listings and property detail pages. LCP optimisation on the hero, Cloudflare caching, GTM lazy-loading, dynamic imports on everything below the fold.",
+                    body: "The mobile PageSpeed score moved meaningfully across both the listings and property detail pages. LCP optimisation on the hero, caching, lazy-loading, and dynamic imports on everything below the fold.",
                   },
                   {
-                    title: "Outcome-tied commercials",
-                    body: "Agencies don't pay a monthly fee. They pay for verified leads, or they get a \"free until 10 verified leads\" runway during onboarding. The pricing matches the value.",
+                    title: "Pricing model",
+                    body: "The first 10 agencies on the platform receive 10 free verified leads. After that, pricing is volume-based. All active Agent Accounts have equal access to the platform's professional toolset, analytics, and security features regardless of plan size. We do not sell premium placement packages: we sell listing capacity. Ranking is earned through Quality Score. Listings with high-resolution imagery, comprehensive descriptions, and verified utility data (borehole yield, solar capacity, ZESA reliability) naturally outrank incomplete listings. Purchasing higher volume plans does not bypass this quality requirement. The integrity of data provided to buyers is the product.",
                   },
                 ].map((item) => (
                   <div key={item.title}>
@@ -205,11 +202,10 @@ export default function PropertyzoneCaseStudy() {
               </ul>
               <p>
                 What we learned: agencies don&apos;t sign up to portals, they
-                get onboarded by humans. The &ldquo;free until 10 verified
-                leads&rdquo; model works only when paired with manual listing
-                upload on the agency&apos;s behalf during weeks 1 and 2. The
-                friction of &ldquo;publish your listings yourself&rdquo; is what
-                kills most onboarding.
+                get onboarded by humans. The onboarding model works only when
+                paired with manual listing upload on the agency&apos;s behalf
+                during weeks 1 and 2. The friction of &ldquo;publish your
+                listings yourself&rdquo; is what kills most onboarding.
               </p>
             </div>
           </section>
@@ -234,7 +230,7 @@ export default function PropertyzoneCaseStudy() {
               <p>
                 Propertyzone is live and accepting agency partners now. Visit{" "}
                 <a
-                  href="https://propzone.co.zw"
+                  href="https://www.propzone.co.zw/en/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-4 text-foreground"
@@ -253,11 +249,6 @@ export default function PropertyzoneCaseStudy() {
             </h2>
             <div className="grid sm:grid-cols-2 gap-6 text-base">
               {[
-                {
-                  label: "Stack",
-                  value:
-                    "Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui, Clerk, React Hook Form, Zod, Sanity, pnpm, Vercel + Cloudflare",
-                },
                 {
                   label: "Team",
                   value:

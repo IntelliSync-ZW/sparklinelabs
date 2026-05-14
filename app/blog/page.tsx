@@ -57,7 +57,7 @@ export default async function BlogPage() {
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
             What we&apos;ve learned shipping{" "}
             <a
-              href="https://propzone.co.zw"
+              href="https://www.propzone.co.zw/en/"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4"

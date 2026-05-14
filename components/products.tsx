@@ -64,7 +64,7 @@ export function Products() {
               "Intent-tagged listings (buy / rent / invest)",
               "Verified buyer and renter profiles",
               "Direct WhatsApp-routed enquiries",
-              "Suburb-level content depth (Pamusha)",
+              "Suburb-level content depth with neighbourhood reviews",
             ].map((feature) => (
               <li key={feature} className="flex items-center gap-2 text-base">
                 <span className="w-1.5 h-1.5 rounded-full bg-foreground flex-shrink-0" />
@@ -79,7 +79,7 @@ export function Products() {
               asChild
             >
               <a
-                href="https://propzone.co.zw"
+                href="https://www.propzone.co.zw/en/"
                 target="_blank"
                 rel="noopener noreferrer"
               >

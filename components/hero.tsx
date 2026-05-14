@@ -42,7 +42,7 @@ export function Hero() {
               asChild
             >
               <a
-                href="https://propzone.co.zw"
+                href="https://www.propzone.co.zw/en/"
                 target="_blank"
                 rel="noopener noreferrer"
               >

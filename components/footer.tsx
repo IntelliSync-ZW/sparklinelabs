@@ -81,7 +81,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} Sparkline Labs. All rights reserved.
           </span>
           <a
-            href="https://propzone.co.zw"
+            href="https://www.propzone.co.zw/en/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-accent transition-colors"
