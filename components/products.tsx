@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { WHATSAPP_NUMBER, WHATSAPP_BETA_MESSAGE } from "@/lib/config";
+import Image from "next/image";
 
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_BETA_MESSAGE}`;
 
@@ -39,7 +40,8 @@ export function Products() {
         </div>
 
         {/* Featured product */}
-        <div className="bg-background border border-border rounded-2xl p-8 md:p-10 mb-10">
+        <div className="bg-background border border-border flex flex-col md:flex-row gap-4 rounded-2xl p-8 md:p-10 mb-10">
+          <div>
           <div className="flex items-center gap-2 mb-4">
             <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600">
               <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
@@ -91,6 +93,14 @@ export function Products() {
               <Link href="/work/propertyzone">Read the case study</Link>
             </Button>
           </div>
+          </div>
+            <Image
+              src="/propertyzone.png"
+              loading="lazy"
+              width={720}
+              height={500}
+              className="rounded-lg w-full my-auto aspect-video"
+             />
         </div>
 
         {/* Divider */}
