@@ -46,14 +46,14 @@ export function Services() {
               key={index}
               className={`group relative ${service.color} hover:border-accent rounded-2xl min-h-[380px] flex flex-col overflow-hidden transition-transform hover:-translate-y-1`}
             >
-              <div className="relative z-10 p-6 pb-0 bg-background/50">
+              <div className="relative h-full z-10 p-6 pb-0 bg-background/80">
                 <h3
                   className={`text-xl md:text-2xl font-medium mb-2 ${service.textColor}`}
                 >
                   {service.title}
                 </h3>
                 <p
-                  className={`text-base ${service.textColor} opacity-80 leading-relaxed`}
+                  className={`text-base ${service.textColor} opacity-90 leading-relaxed`}
                 >
                   {service.description}
                 </p>
