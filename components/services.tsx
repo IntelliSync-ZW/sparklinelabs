@@ -21,8 +21,8 @@ const services = [
     title: "Technical strategy",
     description:
       "Stuck between vendor pitches and engineering quotes? We deliver architecture, a roadmap, and a build proposal: flat fee, two-week turnaround.",
-    color: "bg-neutral-800/60",
-    textColor: "text-neutral-800",
+    color: "bg-neutral-800/80",
+    textColor: "text-neutral-100",
     image: "/whiteboard-planning-strategy-minimal.jpg",
   },
 ];
