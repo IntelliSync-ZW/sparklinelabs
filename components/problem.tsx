@@ -10,11 +10,19 @@ export function Problem() {
               The reality
             </p>
             <h2 className="text-4xl md:text-5xl font-semibold tracking-tight leading-tight mb-6 text-balance">
-              Great ideas deserve great execution
+              Most software sold into Zimbabwe doesn&apos;t fit Zimbabwe.
             </h2>
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-4">
+              Foreign SaaS breaks on local payment rails, assumes 24/7 power,
+              and prices in currencies your customers don&apos;t hold. Local
+              builds often ship without a roadmap and stall after launch,
+              leaving you with code nobody can extend.
+            </p>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              You need software that delivers. Not promises. Not delays. Just
-              results that move your business forward.
+              We build for the conditions that actually exist on the ground: USD
+              pricing, WhatsApp as a primary channel, offline-tolerant flows,
+              and operators who need to run the system manually before it ever
+              sees automation.
             </p>
           </div>
 

@@ -1,32 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import { WHATSAPP_NUMBER, WHATSAPP_BETA_MESSAGE } from "@/lib/config";
+import Image from "next/image";
 
-const products = [
+const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_BETA_MESSAGE}`;
+
+const inDevelopment = [
   {
-    name: "propertyzone",
-    tagline: "List, manage and discover properties",
-    description: "Connect buyers, renters and landlords in one platform.",
-    color: "bg-neutral-100",
-    textColor: "text-neutral-900",
-    image: "/workflow-automation-dashboard-clean-minimal-light.jpg",
+    pill: "Private beta · Q2 2026",
+    pillColor: "text-amber-600",
+    name: "Agency CRM",
+    description:
+      "A CRM built around how Zimbabwean agencies actually work: WhatsApp-first lead handling, USD/ZWL dual pricing, manual-first workflows that agents can run before automating.",
   },
   {
-    name: "DataPulse",
-    tagline: "Analytics that make sense",
-    description: "See insights. Act fast.",
-    color: "bg-neutral-900",
-    textColor: "text-white",
-    image: "/analytics-dashboard-charts-minimal-dark-theme.jpg",
-  },
-  {
-    name: "LaunchKit",
-    tagline: "Ship MVPs in weeks, not months",
-    description: "Pre-built modules. Rapid deployment.",
-    color: "bg-neutral-200",
-    textColor: "text-neutral-900",
-    image: "/startup-dashboard-launch-progress-clean-interface.jpg",
+    pill: "In design · Q3 2026",
+    pillColor: "text-muted-foreground",
+    name: "WhatsApp Lead Router",
+    description:
+      "A routing layer that takes inbound WhatsApp enquiries from Propertyzone (and any portal that adds it) and assigns them to agents based on suburb, listing ref, and response SLA.",
   },
 ];
 
@@ -39,63 +32,116 @@ export function Products() {
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
-            Our Products
+            What we&apos;ve built
           </p>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance mb-6">
-            SaaS tools we built and run
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
+            One product live. More on the way.
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            We create products that solve real problems.
+        </div>
+
+        {/* Featured product */}
+        <div className="bg-background border border-border flex flex-col md:flex-row gap-4 rounded-2xl p-8 md:p-10 mb-10">
+          <div>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600">
+              <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+              Live
+            </span>
+          </div>
+
+          <h3 className="text-3xl md:text-4xl font-semibold tracking-tight mb-2">
+            Propertyzone
+          </h3>
+          <p className="text-lg text-muted-foreground mb-4">
+            Zimbabwe&apos;s intent-first property platform
           </p>
-        </div>
+          <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mb-6">
+            A property listing and lead management platform for verified buyers,
+            renters, agents, and landlords. Built around intent, not just
+            impressions.
+          </p>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {products.map((product, index) => (
-            <div
-              key={index}
-              className={`group relative ${product.color} rounded-2xl min-h-[420px] flex flex-col overflow-hidden transition-transform hover:-translate-y-1`}
+          <ul className="space-y-2 mb-8">
+            {[
+              "Intent-tagged listings (buy / rent / invest)",
+              "Verified buyer and renter profiles",
+              "Direct WhatsApp-routed enquiries",
+              "Suburb-level content depth with neighbourhood reviews",
+            ].map((feature) => (
+              <li key={feature} className="flex items-center gap-2 text-base">
+                <span className="w-1.5 h-1.5 rounded-full bg-foreground flex-shrink-0" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex flex-wrap gap-4">
+            <Button
+              className="group bg-accent text-accent-foreground hover:bg-accent/90"
+              asChild
             >
-              <div className="relative z-10 p-6 pb-0">
-                <p
-                  className={`text-sm uppercase tracking-widest ${product.textColor} opacity-60 mb-2`}
-                >
-                  {product.name}
-                </p>
-                <h3
-                  className={`text-xl md:text-2xl font-medium mb-2 ${product.textColor}`}
-                >
-                  {product.tagline}
-                </h3>
-                <p
-                  className={`text-base ${product.textColor} opacity-80 leading-relaxed`}
-                >
-                  {product.description}
-                </p>
-              </div>
-
-              <div className="relative flex-1 mt-auto pt-8">
-                <div className="absolute bottom-0 left-4 right-4 translate-y-6 rounded-t-lg overflow-hidden shadow-2xl">
-                  <Image
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    width={400}
-                    height={300}
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
+              <a
+                href="https://www.propzone.co.zw/en/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Visit propzone.co.zw
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </a>
+            </Button>
+            <Button variant="outline" className="bg-transparent" asChild>
+              <Link href="/work/propertyzone">Read the case study</Link>
+            </Button>
+          </div>
+          </div>
+            <Image
+              src="/propertyzone.png"
+              loading="lazy"
+              width={720}
+              height={500}
+              alt="Propertyzone Preview Image"
+              className="rounded-lg w-full my-auto aspect-video"
+             />
         </div>
 
-        <div className="text-center">
+        {/* Divider */}
+        <div className="border-t border-border mb-10" />
+
+        {/* In development */}
+        <div className="mb-8">
+          <h3 className="text-xl font-medium text-muted-foreground mb-6 uppercase tracking-widest text-sm">
+            Currently in development
+          </h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {inDevelopment.map((item, index) => (
+              <div
+                key={index}
+                className="border border-border rounded-xl p-6"
+              >
+                <span className={`text-sm font-medium ${item.pillColor} mb-3 block`}>
+                  {item.pill}
+                </span>
+                <h4 className="text-xl font-semibold mb-2">{item.name}</h4>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="text-sm text-muted-foreground text-center">
+          We ship one product to live status before announcing the next. No vapourware.
+        </p>
+
+        <div className="text-center mt-8">
           <Button
             variant="outline"
             className="group text-base bg-transparent border-accent hover:bg-accent px-8 py-6"
             asChild
           >
             <Link href="/products">
-              View All Products
+              See all products
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
