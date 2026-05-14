@@ -5,7 +5,7 @@ const services = [
     title: "Custom platforms",
     description:
       "End-to-end web platforms and internal tools. Built on Next.js, TypeScript, and the same stack that runs Propertyzone in production.",
-    color: "bg-neutral-900",
+    color: "bg-neutral-900/70",
     textColor: "text-white",
     image: "/minimal-code-editor-dark-theme-interface.jpg",
   },
@@ -13,16 +13,16 @@ const services = [
     title: "Integrations and automation",
     description:
       "WhatsApp, Paynow, EcoCash, Google Workspace, your CRM, your sheets. We wire the workflows already running your business so they stop running on copy-paste.",
-    color: "bg-neutral-900",
-    textColor: "text-white",
+    color: "bg-neutral-200/80",
+    textColor: "text-neutral-900",
     image: "/connected-systems-flowchart-minimal-diagram.jpg",
   },
   {
     title: "Technical strategy",
     description:
       "Stuck between vendor pitches and engineering quotes? We deliver architecture, a roadmap, and a build proposal: flat fee, two-week turnaround.",
-    color: "bg-neutral-800",
-    textColor: "text-white",
+    color: "bg-neutral-800/60",
+    textColor: "text-neutral-800",
     image: "/whiteboard-planning-strategy-minimal.jpg",
   },
 ];
@@ -42,11 +42,22 @@ export function Services() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {services.map((service, index) => (
+            <div key={index} className="group relative relative rounded-2xl min-h-[380px]  overflow-hidden">
+              <div className="relative flex-1 mt-auto pt-8">
+                <div className="rounded-t-lg overflow-hidden shadow-2xl">
+                  <Image
+                    src={service.image || "/placeholder.svg"}
+                    alt={service.title}
+                    width={400}
+                    height={300}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
             <div
-              key={index}
-              className={`group relative ${service.color} hover:border-accent rounded-2xl min-h-[380px] flex flex-col overflow-hidden transition-transform hover:-translate-y-1`}
+              className={`absolute inset-0 top-0 left-4 right-4 translate-y-6  ${service.color} hover:border-accent flex rounded-2xl flex-col transition-transform hover:-translate-y-1`}
             >
-              <div className="relative h-full z-10 p-6 pb-0 bg-background/80">
+              <div className="relative z-10 p-6 pb-0">
                 <h3
                   className={`text-xl md:text-2xl font-medium mb-2 ${service.textColor}`}
                 >
@@ -58,18 +69,7 @@ export function Services() {
                   {service.description}
                 </p>
               </div>
-
-              <div className="relative flex-1 mt-auto pt-8">
-                <div className="absolute bottom-0 left-4 right-4 translate-y-6 rounded-t-lg overflow-hidden shadow-2xl">
-                  <Image
-                    src={service.image || "/placeholder.svg"}
-                    alt={service.title}
-                    width={400}
-                    height={300}
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-              </div>
+            </div>
             </div>
           ))}
         </div>

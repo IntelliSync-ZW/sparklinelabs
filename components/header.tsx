@@ -39,25 +39,25 @@ export function Header() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href={getHref("#services")}
-              className="text-base text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base text-foreground/80 hover:text-foreground transition-colors"
             >
               Services
             </Link>
             <Link
               href="/products"
-              className="text-base text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base text-foreground/80 hover:text-foreground transition-colors"
             >
               Products
             </Link>
             <Link
               href="/work"
-              className="text-base text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base text-foreground/80 hover:text-foreground transition-colors"
             >
               Work
             </Link>
             <Link
               href="/blog"
-              className="text-base text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base text-foreground/80 hover:text-foreground transition-colors"
             >
               Blog
             </Link>
@@ -87,28 +87,28 @@ export function Header() {
             <div className="flex flex-col gap-4">
               <Link
                 href={getHref("#services")}
-                className="text-base text-muted-foreground hover:text-foreground transition-colors"
+                className="text-base text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Services
               </Link>
               <Link
                 href="/products"
-                className="text-base text-muted-foreground hover:text-foreground transition-colors"
+                className="text-base text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Products
               </Link>
               <Link
                 href="/work"
-                className="text-base text-muted-foreground hover:text-foreground transition-colors"
+                className="text-base text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Work
               </Link>
               <Link
                 href="/blog"
-                className="text-base text-muted-foreground hover:text-foreground transition-colors"
+                className="text-base text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Blog
