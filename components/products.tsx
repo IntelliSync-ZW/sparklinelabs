@@ -99,6 +99,7 @@ export function Products() {
               loading="lazy"
               width={720}
               height={500}
+              alt="Propertyzone Preview Image"
               className="rounded-lg w-full my-auto aspect-video"
              />
         </div>
