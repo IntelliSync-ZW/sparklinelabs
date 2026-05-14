@@ -13,8 +13,8 @@ const services = [
     title: "Integrations and automation",
     description:
       "WhatsApp, Paynow, EcoCash, Google Workspace, your CRM, your sheets. We wire the workflows already running your business so they stop running on copy-paste.",
-    color: "bg-neutral-200",
-    textColor: "text-neutral-900",
+    color: "bg-neutral-900",
+    textColor: "text-white",
     image: "/connected-systems-flowchart-minimal-diagram.jpg",
   },
   {
@@ -46,7 +46,7 @@ export function Services() {
               key={index}
               className={`group relative ${service.color} hover:border-accent rounded-2xl min-h-[380px] flex flex-col overflow-hidden transition-transform hover:-translate-y-1`}
             >
-              <div className="relative z-10 p-6 pb-0">
+              <div className="relative z-10 p-6 pb-0 bg-background/50">
                 <h3
                   className={`text-xl md:text-2xl font-medium mb-2 ${service.textColor}`}
                 >

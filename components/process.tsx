@@ -44,11 +44,11 @@ export function Process() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
             <div key={index} className="relative">
-              <span className="text-6xl md:text-7xl font-semibold text-primary-foreground/10 mb-4 block">
+              <span className="text-6xl md:text-7xl font-semibold text-primary-foreground/50 mb-4 block">
                 {step.number}
               </span>
               <h3 className="text-xl font-medium mb-3">{step.title}</h3>
-              <p className="text-lg text-primary-foreground/70 leading-relaxed">
+              <p className="text-lg text-primary-foreground/80 leading-relaxed">
                 {step.description}
               </p>
             </div>
