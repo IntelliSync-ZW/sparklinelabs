@@ -1,24 +1,27 @@
 const steps = [
   {
     number: "01",
-    title: "Listen",
+    title: "Discovery (paid, 1 week)",
     description:
-      "We understand your goals before writing a single line of code.",
+      "A scoping call, a written brief, a 1-page architecture diagram, and a fixed-price build proposal. You leave week one with a yes/no decision, not a follow-up next steps deck.",
   },
   {
     number: "02",
-    title: "Plan",
-    description: "A clear roadmap from where you are to where you want to be.",
+    title: "Pilot (2 weeks, fixed price)",
+    description:
+      "We build the riskiest slice first. If the pilot doesn't validate the approach, we stop. You keep everything we built, no cancellation fee.",
   },
   {
     number: "03",
-    title: "Build",
-    description: "Weekly progress. Clear communication. No surprises.",
+    title: "Build (4-8 weeks, fixed price)",
+    description:
+      "Weekly demo. Weekly progress note. Fixed scope, fixed price, fixed timeline. Scope changes get re-quoted, not absorbed.",
   },
   {
     number: "04",
-    title: "Launch",
-    description: "Ship with confidence and iterate based on real feedback.",
+    title: "Handover and operate",
+    description:
+      "We train your team to run the system manually first. We automate after we've seen the workflow run for real, with real data, in your hands.",
   },
 ];
 
@@ -34,7 +37,7 @@ export function Process() {
             How we work
           </p>
           <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
-            Simple. Transparent. Effective.
+            Four stages. No retainers. No scope theatre.
           </h2>
         </div>
 
@@ -44,7 +47,7 @@ export function Process() {
               <span className="text-6xl md:text-7xl font-semibold text-primary-foreground/10 mb-4 block">
                 {step.number}
               </span>
-              <h3 className="text-2xl font-medium mb-3">{step.title}</h3>
+              <h3 className="text-xl font-medium mb-3">{step.title}</h3>
               <p className="text-lg text-primary-foreground/70 leading-relaxed">
                 {step.description}
               </p>

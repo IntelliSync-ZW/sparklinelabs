@@ -1,25 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
+
+const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
 
 export function Footer() {
-  const pathname = usePathname();
-  const isHome = pathname === "/";
-
-  const getLink = (anchor: string) => {
-    return isHome ? anchor : `/${anchor}`;
-  };
-
   return (
     <footer className="py-12 px-6 border-t border-border bg-background">
       <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+        <div className="grid md:grid-cols-4 gap-8 mb-10">
+          {/* Brand */}
+          <div className="md:col-span-2">
             <Link
               href="/"
-              className="text-xl font-semibold tracking-tight flex gap-2 items-center"
+              className="text-xl font-semibold tracking-tight flex gap-2 items-center mb-3"
             >
               <Image
                 src="/icon.svg"
@@ -30,40 +26,68 @@ export function Footer() {
               />
               <span>sparkline labs</span>
             </Link>
-            <div className="flex items-center gap-6 text-base text-muted-foreground">
-              <Link
-                href={getLink("#services")}
-                className="hover:text-accent transition-colors"
-              >
+            <p className="text-base text-muted-foreground">
+              Software for African businesses.
+            </p>
+          </div>
+
+          {/* Company */}
+          <div>
+            <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-4">
+              Company
+            </p>
+            <div className="flex flex-col gap-3 text-base text-muted-foreground">
+              <Link href="/#services" className="hover:text-accent transition-colors">
                 Services
               </Link>
-              <Link
-                href="/products"
-                className="hover:text-accent transition-colors"
-              >
+              <Link href="/products" className="hover:text-accent transition-colors">
                 Products
               </Link>
-              <Link
-                href={getLink("#process")}
-                className="hover:text-accent transition-colors"
-              >
-                Process
+              <Link href="/work" className="hover:text-accent transition-colors">
+                Work
+              </Link>
+              <Link href="/blog" className="hover:text-accent transition-colors">
+                Blog
               </Link>
             </div>
           </div>
 
-          <div className="flex items-center gap-6 text-base text-muted-foreground">
-            <Link
-              href="mailto:hello@sparklinelabs.com"
-              className="hover:text-accent transition-colors"
-            >
-              hello@sparklinelabs.com
-            </Link>
+          {/* Contact */}
+          <div>
+            <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-4">
+              Contact
+            </p>
+            <div className="flex flex-col gap-3 text-base text-muted-foreground">
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-accent transition-colors"
+              >
+                WhatsApp
+              </a>
+              <a
+                href="mailto:sales@sparklinelabs.co.zw"
+                className="hover:text-accent transition-colors"
+              >
+                sales@sparklinelabs.co.zw
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-border text-center text-base text-muted-foreground">
-          © {new Date().getFullYear()} Sparkline Labs. All rights reserved.
+        <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-base text-muted-foreground">
+          <span>
+            &copy; {new Date().getFullYear()} Sparkline Labs. All rights reserved.
+          </span>
+          <a
+            href="https://propzone.co.zw"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-accent transition-colors"
+          >
+            We built Propertyzone.
+          </a>
         </div>
       </div>
     </footer>

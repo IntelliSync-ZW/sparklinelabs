@@ -6,6 +6,9 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
+
+const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,12 +50,25 @@ export function Header() {
               Products
             </Link>
             <Link
-              href={getHref("#process")}
+              href="/work"
               className="text-base text-muted-foreground hover:text-foreground transition-colors"
             >
-              Process
+              Work
             </Link>
-            <Button className="ml-4 bg-accent text-accent-foreground hover:bg-accent/90">Start a Project</Button>
+            <Link
+              href="/blog"
+              className="text-base text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Blog
+            </Link>
+            <Button
+              className="ml-4 bg-accent text-accent-foreground hover:bg-accent/90"
+              asChild
+            >
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                Book a call
+              </a>
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -84,13 +100,24 @@ export function Header() {
                 Products
               </Link>
               <Link
-                href={getHref("#process")}
+                href="/work"
                 className="text-base text-muted-foreground hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >
-                Process
+                Work
               </Link>
-              <Button className="w-fit">Start a Project</Button>
+              <Link
+                href="/blog"
+                className="text-base text-muted-foreground hover:text-foreground transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Blog
+              </Link>
+              <Button className="w-fit bg-accent text-accent-foreground" asChild>
+                <a href={waLink} target="_blank" rel="noopener noreferrer">
+                  Book a call
+                </a>
+              </Button>
             </div>
           </div>
         )}

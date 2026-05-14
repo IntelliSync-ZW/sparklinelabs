@@ -13,29 +13,27 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://sparklinelabs.co.zw"),
   title: {
-    default: "Sparkline Labs | Software Solutions That Scale Your Business",
+    default: "Sparkline Labs - Custom software for African businesses",
     template: "%s | Sparkline Labs",
   },
   description:
-    "We build software that solves real problems. Custom development, SaaS products, and technical consulting to help your business grow faster.",
+    "We build custom software, internal tools, and SaaS products for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design. We built Propertyzone.",
   keywords: [
-    "software development",
-    "SaaS products",
-    "custom software",
-    "web development",
-    "mobile apps",
-    "API development",
-    "technical consulting",
-    "startup development",
-    "MVP development",
-    "software agency",
-    "tech consulting",
+    "custom software development Zimbabwe",
+    "software developer Harare",
+    "Next.js developer Zimbabwe",
+    "SaaS development Africa",
+    "internal tools Zimbabwe",
+    "Paynow integration developer",
+    "WhatsApp integration Zimbabwe",
+    "real estate platform Zimbabwe",
+    "Propertyzone",
+    "Sparkline Labs",
   ],
   authors: [{ name: "Sparkline Labs", url: "https://sparklinelabs.co.zw" }],
   creator: "Sparkline Labs",
   publisher: "Sparkline Labs",
   category: "Technology",
-  classification: "Business",
   formatDetection: {
     email: false,
     address: false,
@@ -43,59 +41,41 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_ZW",
     url: "https://sparklinelabs.co.zw",
     siteName: "Sparkline Labs",
-    title: "Sparkline Labs | Software Solutions That Scale Your Business",
+    title: "Sparkline Labs - Custom software for African businesses",
     description:
-      "We build software that solves real problems. Custom development, SaaS products, and technical consulting.",
+      "We build custom software for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design. We built Propertyzone.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Sparkline Labs - Software Solutions",
-        type: "image/jpeg",
-      },
-      {
-        url: "/og-image-square.jpg",
-        width: 600,
-        height: 600,
-        alt: "Sparkline Labs Logo",
+        alt: "Sparkline Labs - Custom software for African businesses",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@sparklinelabs",
-    creator: "@sparklinelabs",
-    title: "Sparkline Labs | Software Solutions That Scale Your Business",
+    title: "Sparkline Labs - Custom software for African businesses",
     description:
-      "We build software that solves real problems. Custom development, SaaS products, and technical consulting.",
-    images: {
-      url: "/og-image.jpg",
-      alt: "Sparkline Labs - Software Solutions",
-    },
+      "Custom software for Zimbabwean and African businesses. Outcome-tied pricing. We built Propertyzone.",
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
     follow: true,
-    nocache: false,
     googleBot: {
       index: true,
       follow: true,
-      noimageindex: false,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
   alternates: {
     canonical: "https://sparklinelabs.co.zw",
-    languages: {
-      "en-US": "https://sparklinelabs.co.zw",
-    },
   },
   manifest: "/manifest.json",
   icons: {
@@ -104,29 +84,11 @@ export const metadata: Metadata = {
       { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
     ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     shortcut: "/favicon.ico",
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Sparkline Labs",
   },
   applicationName: "Sparkline Labs",
   referrer: "origin-when-cross-origin",
-  verification: {
-    google: "google-site-verification-code",
-    yandex: "yandex-verification-code",
-    other: {
-      "msvalidate.01": "bing-verification-code",
-    },
-  },
-  other: {
-    "apple-mobile-web-app-capable": "yes",
-    "mobile-web-app-capable": "yes",
-  },
 };
 
 export const viewport: Viewport = {
@@ -145,34 +107,23 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Sparkline Labs",
-  legalName: "Sparkline Labs Inc.",
   url: "https://sparklinelabs.co.zw",
   logo: "https://sparklinelabs.co.zw/icon.svg",
   foundingDate: "2024",
   description:
-    "We build software that solves real problems. Custom development, SaaS products, and technical consulting.",
-  sameAs: [
-    "https://twitter.com/sparklinelabs",
-    "https://linkedin.com/company/sparklinelabs",
-    "https://github.com/sparklinelabs",
-  ],
+    "We build custom software, internal tools, and SaaS products for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design.",
   contactPoint: [
     {
       "@type": "ContactPoint",
       contactType: "sales",
-      email: "hello@sparklinelabs.com",
-      availableLanguage: ["English"],
-    },
-    {
-      "@type": "ContactPoint",
-      contactType: "customer support",
-      email: "support@sparklinelabs.com",
+      email: "sales@sparklinelabs.co.zw",
       availableLanguage: ["English"],
     },
   ],
   address: {
     "@type": "PostalAddress",
-    addressCountry: "US",
+    addressLocality: "Harare",
+    addressCountry: "ZW",
   },
 };
 
@@ -190,13 +141,6 @@ export default function RootLayout({
             __html: JSON.stringify(organizationSchema),
           }}
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       </head>
       <body className={`font-sans antialiased ${dmSans.className}`}>
         <Header />
