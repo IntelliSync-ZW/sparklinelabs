@@ -9,21 +9,24 @@ import { PortableTextRenderer, type RichTextValue } from "@/components/portable-
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Building Zimbabwe's Most Trusted Property Portal: Propertyzone Case Study",
+  title: "How We Built Propertyzone, Zimbabwe's Intent-First Property Platform",
   description:
-    "See how Sparkline Labs solved the trust gap in Zimbabwean real estate. A deep dive into the architecture, verified agent workflows, and ROI of Propertyzone.",
+    "A full technical and commercial breakdown of Propertyzone. How Sparkline Labs solved the trust deficit in Zimbabwean real estate: verified EAC agents, intent-tagged listings, Quality Score ranking, and WhatsApp-first lead routing. Architecture, cost model, and outcomes.",
   keywords: [
-    "Zimbabwe real estate software",
-    "EAC registered property portal development",
+    "Propertyzone case study",
+    "Zimbabwe real estate platform development",
+    "EAC property portal Zimbabwe",
+    "intent-first property search Zimbabwe",
+    "PropTech Africa",
     "custom SaaS Zimbabwe",
     "Sparkline Labs case study",
-    "Propertyzone architecture",
+    "Harare property technology",
   ],
   alternates: { canonical: "https://www.sparklinelabs.co.zw/work/propertyzone" },
   openGraph: {
-    title: "How We Built Propertyzone: Solving Trust in ZW Real Estate",
+    title: "How We Built Propertyzone, Zimbabwe's Intent-First Property Platform",
     description:
-      "A technical and business breakdown of Zimbabwe's intent-first property platform. Architecture, cost-efficiency, and sales outcomes.",
+      "Architecture, verified agent workflows, Quality Score ranking, and commercial outcomes. A deep dive into building PropTech for Zimbabwe.",
     url: "https://www.sparklinelabs.co.zw/work/propertyzone",
     type: "article",
     publishedTime: "2026-05-01T00:00:00.000Z",
@@ -33,15 +36,15 @@ export const metadata: Metadata = {
         url: "/propertyzone.png",
         width: 1200,
         height: 630,
-        alt: "Propertyzone Case Study by Sparkline Labs",
+        alt: "Propertyzone - Zimbabwe's intent-first property platform by Sparkline Labs",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Propertyzone: A Case Study in African PropTech",
+    title: "How We Built Propertyzone, Zimbabwe's Intent-First Property Platform",
     description:
-      "Solving the low-trust problem in the Zimbabwean market through intent-first design.",
+      "Solving the trust deficit in Zimbabwean real estate through verified EAC agents, intent-tagged listings, and Quality Score ranking.",
     images: ["/propertyzone.png"],
   },
 };
@@ -134,10 +137,11 @@ const STATIC_SECTIONS = [
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
+  "@id": "https://www.sparklinelabs.co.zw/work/propertyzone#article",
   headline:
-    "Building Zimbabwe's Most Trusted Property Portal: Propertyzone Case Study",
+    "How We Built Propertyzone, Zimbabwe's Intent-First Property Platform",
   description:
-    "See how Sparkline Labs solved the trust gap in Zimbabwean real estate.",
+    "A full technical and commercial breakdown of Propertyzone: verified EAC agents, intent-tagged listings, Quality Score ranking, and WhatsApp-first lead routing.",
   image: "https://www.sparklinelabs.co.zw/propertyzone.png",
   datePublished: "2026-05-01",
   author: {
@@ -148,17 +152,59 @@ const articleSchema = {
   publisher: {
     "@type": "Organization",
     name: "Sparkline Labs",
-    logo: {
-      "@type": "ImageObject",
-      url: "https://www.sparklinelabs.co.zw/icon.svg",
-    },
+    logo: { "@type": "ImageObject", url: "https://www.sparklinelabs.co.zw/icon.svg" },
+  },
+  isPartOf: { "@id": "https://www.sparklinelabs.co.zw/work#collectionpage" },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
+      { "@type": "ListItem", position: 2, name: "Work", item: "https://www.sparklinelabs.co.zw/work" },
+      { "@type": "ListItem", position: 3, name: "Propertyzone", item: "https://www.sparklinelabs.co.zw/work/propertyzone" },
+    ],
   },
   about: {
     "@type": "SoftwareApplication",
     name: "Propertyzone",
     url: "https://www.propzone.co.zw/en/",
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "Real Estate Platform",
+    operatingSystem: "Web",
+    areaServed: { "@type": "Country", name: "Zimbabwe" },
   },
+};
+
+const softwareAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://www.propzone.co.zw/#software",
+  "name": "Propertyzone",
+  "alternateName": "propzone.co.zw",
+  "applicationCategory": "BusinessApplication",
+  "applicationSubCategory": "Real Estate Platform",
+  "operatingSystem": "Web",
+  "url": "https://www.propzone.co.zw/en/",
+  "description": "Zimbabwe's intent-first property listing and lead management platform. Verified EAC-registered agents, intent-tagged listings (buy, rent, invest, viewing-only), Quality Score ranking based on imagery and verified utility data, and WhatsApp-routed enquiries.",
+  "featureList": [
+    "Intent-tagged property listings: buy, rent, invest, viewing-only",
+    "Verified EAC-registered agent profiles",
+    "Verified buyer and renter profiles",
+    "WhatsApp-routed agent enquiries",
+    "Quality Score ranking: imagery, descriptions, verified ZESA/borehole/solar data",
+    "Lead qualification and engagement tracking dashboards",
+    "Suburb-level content depth with neighbourhood reviews and school proximity",
+    "SEO-optimised listing pages with JSON-LD structured data",
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "10 free leads for first 10 agencies. Volume-based pricing thereafter. Equal platform access for all active Agent Accounts regardless of plan tier.",
+  },
+  "creator": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+  "inLanguage": "en-ZW",
+  "areaServed": { "@type": "Country", "name": "Zimbabwe" },
+  "availableOnDevice": "Desktop, Mobile",
 };
 
 export default async function PropertyzoneCaseStudy() {
@@ -182,6 +228,10 @@ export default async function PropertyzoneCaseStudy() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
         />
         <section className="pt-32 pb-16 px-6">
           <div className="container mx-auto max-w-3xl">

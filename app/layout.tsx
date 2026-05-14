@@ -11,20 +11,22 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sparklinelabs.co.zw"),
   title: {
-    default: "Sparkline Labs - Custom software for African businesses",
+    default: "Sparkline Labs | Custom Software for Zimbabwean Businesses",
     template: "%s | Sparkline Labs",
   },
   description:
-    "We build custom software, internal tools, and SaaS products for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design. We built Propertyzone.",
+    "Harare-based software studio building custom platforms, SaaS, and internal tools for Zimbabwean and African businesses. Native Paynow and EcoCash integration, WhatsApp-first architecture, USD billing. The team behind Propertyzone.",
   keywords: [
     "custom software development Zimbabwe",
     "software developer Harare",
     "Next.js developer Zimbabwe",
     "SaaS development Africa",
-    "internal tools Zimbabwe",
-    "Paynow integration developer",
-    "WhatsApp integration Zimbabwe",
+    "Paynow integration Zimbabwe",
+    "EcoCash integration developer",
+    "ZimSwitch payment integration",
+    "WhatsApp Business API Zimbabwe",
     "real estate platform Zimbabwe",
+    "internal tools Zimbabwe",
     "Propertyzone",
     "Sparkline Labs",
   ],
@@ -42,9 +44,9 @@ export const metadata: Metadata = {
     locale: "en_ZW",
     url: "https://www.sparklinelabs.co.zw",
     siteName: "Sparkline Labs",
-    title: "Sparkline Labs - Custom software for African businesses",
+    title: "Sparkline Labs | Custom Software for Zimbabwean Businesses",
     description:
-      "We build custom software for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design. We built Propertyzone.",
+      "Harare-based software studio. Native Paynow, EcoCash, and WhatsApp-first architecture. The team behind Propertyzone.",
     images: [
       {
         url: "/og-image.png",
@@ -57,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sparkline Labs - Custom software for African businesses",
+    title: "Sparkline Labs | Custom Software for Zimbabwean Businesses",
     description:
-      "Custom software for Zimbabwean and African businesses. Outcome-tied pricing. We built Propertyzone.",
+      "Harare-based. Paynow, EcoCash, WhatsApp-native. The team behind Propertyzone.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -106,22 +108,48 @@ const linkedSchema = {
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://sparklinelabs.co.zw/#website",
-      "url": "https://sparklinelabs.co.zw",
-      "name": "Sparkline Labs", // This is the trigger for the Site Name
-      "publisher": {
-        "@id": "https://sparklinelabs.co.zw/#organization"
-      },
-      "alternateName": ["Sparkline"], // Optional: Helps Google understand shorthand
+      "@id": "https://www.sparklinelabs.co.zw/#website",
+      "url": "https://www.sparklinelabs.co.zw",
+      "name": "Sparkline Labs",
+      "publisher": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+      "alternateName": ["Sparkline"],
     },
     {
-      "@type": "Organization",
-      "@id": "https://sparklinelabs.co.zw/#organization",
+      "@type": ["Organization", "LocalBusiness"],
+      "@id": "https://www.sparklinelabs.co.zw/#organization",
       "name": "Sparkline Labs",
-      "url": "https://sparklinelabs.co.zw",
-      "logo": "https://sparklinelabs.co.zw/icon.svg",
+      "legalName": "Sparkline Labs",
+      "url": "https://www.sparklinelabs.co.zw",
+      "logo": "https://www.sparklinelabs.co.zw/icon.svg",
+      "image": "https://www.sparklinelabs.co.zw/og-image.png",
       "foundingDate": "2024",
-      "description": "We build custom software, internal tools, and SaaS products for Zimbabwean and African businesses. Outcome-tied pricing, manual-first design.",
+      "description": "Harare-based software studio building custom platforms, Paynow and EcoCash payment integrations, and WhatsApp-first business tools for Zimbabwean and African enterprises. The team behind Propertyzone.",
+      "priceRange": "$$",
+      "currenciesAccepted": "USD, ZWL",
+      "paymentAccepted": "USD, ZWL, Paynow, EcoCash",
+      "knowsAbout": [
+        "Paynow payment gateway integration",
+        "EcoCash mobile money integration",
+        "ZimSwitch interbank payment systems",
+        "WhatsApp Business API",
+        "Real estate technology Zimbabwe",
+        "Property listing platforms",
+        "USD/ZWL dual-currency billing",
+        "Next.js TypeScript SaaS development",
+        "EAC estate agency software",
+        "ZESA-resilient offline-first architecture",
+        "Internal tooling for Zimbabwean businesses"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Harare",
+        "addressRegion": "Harare Province",
+        "addressCountry": "ZW",
+      },
+      "areaServed": [
+        { "@type": "Country", "name": "Zimbabwe" },
+        { "@type": "Country", "name": "Nigeria" },
+      ],
       "contactPoint": [
         {
           "@type": "ContactPoint",
@@ -130,17 +158,11 @@ const linkedSchema = {
           "availableLanguage": ["English"],
         },
       ],
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Harare",
-        "addressCountry": "ZW",
-      },
-      // Add social links here if you have them for the agency
       "sameAs": [
-        "https://www.linkedin.com/company/sparklinelabszw", 
+        "https://www.linkedin.com/company/sparklinelabszw",
       ],
-    }
-  ]
+    },
+  ],
 };
 
 export default function RootLayout({

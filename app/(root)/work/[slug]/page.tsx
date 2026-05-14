@@ -111,9 +111,12 @@ export default async function CaseStudyPage({ params }: Props) {
 
   if (!study) notFound();
 
+  const pageUrl = `https://www.sparklinelabs.co.zw/work/${study.slug.current}`;
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${pageUrl}#article`,
     headline: study.title,
     description: study.summary,
     image: study.heroImage?.url ?? `https://www.sparklinelabs.co.zw/og-image.png`,
@@ -127,6 +130,15 @@ export default async function CaseStudyPage({ params }: Props) {
       "@type": "Organization",
       name: "Sparkline Labs",
       logo: { "@type": "ImageObject", url: "https://www.sparklinelabs.co.zw/icon.svg" },
+    },
+    isPartOf: { "@id": "https://www.sparklinelabs.co.zw/work#collectionpage" },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
+        { "@type": "ListItem", position: 2, name: "Work", item: "https://www.sparklinelabs.co.zw/work" },
+        { "@type": "ListItem", position: 3, name: study.title, item: pageUrl },
+      ],
     },
     ...(study.productRef && {
       about: {

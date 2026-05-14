@@ -71,23 +71,26 @@ const STATIC_DEV: DevProduct[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "Products",
+  title: "Products | Propertyzone and More | Sparkline Labs",
   description:
-    "Products we've built and run. Propertyzone is our flagship real estate platform, live in Zimbabwe. Two more products in active development.",
+    "Software products built and operated by Sparkline Labs. Propertyzone is Zimbabwe's intent-first property platform, live and serving EAC-registered agencies. Agency CRM and WhatsApp Lead Router in active development. No vapourware.",
   keywords: [
-    "Propertyzone",
-    "real estate platform Zimbabwe",
-    "property listing Zimbabwe",
+    "Propertyzone Zimbabwe",
+    "Zimbabwe real estate platform",
+    "EAC registered agency software",
     "agency CRM Zimbabwe",
-    "WhatsApp lead routing",
+    "WhatsApp lead routing Zimbabwe",
+    "property listing platform Zimbabwe",
+    "propzone.co.zw",
     "Sparkline Labs products",
   ],
   alternates: { canonical: "https://www.sparklinelabs.co.zw/products" },
   openGraph: {
-    title: "Products | Sparkline Labs",
+    title: "Products | Propertyzone and More | Sparkline Labs",
     description:
-      "Propertyzone is live. Agency CRM in private beta. WhatsApp Lead Router in design. No vapourware.",
+      "Propertyzone is live in Zimbabwe, serving EAC-registered agencies. Agency CRM in private beta. WhatsApp Lead Router in design. No vapourware.",
     url: "https://www.sparklinelabs.co.zw/products",
+    type: "website",
   },
 };
 
@@ -123,21 +126,59 @@ export default async function ProductsPage() {
   const isPropertyzone =
     featured.slug?.current === "propertyzone" || featured._id === "propertyzone";
 
+  const propertyzoneSchemaItem = {
+    "@type": "ListItem",
+    "position": 1,
+    "item": {
+      "@type": "SoftwareApplication",
+      "name": "Propertyzone",
+      "alternateName": "propzone.co.zw",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "Real Estate Platform",
+      "operatingSystem": "Web",
+      "url": "https://www.propzone.co.zw/en/",
+      "description": "Zimbabwe's intent-first property listing and lead management platform. Connects verified buyers, renters, EAC-registered agents, and landlords. Quality Score ranking based on imagery, verified utility data (borehole yield, solar capacity, ZESA reliability), and listing completeness.",
+      "featureList": [
+        "Intent-tagged listings: buy, rent, invest, viewing-only",
+        "Verified buyer and renter profiles",
+        "WhatsApp-routed agent enquiries",
+        "Quality Score ranking algorithm",
+        "Suburb-level content with ZESA reliability, borehole yield, and solar capacity data",
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "10 free leads for the first 10 agencies; volume-based pricing thereafter.",
+      },
+      "creator": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+      "inLanguage": "en-ZW",
+      "areaServed": { "@type": "Country", "name": "Zimbabwe" },
+    },
+  };
+
+  const otherProducts = liveProducts
+    .filter((p) => p.slug?.current !== "propertyzone" && p._id !== "propertyzone")
+    .map((p, i) => ({
+      "@type": "ListItem",
+      "position": i + 2,
+      "item": {
+        "@type": "SoftwareApplication",
+        "name": p.name,
+        "description": p.description ?? p.tagline,
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "creator": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+        ...(p.href && { "url": p.href }),
+      },
+    }));
+
   const productsSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: liveProducts.map((p, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      item: {
-        "@type": "SoftwareApplication",
-        name: p.name,
-        description: p.description ?? p.tagline,
-        applicationCategory: "BusinessApplication",
-        operatingSystem: "Web",
-        ...(p.href && { url: p.href }),
-      },
-    })),
+    "name": "Sparkline Labs Products",
+    "url": "https://www.sparklinelabs.co.zw/products",
+    "itemListElement": [propertyzoneSchemaItem, ...otherProducts],
   };
 
   return (

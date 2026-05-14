@@ -105,23 +105,36 @@ export default async function BlogPostPage({ params }: Props) {
 
   if (!post) notFound();
 
+  const postUrl = `https://www.sparklinelabs.co.zw/blog/${post.slug.current}`;
+
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
+    "@id": `${postUrl}#article`,
     headline: post.title,
     description: post.excerpt,
     image: post.coverImage?.url ?? `https://www.sparklinelabs.co.zw/og-image.png`,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
+    inLanguage: "en-ZW",
+    ...(post.tags && post.tags.length > 0 && { keywords: post.tags.join(", ") }),
+    ...(post.category && { articleSection: post.category.title }),
     author: {
       "@type": post.author ? "Person" : "Organization",
       name: post.author ?? "Sparkline Labs",
       url: "https://www.sparklinelabs.co.zw",
     },
     publisher: {
-      "@type": "Organization",
-      name: "Sparkline Labs",
-      logo: { "@type": "ImageObject", url: "https://www.sparklinelabs.co.zw/icon.svg" },
+      "@id": "https://www.sparklinelabs.co.zw/#organization",
+    },
+    isPartOf: { "@id": "https://www.sparklinelabs.co.zw/blog#blog" },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
+        { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.sparklinelabs.co.zw/blog" },
+        { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+      ],
     },
   };
 
