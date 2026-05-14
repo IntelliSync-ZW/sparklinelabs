@@ -4,31 +4,42 @@ import { ArrowRight } from "lucide-react";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Propertyzone case study - Zimbabwe's intent-first property platform",
+  // Ensure metadataBase is set in your root layout or here
+  title: "Building Zimbabwe’s Most Trusted Property Portal: Propertyzone Case Study",
   description:
-    "How we built Propertyzone - the property platform connecting verified buyers, renters, and agents in Zimbabwe. Tech stack, architecture, outcomes, lessons learned.",
+    "See how Sparkline Labs solved the trust gap in Zimbabwean real estate. A deep dive into the architecture, verified agent workflows, and ROI of Propertyzone.",
   keywords: [
-    "Propertyzone case study",
-    "real estate platform development Zimbabwe",
-    "Next.js property platform",
-    "proptech Zimbabwe",
-    "Sparkline Labs Propertyzone",
+    "Zimbabwe real estate software",
+    "EAC registered property portal development",
+    "custom SaaS Zimbabwe",
+    "Sparkline Labs case study",
+    "Propertyzone architecture",
   ],
-  alternates: { canonical: "https://sparklinelabs.co.zw/work/propertyzone" },
+  alternates: { 
+    canonical: "https://www.sparklinelabs.co.zw/work/propertyzone" 
+  },
   openGraph: {
-    title: "Propertyzone case study | Sparkline Labs",
+    title: "How We Built Propertyzone: Solving Trust in ZW Real Estate",
     description:
-      "We built Zimbabwe's intent-first property platform. Here's how, what it cost, and what's next.",
-    url: "https://sparklinelabs.co.zw/work/propertyzone",
+      "A technical and business breakdown of Zimbabwe's intent-first property platform. Architecture, cost-efficiency, and sales outcomes.",
+    url: "https://www.sparklinelabs.co.zw/work/propertyzone",
     type: "article",
+    publishedTime: "2024-05-13T00:00:00.000Z", // Use actual date
+    authors: ["Sparkline Labs"],
     images: [
       {
-        url: "/og-propertyzone-case-study.jpg",
+        url: "/propertyzone.png", // Ensure this is a high-quality summary card
         width: 1200,
         height: 630,
-        alt: "Propertyzone case study",
+        alt: "Propertyzone Case Study by Sparkline Labs",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Propertyzone: A Case Study in African PropTech",
+    description: "Solving the 'low-trust' problem in the Zimbabwean market through intent-first design.",
+    images: ["/propertyzone.png"],
   },
 };
 
@@ -36,23 +47,23 @@ const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
   headline:
-    "Building Propertyzone - Zimbabwe's intent-first property platform",
+    "Building Zimbabwe’s Most Trusted Property Portal: Propertyzone Case Study",
   description:
-    "A case study on building Propertyzone, the intent-first property platform serving Zimbabwean real estate agencies.",
-  image: "https://sparklinelabs.co.zw/og-propertyzone-case-study.jpg",
+    "See how Sparkline Labs solved the trust gap in Zimbabwean real estate. A deep dive into the architecture, verified agent workflows, and ROI of Propertyzone.",
+  image: "https://www.sparklinelabs.co.zw/propertyzone.png",
   datePublished: "2026-01-01",
   dateModified: "2026-01-01",
   author: {
     "@type": "Organization",
     name: "Sparkline Labs",
-    url: "https://sparklinelabs.co.zw",
+    url: "https://www.sparklinelabs.co.zw",
   },
   publisher: {
     "@type": "Organization",
     name: "Sparkline Labs",
     logo: {
       "@type": "ImageObject",
-      url: "https://sparklinelabs.co.zw/icon.svg",
+      url: "https://www.sparklinelabs.co.zw/icon.svg",
     },
   },
   about: {
