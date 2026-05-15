@@ -1,39 +1,108 @@
-export const allProductsQuery = `*[_type == "product"] | order(order asc) {
-  _id, name, slug, tagline, description, status, statusDate,
-  href, features, "coverImage": coverImage.asset->url,
-  "screenshot": screenshot.asset->url
-}`;
+// ---------------------------------------------------------------------------
+// Shared projection fragments
+// ---------------------------------------------------------------------------
 
-export const liveProductsQuery = `*[_type == "product" && status == "live"] | order(order asc) {
-  _id, name, slug, tagline, description, status, statusDate,
-  href, features, "screenshot": screenshot.asset->url
-}`;
+const seoProjection = `"seo": seo { title, description, "ogImage": ogImage.asset->url }`;
 
-export const inDevelopmentProductsQuery = `*[_type == "product" && status in ["private_beta", "in_design"]] | order(order asc) {
-  _id, name, status, statusDate, description, tagline
-}`;
+const heroImageProjection = `"heroImage": { "url": heroImage.asset->url, "alt": heroImage.alt }`;
 
-export const caseStudyBySlugQuery = `*[_type == "caseStudy" && slug.current == $slug][0] {
-  ..., "heroImage": heroImage.asset->url, productRef->{name, slug, href}
-}`;
+// Portable text blocks including resolved image assets
+const richText = (field: string) =>
+  `"${field}": ${field}[] {
+    ...,
+    _type == "image" => {
+      ...,
+      "asset": asset->{ _id, url, metadata }
+    }
+  }`;
 
-export const allCaseStudiesQuery = `*[_type == "caseStudy"] | order(publishedAt desc) {
-  title, slug, industry, clientName, "heroImage": heroImage.asset->url,
-  publishedAt, productRef->{name, href}
-}`;
+// ---------------------------------------------------------------------------
+// Product queries
+// ---------------------------------------------------------------------------
 
-export const allPostSlugsQuery = `*[_type == "post" && defined(slug.current)] {
-  "slug": slug.current, _updatedAt
-}`;
+export const allProductsQuery = `
+  *[_type == "product"] | order(order asc) {
+    _id, name, slug, tagline, description, status, statusDate,
+    href, features,
+    "coverImage": coverImage.asset->url,
+    "screenshot": screenshot.asset->url
+  }`;
 
-export const allCaseStudySlugsQuery = `*[_type == "caseStudy" && defined(slug.current)] {
-  "slug": slug.current, _updatedAt
-}`;
+export const liveProductsQuery = `
+  *[_type == "product" && status == "live"] | order(order asc) {
+    _id, name, slug, tagline, description, status, statusDate,
+    href, features,
+    "screenshot": screenshot.asset->url
+  }`;
 
-export const latestPostsQuery = `*[_type == "post"] | order(publishedAt desc)[0...3] {
-  title, slug, excerpt, publishedAt, "coverImage": coverImage.asset->url
-}`;
+export const inDevelopmentProductsQuery = `
+  *[_type == "product" && status in ["private_beta", "in_design"]] | order(order asc) {
+    _id, name, status, statusDate, description, tagline
+  }`;
 
-export const postBySlugQuery = `*[_type == "post" && slug.current == $slug][0] {
-  ..., "ogImage": seo.ogImage.asset->url
-}`;
+// ---------------------------------------------------------------------------
+// Case study queries
+// ---------------------------------------------------------------------------
+
+export const allCaseStudiesQuery = `
+  *[_type == "caseStudy"] | order(publishedAt desc) {
+    title, slug, summary, industry, clientName, publishedAt,
+    ${heroImageProjection},
+    productRef->{ name, href }
+  }`;
+
+export const allCaseStudySlugsQuery = `
+  *[_type == "caseStudy" && defined(slug.current)] {
+    "slug": slug.current,
+    _updatedAt
+  }`;
+
+export const caseStudyBySlugQuery = `
+  *[_type == "caseStudy" && slug.current == $slug][0] {
+    _id, title, slug, summary, headline, industry, clientName,
+    publishedAt, readingTime, team, started, live,
+    ${heroImageProjection},
+    ${richText("problem")},
+    ${richText("solution")},
+    ${richText("outcomes")},
+    ${richText("whatsNext")},
+    "outcomeMetrics": outcomeMetrics[] { value, label },
+    testimonialQuote, testimonialAuthor,
+    productRef->{ name, slug, href },
+    ${seoProjection}
+  }`;
+
+// ---------------------------------------------------------------------------
+// Post queries
+// ---------------------------------------------------------------------------
+
+const postCard = `
+  title, slug, excerpt, publishedAt, readingTime,
+  "category": category->{ title, slug, color },
+  "coverImage": coverImage.asset->url
+`;
+
+export const allPostsQuery = `
+  *[_type == "post"] | order(publishedAt desc) {
+    ${postCard}
+  }`;
+
+export const latestPostsQuery = `
+  *[_type == "post"] | order(publishedAt desc)[0...3] {
+    ${postCard}
+  }`;
+
+export const allPostSlugsQuery = `
+  *[_type == "post" && defined(slug.current)] {
+    "slug": slug.current,
+    _updatedAt
+  }`;
+
+export const postBySlugQuery = `
+  *[_type == "post" && slug.current == $slug][0] {
+    _id, title, slug, excerpt, author, publishedAt, updatedAt, tags, readingTime,
+    "category": category->{ title, slug, color },
+    "coverImage": { "url": coverImage.asset->url, "alt": coverImage.alt },
+    ${richText("body")},
+    ${seoProjection}
+  }`;

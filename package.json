@@ -11,6 +11,7 @@
   "dependencies": {
     "@portabletext/react": "^6.2.0",
     "@radix-ui/react-slot": "^1.2.4",
+    "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.25.1",
     "autoprefixer": "^10.4.20",

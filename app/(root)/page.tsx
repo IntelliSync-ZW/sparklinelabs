@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import type { Metadata } from "next";
 import { Hero } from "@/components/hero";
 import { Problem } from "@/components/problem";
 import { Services } from "@/components/services";
@@ -5,133 +7,120 @@ import { Products } from "@/components/products";
 import { Process } from "@/components/process";
 import { WhySparkline } from "@/components/why-sparkline";
 import { CTA } from "@/components/cta";
-import type { Metadata } from "next";
-import { client } from "@/sanity/lib/client";
-import { latestPostsQuery, allCaseStudiesQuery } from "@/sanity/lib/queries";
+import { LatestWork, LatestWorkSkeleton } from "@/components/latest-work";
+import { LatestPosts, LatestPostsSkeleton } from "@/components/latest-posts";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Custom software for African businesses",
+  title: "Custom Software Development Zimbabwe | Sparkline Labs",
   description:
-    "We build custom software, internal tools, and SaaS products for Zimbabwean and African businesses. Outcome-tied pricing, two-week paid discovery, zero retainers. We're the team behind Propertyzone.",
-  alternates: { canonical: "https://sparklinelabs.co.zw" },
+    "Harare-based software studio building platforms, internal tools, and SaaS for Zimbabwean businesses. Native Paynow and EcoCash integration, WhatsApp-first architecture, USD billing. Two-week paid discovery. The team behind Propertyzone.",
+  alternates: { canonical: "https://www.sparklinelabs.co.zw" },
   openGraph: {
-    title: "Sparkline Labs - Custom software for African businesses",
+    title: "Custom Software Development Zimbabwe | Sparkline Labs",
     description:
-      "We build for Zimbabwean and African businesses. USD pricing, WhatsApp-first, Paynow on the rails. We built Propertyzone.",
-    url: "https://sparklinelabs.co.zw",
+      "Harare-based. Paynow, EcoCash, WhatsApp-native. Two-week paid discovery, outcome-tied pricing, zero retainers. The team behind Propertyzone.",
+    url: "https://www.sparklinelabs.co.zw",
   },
 };
 
-type Post = {
-  title: string;
-  slug: { current: string };
-  excerpt: string;
-  publishedAt: string;
-};
-
-type CaseStudy = {
-  title: string;
-  slug: { current: string };
-  industry: string;
-  heroImage?: string;
-  publishedAt: string;
-  productRef?: { name: string; href: string };
-};
-
-export const revalidate = 300;
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-ZW", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
-const websiteSchema = {
+const professionalServiceSchema = {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Sparkline Labs",
-  url: "https://sparklinelabs.co.zw",
-};
-
-const serviceSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  serviceType: "Software Development",
-  provider: {
-    "@type": "Organization",
-    name: "Sparkline Labs",
+  "@type": "ProfessionalService",
+  "@id": "https://www.sparklinelabs.co.zw/#professionalservice",
+  "name": "Sparkline Labs",
+  "url": "https://www.sparklinelabs.co.zw",
+  "image": "https://www.sparklinelabs.co.zw/og-image.png",
+  "description": "Harare-based software studio specialising in custom platforms, Paynow and EcoCash payment integrations, and WhatsApp-first business tools for Zimbabwean and African enterprises.",
+  "priceRange": "$$",
+  "currenciesAccepted": "USD, ZWL",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Harare",
+    "addressRegion": "Harare Province",
+    "addressCountry": "ZW",
   },
-  areaServed: ["Zimbabwe", "Africa"],
-  hasOfferCatalog: {
+  "areaServed": [
+    { "@type": "Country", "name": "Zimbabwe" },
+    { "@type": "Country", "name": "Nigeria" },
+  ],
+  "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    name: "Software Services",
-    itemListElement: [
+    "name": "Software Development Services",
+    "itemListElement": [
       {
         "@type": "Offer",
-        itemOffered: {
+        "itemOffered": {
           "@type": "Service",
-          name: "Custom Platforms",
-          description:
-            "End-to-end web platforms and internal tools built on Next.js and TypeScript",
+          "name": "Custom Platform Development",
+          "description": "End-to-end web platforms built for Zimbabwean conditions: ZESA-resilient architecture, offline-capable design, WhatsApp-native workflows, and USD/ZWL dual billing from day one.",
         },
       },
       {
         "@type": "Offer",
-        itemOffered: {
+        "itemOffered": {
           "@type": "Service",
-          name: "Integrations and Automation",
-          description:
-            "WhatsApp, Paynow, EcoCash, and CRM integrations for Zimbabwean businesses",
+          "name": "Payment Integration",
+          "description": "Native integrations with Paynow, EcoCash, ZimSwitch, and international payment rails for businesses operating in Zimbabwe and across Africa.",
         },
       },
       {
         "@type": "Offer",
-        itemOffered: {
+        "itemOffered": {
           "@type": "Service",
-          name: "Technical Strategy",
-          description:
-            "Architecture, roadmap, and build proposal: flat fee, two-week turnaround",
+          "name": "WhatsApp Business Infrastructure",
+          "description": "Lead routing, automated qualification, and client communication systems built on the WhatsApp Business API - the default primary channel for Zimbabwean businesses.",
+        },
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Technical Discovery",
+          "description": "A structured two-week engagement producing architecture docs, a build roadmap, and a flat-fee proposal. Outcome-tied pricing, zero retainers.",
         },
       },
     ],
   },
 };
 
-export default async function Home() {
-  let posts: Post[] = [];
-  let caseStudies: CaseStudy[] = [];
+function ProductsSkeleton() {
+  return (
+    <section className="py-20 md:py-32 px-6 bg-secondary">
+      <div className="container mx-auto">
+        <div className="text-center mb-16 animate-pulse">
+          <div className="h-4 bg-muted rounded w-32 mx-auto mb-4" />
+          <div className="h-10 bg-muted rounded w-72 mx-auto" />
+        </div>
+        <div className="bg-background border border-border rounded-2xl p-8 md:p-10 mb-10 animate-pulse">
+          <div className="h-4 bg-muted rounded w-12 mb-4" />
+          <div className="h-8 bg-muted rounded w-48 mb-3" />
+          <div className="h-4 bg-muted rounded w-full max-w-lg mb-2" />
+          <div className="h-4 bg-muted rounded w-4/5 max-w-md" />
+        </div>
+      </div>
+    </section>
+  );
+}
 
-  try {
-    [posts, caseStudies] = await Promise.all([
-      client.fetch<Post[]>(latestPostsQuery),
-      client.fetch<CaseStudy[]>(allCaseStudiesQuery),
-    ]);
-  } catch {
-    // Sanity not configured yet; sections render with empty state copy
-  }
-
+export default function Home() {
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceSchema) }}
       />
       <Hero />
       <Problem />
       <Services />
-      <Products />
+      <Suspense fallback={<ProductsSkeleton />}>
+        <Products />
+      </Suspense>
       <Process />
       <WhySparkline />
 
-      {/* Selected work strip */}
+      {/* Selected work */}
       <section className="py-20 md:py-32 px-6 bg-secondary">
         <div className="container mx-auto">
           <div className="flex items-end justify-between mb-12">
@@ -151,52 +140,9 @@ export default async function Home() {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-
-          {caseStudies.length === 0 ? (
-            <div className="border border-border rounded-2xl p-8">
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600 mb-4 block">
-                <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-                Live in production
-              </span>
-              <h3 className="text-2xl font-semibold mb-2">
-                Building Propertyzone
-              </h3>
-              <p className="text-base text-muted-foreground mb-4">
-                Zimbabwe&apos;s intent-first property platform. From zero to live agencies in production.
-              </p>
-              <Link
-                href="/work/propertyzone"
-                className="inline-flex items-center gap-2 text-base font-medium hover:underline"
-              >
-                Read case study
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-6">
-              {caseStudies.slice(0, 2).map((study) => (
-                <div
-                  key={study.slug.current}
-                  className="border border-border rounded-2xl p-8"
-                >
-                  {study.industry && (
-                    <span className="text-sm uppercase tracking-widest text-muted-foreground block mb-2">
-                      {study.industry}
-                    </span>
-                  )}
-                  <h3 className="text-2xl font-semibold mb-2">{study.title}</h3>
-                  <Link
-                    href={`/work/${study.slug.current}`}
-                    className="inline-flex items-center gap-2 text-base font-medium hover:underline"
-                  >
-                    Read case study
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          )}
-
+          <Suspense fallback={<LatestWorkSkeleton />}>
+            <LatestWork />
+          </Suspense>
           <div className="mt-6 md:hidden">
             <Link
               href="/work"
@@ -209,7 +155,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Latest writing strip */}
+      {/* Latest writing */}
       <section className="py-20 md:py-32 px-6">
         <div className="container mx-auto">
           <div className="flex items-end justify-between mb-12">
@@ -229,37 +175,9 @@ export default async function Home() {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-
-          {posts.length === 0 ? (
-            <div className="border border-border rounded-xl p-8 text-center">
-              <p className="text-muted-foreground text-lg">
-                First post lands this week.
-              </p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-3 gap-6">
-              {posts.map((post) => (
-                <Link
-                  key={post.slug.current}
-                  href={`/blog/${post.slug.current}`}
-                  className="group border border-border rounded-xl p-6 hover:border-foreground transition-colors"
-                >
-                  <time className="text-sm text-muted-foreground block mb-2">
-                    {formatDate(post.publishedAt)}
-                  </time>
-                  <h3 className="text-lg font-semibold mb-2 group-hover:underline">
-                    {post.title}
-                  </h3>
-                  {post.excerpt && (
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
-                </Link>
-              ))}
-            </div>
-          )}
-
+          <Suspense fallback={<LatestPostsSkeleton />}>
+            <LatestPosts />
+          </Suspense>
           <div className="mt-6 md:hidden">
             <Link
               href="/blog"
