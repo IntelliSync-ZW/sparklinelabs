@@ -417,27 +417,6 @@ export default async function PropertyzoneCaseStudy() {
             </section>
           ))}
 
-          <section>
-            <h2 className="text-3xl font-semibold tracking-tight mb-6">Team</h2>
-            <div className="grid sm:grid-cols-3 gap-6 text-base">
-              {[
-                {
-                  label: "Team",
-                  value: "Sparkline Labs founders (product strategy + frontend, backend infrastructure, financial and legal)",
-                },
-                { label: "Started", value: "2025" },
-                { label: "Live", value: "2026" },
-              ].map((item) => (
-                <div key={item.label}>
-                  <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-1">
-                    {item.label}
-                  </p>
-                  <p className="text-foreground">{item.value}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
           <EndCTA waLink={waLink} />
         </div>
       </article>
