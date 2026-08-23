@@ -9,6 +9,24 @@ import { PortableTextRenderer, type RichTextValue } from "@/components/portable-
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 import Link from "next/link";
 
+type ArticleAuthor = {
+  articleRole?: string;
+  author: {
+    _id: string;
+    name: string;
+    slug?: { current: string };
+    role?: string;
+    company?: string;
+    avatar?: { url: string; alt?: string };
+    socials?: {
+      twitter?: string;
+      linkedin?: string;
+      github?: string;
+      bluesky?: string;
+    };
+  };
+};
+
 type CaseStudy = {
   _id: string;
   title: string;
@@ -31,6 +49,7 @@ type CaseStudy = {
   testimonialQuote?: string;
   testimonialAuthor?: string;
   productRef?: { name: string; slug: { current: string }; href: string };
+  authors?: ArticleAuthor[];
   seo?: { title?: string; description?: string; ogImage?: string };
 };
 
@@ -121,11 +140,23 @@ export default async function CaseStudyPage({ params }: Props) {
     description: study.summary,
     image: study.heroImage?.url ?? `https://www.sparklinelabs.co.zw/og-image.png`,
     datePublished: study.publishedAt,
-    author: {
-      "@type": "Organization",
-      name: "Sparkline Labs",
-      url: "https://www.sparklinelabs.co.zw",
-    },
+    author: study.authors && study.authors.length > 0
+      ? study.authors.map((a) => ({
+          "@type": "Person",
+          name: a.author.name,
+          jobTitle: a.author.role,
+          worksFor: a.author.company ? { "@type": "Organization", name: a.author.company } : undefined,
+          ...(a.author.avatar?.url && { image: a.author.avatar.url }),
+          ...(a.author.slug?.current && {
+            url: `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}`,
+            "@id": `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}#person`,
+          }),
+        }))
+      : {
+          "@type": "Organization",
+          name: "Sparkline Labs",
+          url: "https://www.sparklinelabs.co.zw",
+        },
     publisher: {
       "@type": "Organization",
       name: "Sparkline Labs",
@@ -274,17 +305,86 @@ export default async function CaseStudyPage({ params }: Props) {
             </section>
           )}
 
-          {/* Team */}
-          {(study.team || study.started || study.live) && (
+          {/* Team / Authors */}
+          {(study.team || study.started || study.live || (study.authors && study.authors.length > 0)) && (
             <section>
               <h2 className="text-3xl font-semibold tracking-tight mb-6">
-                Team
+                Team & Delivery
               </h2>
+              {study.authors && study.authors.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                  {study.authors.map(({ author, articleRole }) => {
+                    const authorHref = author.slug?.current
+                      ? `/blog/authors/${author.slug.current}`
+                      : null;
+                    return (
+                      <div
+                        key={author._id}
+                        className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card"
+                      >
+                        {authorHref ? (
+                          <Link
+                            href={authorHref}
+                            className="h-11 w-11 rounded-full overflow-hidden border border-border bg-secondary shrink-0 relative group/avatar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          >
+                            {author.avatar?.url ? (
+                              <Image
+                                src={author.avatar.url}
+                                alt={author.name}
+                                fill
+                                sizes="44px"
+                                className="object-cover transition-transform duration-300 group-hover/avatar:scale-105"
+                              />
+                            ) : (
+                              <span className="absolute inset-0 flex items-center justify-center font-semibold text-muted-foreground">
+                                {author.name.charAt(0)}
+                              </span>
+                            )}
+                          </Link>
+                        ) : (
+                          <div className="h-11 w-11 rounded-full overflow-hidden border border-border bg-secondary shrink-0 relative">
+                            {author.avatar?.url ? (
+                              <Image
+                                src={author.avatar.url}
+                                alt={author.name}
+                                fill
+                                sizes="44px"
+                                className="object-cover"
+                              />
+                            ) : (
+                              <span className="absolute inset-0 flex items-center justify-center font-semibold text-muted-foreground">
+                                {author.name.charAt(0)}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        <div>
+                          {authorHref ? (
+                            <Link
+                              href={authorHref}
+                              className="text-sm font-semibold text-foreground hover:underline"
+                            >
+                              {author.name}
+                            </Link>
+                          ) : (
+                            <p className="text-sm font-semibold text-foreground">
+                              {author.name}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground">
+                            {articleRole ? articleRole.replace(/_/g, " ") : (author.role ?? author.company ?? "Contributor")}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
               <div className="grid sm:grid-cols-3 gap-6 text-base">
                 {study.team && (
                   <div>
                     <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-1">
-                      Team
+                      Lead Team
                     </p>
                     <p className="text-foreground">{study.team}</p>
                   </div>

@@ -29,3 +29,9 @@ export const fetchCaseStudies = <T>(query: string, params?: QueryParams) =>
 
 export const fetchProducts = <T>(query: string, params?: QueryParams) =>
   sanityFetch<T>({ query, params, tags: ["product"], revalidate: 300 });
+
+export const fetchCategories = <T>(query: string, params?: QueryParams) =>
+  sanityFetch<T>({ query, params, tags: ["category"], revalidate: 300 });
+
+export const fetchAuthors = <T>(query: string, params?: QueryParams) =>
+  sanityFetch<T>({ query, params, tags: ["author"], revalidate: 300 });

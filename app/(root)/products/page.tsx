@@ -4,8 +4,8 @@ import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchProducts } from "@/sanity/lib/fetch";
-import { liveProductsQuery, inDevelopmentProductsQuery } from "@/sanity/lib/queries";
-import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE, WHATSAPP_BETA_MESSAGE, WHATSAPP_NOTIFY_MESSAGE } from "@/lib/config";
+import { liveProductsQuery } from "@/sanity/lib/queries";
+import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 
 type LiveProduct = {
   _id: string;
@@ -18,15 +18,6 @@ type LiveProduct = {
   href?: string;
   features?: string[];
   screenshot?: string;
-};
-
-type DevProduct = {
-  _id: string;
-  name: string;
-  status: string;
-  statusDate?: string;
-  description?: string;
-  tagline?: string;
 };
 
 const STATIC_LIVE: LiveProduct[] = [
@@ -48,37 +39,39 @@ const STATIC_LIVE: LiveProduct[] = [
       "Suburb-level content depth with neighbourhood reviews, school proximity, security info, and a growing real estate glossary.",
       "SEO-optimised listing pages with JSON-LD, OG image generation, and structured data for buy/rent intent.",
     ],
+    screenshot: "/propertyzone.png",
   },
-];
-
-const STATIC_DEV: DevProduct[] = [
   {
     _id: "agency-crm",
     name: "Agency CRM",
-    status: "private_beta",
-    statusDate: "Q2 2026",
+    slug: { current: "agency-crm" },
+    tagline: "The Core Sales Pipeline & Deal Tracking Engine for Propertyzone.",
     description:
-      "A CRM built around how Zimbabwean agencies actually work. WhatsApp-first lead handling, USD/ZWL dual pricing, manual-first workflows that agents can run before automating. Currently in closed beta with 3 agencies.",
-  },
-  {
-    _id: "wa-lead-router",
-    name: "WhatsApp Lead Router",
-    status: "in_design",
-    statusDate: "Q3 2026",
-    description:
-      "A routing layer that takes inbound WhatsApp enquiries from Propertyzone or any portal that integrates it, and auto-assigns them to agents based on suburb, listing reference number, and response SLA.",
+      "Agency CRM is built directly into Propertyzone to give EAC-registered real estate agencies a structured pipeline to track deals from initial WhatsApp enquiry through to viewing, negotiation, and commission payout.",
+    status: "live",
+    statusDate: "2026",
+    href: "https://www.propzone.co.zw/en/",
+    features: [
+      "Direct WhatsApp enquiry inbox with intent tag context (buy, rent, invest).",
+      "Visual deal stages: New Lead → Viewing Scheduled → Offer Made → Under Contract → Commission Paid.",
+      "Comprehensive deal accounting, commission splitting, and transaction tracking.",
+      "Agent performance attribution and lead response velocity metrics.",
+      "Available to all verified EAC-registered agency subscribers on Propertyzone.",
+    ],
+    screenshot: "/crm.png",
   },
 ];
 
 export const metadata: Metadata = {
-  title: "Products | Propertyzone and More | Sparkline Labs",
+  title: "Products | Propertyzone and Agency CRM | Sparkline Labs",
   description:
-    "Software products built and operated by Sparkline Labs. Propertyzone is Zimbabwe's intent-first property platform, live and serving EAC-registered agencies. Agency CRM and WhatsApp Lead Router in active development. No vapourware.",
+    "Software products built and operated by Sparkline Labs. Propertyzone is Zimbabwe's intent-first property platform, and Agency CRM is its core sales pipeline tracking engine. WhatsApp Lead Router in active development. No vapourware.",
   keywords: [
     "Propertyzone Zimbabwe",
+    "Agency CRM Zimbabwe",
     "Zimbabwe real estate platform",
     "EAC registered agency software",
-    "agency CRM Zimbabwe",
+    "sales pipeline tracking Zimbabwe",
     "WhatsApp lead routing Zimbabwe",
     "property listing platform Zimbabwe",
     "propzone.co.zw",
@@ -86,45 +79,26 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.sparklinelabs.co.zw/products" },
   openGraph: {
-    title: "Products | Propertyzone and More | Sparkline Labs",
+    title: "Products | Propertyzone and Agency CRM | Sparkline Labs",
     description:
-      "Propertyzone is live in Zimbabwe, serving EAC-registered agencies. Agency CRM in private beta. WhatsApp Lead Router in design. No vapourware.",
+      "Propertyzone and Agency CRM are live in Zimbabwe, serving EAC-registered agencies. WhatsApp Lead Router in design. No vapourware.",
     url: "https://www.sparklinelabs.co.zw/products",
     type: "website",
   },
 };
 
-function statusPill(status: string, statusDate?: string) {
-  if (status === "live") {
-    return { label: `Live${statusDate ? ` · launched ${statusDate}` : ""}`, color: "text-green-600" };
-  }
-  if (status === "private_beta") {
-    return { label: `Private beta · ${statusDate ?? ""}`, color: "text-amber-600" };
-  }
-  return { label: `In design · ${statusDate ?? ""}`, color: "text-muted-foreground" };
-}
-
 export default async function ProductsPage() {
   const waProjectLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
-  const waBetaLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_BETA_MESSAGE}`;
-  const waNotifyLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_NOTIFY_MESSAGE}`;
 
   let liveProducts: LiveProduct[] = [];
-  let devProducts: DevProduct[] = [];
 
   try {
     liveProducts = await fetchProducts<LiveProduct[]>(liveProductsQuery);
-    devProducts = await fetchProducts<DevProduct[]>(inDevelopmentProductsQuery);
   } catch {
     /* Sanity not configured */
   }
 
   if (!liveProducts || liveProducts.length === 0) liveProducts = STATIC_LIVE;
-  if (!devProducts || devProducts.length === 0) devProducts = STATIC_DEV;
-
-  const featured = liveProducts[0];
-  const isPropertyzone =
-    featured.slug?.current === "propertyzone" || featured._id === "propertyzone";
 
   const propertyzoneSchemaItem = {
     "@type": "ListItem",
@@ -157,11 +131,28 @@ export default async function ProductsPage() {
     },
   };
 
+  const crmSchemaItem = {
+    "@type": "ListItem",
+    "position": 2,
+    "item": {
+      "@type": "SoftwareApplication",
+      "name": "Agency CRM",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "CRM & Sales Pipeline Tracking",
+      "operatingSystem": "Web",
+      "url": "https://www.propzone.co.zw/en/",
+      "description": "Core sales pipeline and deal tracking system for Propertyzone subscribers. WhatsApp-first lead handling, stage-based deal progression, and commission tracking.",
+      "creator": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+      "inLanguage": "en-ZW",
+      "areaServed": { "@type": "Country", "name": "Zimbabwe" },
+    },
+  };
+
   const otherProducts = liveProducts
-    .filter((p) => p.slug?.current !== "propertyzone" && p._id !== "propertyzone")
+    .filter((p) => p.slug?.current !== "propertyzone" && p._id !== "propertyzone" && p._id !== "agency-crm" && p.name !== "Agency CRM")
     .map((p, i) => ({
       "@type": "ListItem",
-      "position": i + 2,
+      "position": i + 3,
       "item": {
         "@type": "SoftwareApplication",
         "name": p.name,
@@ -178,7 +169,7 @@ export default async function ProductsPage() {
     "@type": "ItemList",
     "name": "Sparkline Labs Products",
     "url": "https://www.sparklinelabs.co.zw/products",
-    "itemListElement": [propertyzoneSchemaItem, ...otherProducts],
+    "itemListElement": [propertyzoneSchemaItem, crmSchemaItem, ...otherProducts],
   };
 
   return (
@@ -196,187 +187,134 @@ export default async function ProductsPage() {
               Products
             </p>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 text-balance">
-              One product live.
+              Two products live.
               <br />
               <span className="text-muted-foreground">
-                Two in active development.
+                One in active development.
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
               We build products in the same domains we build for clients:
-              property, payments, and pipeline-heavy workflows. Our flagship is
-              Propertyzone. Everything else is still in the kitchen, and
-              we&apos;ll tell you exactly where it is on the menu.
+              property, payments, and pipeline-heavy workflows. Propertyzone and
+              its Agency CRM pipeline engine are live and serving EAC-registered
+              agencies.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Featured product */}
-      <section id={featured.slug?.current ?? "product"} className="py-20 md:py-32 px-6 bg-secondary scroll-mt-20">
-        <div className="container mx-auto">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600">
-              <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-              {statusPill(featured.status, featured.statusDate).label}
-            </span>
-          </div>
+      {/* Live products */}
+      {liveProducts.map((product, idx) => {
+        const isPropertyzone =
+          product.slug?.current === "propertyzone" || product._id === "propertyzone";
+        const isAgencyCRM =
+          product.slug?.current === "agency-crm" || product._id === "agency-crm" || product.name === "Agency CRM";
 
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-1">
-            {featured.name}
-          </h2>
-          {featured.href && (
-            <a
-              href={featured.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-lg text-muted-foreground hover:text-accent transition-colors underline underline-offset-4 block mb-4"
-            >
-              {new URL(featured.href).hostname.replace("www.", "")}
-            </a>
-          )}
-          {featured.tagline && (
-            <p className="text-xl text-muted-foreground mb-2">{featured.tagline}</p>
-          )}
-
-          {featured.description && (
-            <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mb-4">
-              {featured.description}
-            </p>
-          )}
-
-          {featured.features && featured.features.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-3">
-                  What it does
-                </p>
-                <ul className="space-y-2">
-                  {featured.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-foreground flex items-center justify-center mt-0.5">
-                        <Check className="w-3 h-3 text-background" />
-                      </div>
-                      <span className="text-base">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+        return (
+          <section
+            key={product._id}
+            id={product.slug?.current ?? `product-${idx}`}
+            className={`py-20 md:py-32 px-6 scroll-mt-20 ${idx % 2 === 0 ? "bg-secondary" : "bg-background border-t border-border"}`}
+          >
+            <div className="container mx-auto">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600">
+                  <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+                  {isAgencyCRM
+                    ? "Live · Core Propertyzone Module"
+                    : "Live"}
+                </span>
               </div>
 
-              {isPropertyzone && (
-                <div>
-                  <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-3">
-                    Who it&apos;s for
-                  </p>
-                  <p className="text-base text-muted-foreground leading-relaxed">
-                    EAC-registered real estate agencies in Zimbabwe, with active
-                    expansion to Nigeria. Property seekers searching for honest,
-                    detail-rich listings instead of stock photos and missing
-                    addresses.
-                  </p>
+              <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-1">
+                {product.name}
+              </h2>
+              {product.href && (
+                <a
+                  href={product.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg text-muted-foreground hover:text-accent transition-colors underline underline-offset-4 block mb-4"
+                >
+                  {new URL(product.href).hostname.replace("www.", "")}
+                </a>
+              )}
+              {product.tagline && (
+                <p className="text-xl text-muted-foreground mb-2">{product.tagline}</p>
+              )}
+
+              {product.description && (
+                <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mb-6">
+                  {product.description}
+                </p>
+              )}
+
+              {product.features && product.features.length > 0 && (
+                <div className="grid md:grid-cols-2 gap-8 mb-8">
+                  <div>
+                    <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-3">
+                      What it does
+                    </p>
+                    <ul className="space-y-2">
+                      {product.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-3">
+                          <div className="shrink-0 w-5 h-5 rounded-full bg-foreground flex items-center justify-center mt-0.5">
+                            <Check className="w-3 h-3 text-background" />
+                          </div>
+                          <span className="text-base">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-3">
+                      Who it&apos;s for
+                    </p>
+                    <p className="text-base text-muted-foreground leading-relaxed">
+                      {isAgencyCRM
+                        ? "Active EAC-registered agency subscribers on Propertyzone who need structured sales pipeline management, WhatsApp response logs, and automated deal stage tracking."
+                        : "EAC-registered real estate agencies in Zimbabwe, with active expansion to Nigeria. Property seekers searching for honest, detail-rich listings instead of stock photos and missing addresses."}
+                    </p>
+                  </div>
                 </div>
               )}
-            </div>
-          )}
 
-          {isPropertyzone && !featured.features && (
-            <div className="mb-8">
-              <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-3">
-                Who it&apos;s for
-              </p>
-              <p className="text-base text-muted-foreground leading-relaxed max-w-2xl">
-                EAC-registered real estate agencies in Zimbabwe, with active
-                expansion to Nigeria. Property seekers searching for honest,
-                detail-rich listings instead of stock photos and missing
-                addresses.
-              </p>
-            </div>
-          )}
-
-          {isPropertyzone && featured.screenshot && (
-            <div className="relative w-full overflow-hidden rounded-2xl border border-border mb-8">
-              <Image
-                src={featured.screenshot}
-                alt={`${featured.name} screenshot`}
-                width={1200}
-                height={675}
-                className="w-full h-auto object-cover"
-              />
-            </div>
-          )}
-
-          <div className="flex flex-wrap gap-4">
-            {featured.href && (
-              <Button
-                size="lg"
-                className="group bg-accent text-accent-foreground hover:bg-accent/90"
-                asChild
-              >
-                <a href={featured.href} target="_blank" rel="noopener noreferrer">
-                  Visit {new URL(featured.href).hostname.replace("www.", "")}
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-              </Button>
-            )}
-            {isPropertyzone && (
-              <Button variant="outline" size="lg" className="bg-transparent" asChild>
-                <Link href="/work/propertyzone">Read the full case study</Link>
-              </Button>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* In development */}
-      <section className="py-20 md:py-32 px-6">
-        <div className="container mx-auto">
-          <h2 className="text-2xl font-semibold tracking-tight mb-10">
-            Currently in development
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {devProducts.map((item) => {
-              const pill = statusPill(item.status, item.statusDate);
-              const isAgencyCRM = item._id === "agency-crm" || item.name === "Agency CRM";
-              const isWaRouter = item._id === "wa-lead-router" || item.name === "WhatsApp Lead Router";
-              return (
-                <div key={item._id} className="border border-border rounded-2xl p-8">
-                  <span className={`inline-flex items-center gap-1.5 text-sm font-medium ${pill.color} mb-4 block`}>
-                    {pill.label}
-                  </span>
-                  <h3 className="text-2xl font-semibold mb-3">{item.name}</h3>
-                  {(item.description ?? item.tagline) && (
-                    <p className="text-base text-muted-foreground leading-relaxed mb-6">
-                      {item.description ?? item.tagline}
-                    </p>
-                  )}
-                  {isAgencyCRM && (
-                    <Button variant="outline" className="bg-transparent" asChild>
-                      <a href={waBetaLink} target="_blank" rel="noopener noreferrer">
-                        Request beta access
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </a>
-                    </Button>
-                  )}
-                  {isWaRouter && (
-                    <Button variant="outline" className="bg-transparent" asChild>
-                      <a href={waNotifyLink} target="_blank" rel="noopener noreferrer">
-                        Get notified at launch
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </a>
-                    </Button>
-                  )}
+              {product.screenshot && (
+                <div className="relative w-full overflow-hidden rounded-2xl border border-border mb-8">
+                  <Image
+                    src={product.screenshot}
+                    alt={`${product.name} screenshot`}
+                    width={1200}
+                    height={675}
+                    className="w-full h-auto object-cover"
+                  />
                 </div>
-              );
-            })}
-          </div>
+              )}
 
-          <p className="text-sm text-muted-foreground text-center">
-            We ship one product to live status before announcing the next. No
-            vapourware.
-          </p>
-        </div>
-      </section>
+              <div className="flex flex-wrap gap-4">
+                {product.href && (
+                  <Button
+                    size="lg"
+                    className="group bg-accent text-accent-foreground hover:bg-accent/90"
+                    asChild
+                  >
+                    <a href={product.href} target="_blank" rel="noopener noreferrer">
+                      {isAgencyCRM ? "Access on Propertyzone" : `Visit ${new URL(product.href).hostname.replace("www.", "")}`}
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </a>
+                  </Button>
+                )}
+                {isPropertyzone && (
+                  <Button variant="outline" size="lg" className="bg-transparent" asChild>
+                    <Link href="/work/propertyzone">Read the full case study</Link>
+                  </Button>
+                )}
+              </div>
+            </div>
+          </section>
+        );
+      })}
 
       {/* Bottom CTA */}
       <section className="py-20 md:py-32 px-6 bg-foreground text-background">

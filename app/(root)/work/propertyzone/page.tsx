@@ -128,7 +128,7 @@ const STATIC_SECTIONS = [
         body: "Expansion to Nigeria is in scoping: a market with similar structural problems at roughly 20x the addressable inventory.",
       },
       {
-        body: "The Agency CRM (Q2 2026) and the WhatsApp Lead Router (Q3 2026) are both built to interoperate with Propertyzone, turning the portal into a lead engine for agencies running their own pipelines.",
+        body: "The Agency CRM is live for all active Propertyzone subscribers, powering sales pipeline tracking and lead management. The WhatsApp Lead Router (Q3 2026) is in development to auto-assign incoming enquiries across teams.",
       },
     ],
   },

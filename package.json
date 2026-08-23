@@ -23,6 +23,9 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "sanity": "^5.25.1",
+    "sanity-plugin-stl-table": "^0.3.0",
+    "structured-table": "^0.3.0",
+    "structured-table-cli": "^0.2.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7"
   },
