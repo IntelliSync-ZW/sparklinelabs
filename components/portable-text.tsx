@@ -6,6 +6,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
+import { STLReact } from "@/components/stl-render-react/latest";
+import "@/components/stl-render-react/latest/style.css";
 
 export type RichTextValue = PortableTextProps["value"];
 
@@ -100,7 +102,7 @@ const components: Partial<PortableTextReactComponents> = {
       if (!value?.asset) return null;
       const imageUrl = urlFor(value).width(1200).quality(90).url();
       return (
-        <figure className="my-8">
+        <figure className="my-4">
           <div className="relative w-full overflow-hidden rounded-xl border border-border">
             <Image
               src={imageUrl}
@@ -117,6 +119,29 @@ const components: Partial<PortableTextReactComponents> = {
             </figcaption>
           )}
         </figure>
+      );
+    },
+    stlTableBlock: ({ value }) => {
+      let parsedData = value?.stlParsed;
+      if (typeof parsedData === "string") {
+        try {
+          parsedData = JSON.parse(parsedData);
+        } catch {
+          parsedData = null;
+        }
+      }
+      if (!parsedData && typeof value?.stlString === "string") {
+        try {
+          parsedData = JSON.parse(value.stlString);
+        } catch {
+          parsedData = null;
+        }
+      }
+      if (!parsedData || !parsedData.body) return null;
+      return (
+        <div className="my-6 w-full max-w-full overflow-hidden">
+          <STLReact.Table data={parsedData} />
+        </div>
       );
     },
   },

@@ -27,11 +27,22 @@ export const categorySchema = defineType({
       rows: 2,
     }),
     defineField({
+      name: "image",
+      title: "Image",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({ name: "alt", title: "Alt text", type: "string" }),
+      ],
+    }),
+    defineField({
       name: "color",
       title: "Color (Tailwind class)",
       description: "e.g. text-blue-600 — used for the category pill",
       type: "string",
     }),
   ],
-  preview: { select: { title: "title", subtitle: "description" } },
+  preview: {
+    select: { title: "title", subtitle: "description", media: "image" },
+  },
 });

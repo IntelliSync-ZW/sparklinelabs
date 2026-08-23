@@ -7,6 +7,7 @@ type Post = {
   slug: { current: string };
   excerpt?: string;
   publishedAt?: string;
+  category?: { title: string; slug: { current: string } };
 };
 
 function formatDate(dateStr: string) {
@@ -35,27 +36,30 @@ export async function LatestPosts() {
 
   return (
     <div className="grid md:grid-cols-3 gap-6">
-      {posts.map((post) => (
-        <Link
-          key={post.slug.current}
-          href={`/blog/${post.slug.current}`}
-          className="group border border-border rounded-xl p-6 hover:border-foreground transition-colors"
-        >
-          {post.publishedAt && (
-            <time className="text-sm text-muted-foreground block mb-2">
-              {formatDate(post.publishedAt)}
-            </time>
-          )}
-          <h3 className="text-lg font-semibold mb-2 group-hover:underline">
-            {post.title}
-          </h3>
-          {post.excerpt && (
-            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-              {post.excerpt}
-            </p>
-          )}
-        </Link>
-      ))}
+      {posts.map((post) => {
+        const categorySlug = post.category?.slug.current ?? "uncategorised";
+        return (
+          <Link
+            key={post.slug.current}
+            href={`/blog/${categorySlug}/${post.slug.current}`}
+            className="group border border-border rounded-xl p-6 hover:border-foreground transition-colors"
+          >
+            {post.publishedAt && (
+              <time className="text-sm text-muted-foreground block mb-2">
+                {formatDate(post.publishedAt)}
+              </time>
+            )}
+            <h3 className="text-lg font-semibold mb-2 group-hover:underline">
+              {post.title}
+            </h3>
+            {post.excerpt && (
+              <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                {post.excerpt}
+              </p>
+            )}
+          </Link>
+        );
+      })}
     </div>
   );
 }
