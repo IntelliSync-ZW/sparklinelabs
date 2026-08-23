@@ -12,6 +12,7 @@ import {
 import { PortableTextRenderer, type RichTextValue } from "@/components/portable-text";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 import { ViewTracker } from "@/components/blog/view-tracker";
+import { TableOfContents } from "@/components/blog/table-of-contents";
 
 type ArticleAuthor = {
   articleRole?: string;
@@ -373,6 +374,11 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Main Content */}
       <article className="pb-20 md:pb-32 px-6">
         <div className="container mx-auto max-w-3xl">
+          {/* Inline sticky TOC — just below the cover image, starts closed */}
+          {post.body && post.body.length > 0 && (
+            <TableOfContents body={post.body as unknown[]} />
+          )}
+
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-8">

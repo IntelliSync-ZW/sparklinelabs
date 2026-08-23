@@ -11,6 +11,16 @@ import "@/components/stl-render-react/latest/style.css";
 
 export type RichTextValue = PortableTextProps["value"];
 
+/** Converts heading text to a URL-safe id, matching the TOC link generation. */
+export function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/[\s_]+/g, "-");
+}
+
+
 const components: Partial<PortableTextReactComponents> = {
   block: {
     normal: ({ children }) => (
@@ -18,16 +28,24 @@ const components: Partial<PortableTextReactComponents> = {
         {children}
       </p>
     ),
-    h2: ({ children }) => (
-      <h2 className="text-3xl font-semibold tracking-tight text-foreground mt-12 mb-5 first:mt-0">
-        {children}
-      </h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="text-xl font-semibold text-foreground mt-8 mb-3 first:mt-0">
-        {children}
-      </h3>
-    ),
+    h2: ({ children, value }) => {
+      const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
+      const id = slugifyHeading(text);
+      return (
+        <h2 id={id} className="text-3xl font-semibold tracking-tight text-foreground mt-12 mb-5 first:mt-0 scroll-mt-24">
+          {children}
+        </h2>
+      );
+    },
+    h3: ({ children, value }) => {
+      const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
+      const id = slugifyHeading(text);
+      return (
+        <h3 id={id} className="text-xl font-semibold text-foreground mt-8 mb-3 first:mt-0 scroll-mt-24">
+          {children}
+        </h3>
+      );
+    },
     h4: ({ children }) => (
       <h4 className="text-lg font-semibold text-foreground mt-6 mb-2">
         {children}
