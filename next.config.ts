@@ -26,6 +26,36 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog/is-zimbabwean-real-estate-ready-for-ai",
+        destination:
+          "/blog/software-industry/is-zimbabwean-real-estate-ready-for-ai",
+        permanent: true,
+      },
+      {
+        source:
+          "/blog/building-for-the-distribution-bottleneck-why-we-engineered-a-whatsapp-first-matching-engine",
+        destination:
+          "/blog/seo-digital-strategy/building-for-the-distribution-bottleneck-why-we-engineered-a-whatsapp-first-matching-engine",
+        permanent: true,
+      },
+      {
+        source: "/blog/winning-the-market-where-connectivity-is-a-luxury",
+        destination:
+          "/blog/seo-digital-strategy/winning-the-market-where-connectivity-is-a-luxury",
+        permanent: true,
+      },
+      {
+        source:
+          "/blog/whatsapp-as-a-crm-channel-what-we-learned-from-propertyzone-s-lead-flow",
+        destination:
+          "/blog/seo-digital-strategy/whatsapp-as-a-crm-channel-what-we-learned-from-propertyzone-s-lead-flow",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
