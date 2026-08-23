@@ -11,6 +11,7 @@ import {
 } from "@/sanity/lib/queries";
 import { PortableTextRenderer, type RichTextValue } from "@/components/portable-text";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
+import { ViewTracker } from "@/components/blog/view-tracker";
 
 type ArticleAuthor = {
   articleRole?: string;
@@ -220,6 +221,9 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
+      {/* Client-side view tracker — fires once per session per post via cookie */}
+      <ViewTracker postId={post._id} slug={post.slug.current} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}

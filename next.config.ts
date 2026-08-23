@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
       {
         source: "/blog/is-zimbabwean-real-estate-ready-for-ai",
         destination:
-          "/blog/software-industry/is-zimbabwean-real-estate-ready-for-ai",
+          "/blog/proptech-real-estate/zimbabwe-real-estate-ai-readiness-data-infrastructure",
         permanent: true,
       },
       {

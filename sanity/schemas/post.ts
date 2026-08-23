@@ -150,6 +150,18 @@ export const postSchema = defineType({
       type: "datetime",
     }),
     defineField({ name: "seo", title: "SEO", type: "seo" }),
+
+    // ── Analytics (Studio-only, not projected in frontend queries) ────────────
+    defineField({
+      name: "viewCount",
+      title: "View Count",
+      description: "Automatically incremented by the website. Do not edit manually.",
+      type: "number",
+      initialValue: 0,
+      readOnly: true,
+      group: undefined,
+      options: {},
+    }),
   ],
   orderings: [
     {
@@ -157,8 +169,32 @@ export const postSchema = defineType({
       name: "publishedAtDesc",
       by: [{ field: "publishedAt", direction: "desc" }],
     },
+    {
+      title: "Most Viewed",
+      name: "viewCountDesc",
+      by: [{ field: "viewCount", direction: "desc" }],
+    },
   ],
   preview: {
-    select: { title: "title", subtitle: "excerpt", media: "coverImage" },
+    select: {
+      title: "title",
+      subtitle: "excerpt",
+      media: "coverImage",
+      views: "viewCount",
+    },
+    prepare(selection) {
+      const { title, subtitle, media, views } = selection as {
+        title: string;
+        subtitle?: string;
+        media?: string | boolean | number;
+        views?: number;
+      };
+      const count = views ?? 0;
+      return {
+        title,
+        subtitle: `👁 ${count} view${count === 1 ? "" : "s"}${subtitle ? ` · ${subtitle}` : ""}`,
+        media,
+      };
+    },
   },
 });
