@@ -31,12 +31,12 @@ type Author = {
 };
 
 export const metadata: Metadata = {
-  title: "Authors & Contributors | Sparkline Labs",
+  title: "Solutions Engineering Team Zimbabwe | Sparkline Labs",
   description:
     "Meet the engineers, founders, and technical writers sharing battle-tested playbooks on building software for Zimbabwe and African markets.",
   alternates: { canonical: "https://www.sparklinelabs.co.zw/blog/authors" },
   openGraph: {
-    title: "Authors & Contributors | Sparkline Labs",
+    title: "Solutions Engineering Team Zimbabwe | Sparkline Labs",
     description:
       "Meet the engineers and domain experts sharing playbooks on software development in Zimbabwe.",
     url: "https://www.sparklinelabs.co.zw/blog/authors",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Authors & Contributors | Sparkline Labs",
+    title: "Solutions Engineering Team Zimbabwe | Sparkline Labs",
     description:
       "Meet the team writing about Zimbabwean tech infrastructure, payment integrations, and SME distribution.",
   },
@@ -129,10 +129,10 @@ export default async function AuthorsIndexPage() {
             Our Voice
           </p>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 text-balance max-w-3xl">
-            Authors & Contributors.
+            The people behind the systems.
           </h1>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-            The engineers, product architects, and builders documenting real-world technical playbooks for software engineering in Zimbabwe and across Africa.
+            We work across business operations, product design and engineering. Our job is to understand the problem well enough to determine what should be built and then build it properly.
           </p>
         </div>
       </section>

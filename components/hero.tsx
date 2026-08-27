@@ -10,18 +10,15 @@ export function Hero() {
       <div className="container mx-auto">
         <div className="text-center">
           <p className="text-base uppercase tracking-widest opacity-70 font-medium mb-6">
-            Software development - Harare, Zimbabwe
+            Solutions Engineering - Harare, Zimbabwe
           </p>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl max-w-6xl mx-auto font-semibold tracking-tight leading-[1.05] text-balance mb-8">
-            We build the software African businesses actually use.
+            We engineer systems African businesses can actually run.
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-12 leading-relaxed text-pretty">
-            We&apos;re the team behind Propertyzone. We build custom platforms,
-            internal tools, and SaaS products for businesses operating in real
-            Zimbabwean conditions: USD pricing, WhatsApp-first customers,
-            ZESA-tolerant architecture, Paynow on the rails.
+            We&apos;re the team behind Propertyzone. We design and engineer the digital systems businesses need to operate better: connecting people, processes, data and software around the conditions that actually exist in Zimbabwe and across Africa.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -31,7 +28,7 @@ export function Hero() {
               asChild
             >
               <a href={waLink} target="_blank" rel="noopener noreferrer">
-                Book a call
+                Tell us what isn&apos;t working
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </a>
             </Button>
@@ -46,7 +43,7 @@ export function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                See Propertyzone live
+                See what we&apos;ve engineered
               </a>
             </Button>
           </div>

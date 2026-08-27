@@ -35,7 +35,7 @@ export async function LatestPosts() {
   }
 
   return (
-    <div className="grid md:grid-cols-3 gap-6">
+    <div className="grid lg:grid-cols-3 gap-6">
       {posts.map((post) => {
         const categorySlug = post.category?.slug.current ?? "uncategorised";
         return (

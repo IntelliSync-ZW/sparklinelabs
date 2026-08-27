@@ -35,3 +35,6 @@ export const fetchCategories = <T>(query: string, params?: QueryParams) =>
 
 export const fetchAuthors = <T>(query: string, params?: QueryParams) =>
   sanityFetch<T>({ query, params, tags: ["author"], revalidate: 300 });
+
+export const fetchServicesPage = <T>(query: string, params?: QueryParams) =>
+  sanityFetch<T>({ query, params, tags: ["servicesPage"], revalidate: 300 });

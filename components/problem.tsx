@@ -7,22 +7,17 @@ export function Problem() {
         <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
           <div>
             <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
-              The reality
+              The operating reality
             </p>
             <h2 className="text-4xl md:text-5xl font-semibold tracking-tight leading-tight mb-6 text-balance">
-              Most software sold into Zimbabwe doesn&apos;t fit Zimbabwe.
+              Most digital solutions are designed around assumptions Zimbabwean businesses don&apos;t have.
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-4">
-              Foreign SaaS breaks on local payment rails, assumes 24/7 power,
-              and prices in currencies your customers don&apos;t hold. Local
-              builds often ship without a roadmap and stall after launch,
-              leaving you with code nobody can extend.
+              A system can be technically excellent and still be wrong for the business using it. It can assume constant connectivity, force customers away from WhatsApp, ignore local payment rails, create work instead of removing it, or depend on a process nobody inside the business can actually maintain. <br />
+              We start with the operating reality first: how your team works, where information gets lost, what customers already use, what constraints cannot be removed, and where technology can create a measurable improvement.
             </p>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              We build for the conditions that actually exist on the ground: USD
-              pricing, WhatsApp as a primary channel, offline-tolerant flows,
-              and operators who need to run the system manually before it ever
-              sees automation.
+              Then we engineer around those conditions - whether that means changing a workflow, connecting existing tools, automating a repetitive process, or building a completely new system.
             </p>
           </div>
 

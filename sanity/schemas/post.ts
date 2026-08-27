@@ -56,7 +56,7 @@ export const postSchema = defineType({
               type: "string",
               options: {
                 list: [
-                  { title: "Lead Author", value: "lead_author" },
+                  { title: "Author", value: "lead_author" },
                   { title: "Co-author", value: "co_author" },
                   { title: "Editor", value: "editor" },
                   { title: "Contributor", value: "contributor" },
@@ -75,7 +75,7 @@ export const postSchema = defineType({
             },
             prepare({ name, role, media }) {
               const roleLabel: Record<string, string> = {
-                lead_author: "Lead Author",
+                lead_author: "Author",
                 co_author: "Co-author",
                 editor: "Editor",
                 contributor: "Contributor",
@@ -155,7 +155,8 @@ export const postSchema = defineType({
     defineField({
       name: "viewCount",
       title: "View Count",
-      description: "Automatically incremented by the website. Do not edit manually.",
+      description:
+        "Automatically incremented by the website. Do not edit manually.",
       type: "number",
       initialValue: 0,
       readOnly: true,

@@ -13,14 +13,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Custom Software Development Zimbabwe | Sparkline Labs",
+  title: "Solutions Engineering Zimbabwe | Sparkline Labs",
   description:
-    "Harare-based software studio building platforms, internal tools, and SaaS for Zimbabwean businesses. Native Paynow and EcoCash integration, WhatsApp-first architecture, USD billing. Two-week paid discovery. The team behind Propertyzone.",
+    "We engineer digital systems for Zimbabwean and African businesses - from operational workflows and integrations to custom platforms, automation and internal tools. The team behind Propertyzone.",
   alternates: { canonical: "https://www.sparklinelabs.co.zw" },
   openGraph: {
-    title: "Custom Software Development Zimbabwe | Sparkline Labs",
+    title: "Solutions Engineering Zimbabwe | Sparkline Labs",
     description:
-      "Harare-based. Paynow, EcoCash, WhatsApp-native. Two-week paid discovery, outcome-tied pricing, zero retainers. The team behind Propertyzone.",
+      "We engineer digital systems for Zimbabwean and African businesses - from operational workflows and integrations to custom platforms, automation and internal tools. The team behind Propertyzone.",
     url: "https://www.sparklinelabs.co.zw",
   },
 };
@@ -32,7 +32,7 @@ const professionalServiceSchema = {
   "name": "Sparkline Labs",
   "url": "https://www.sparklinelabs.co.zw",
   "image": "https://www.sparklinelabs.co.zw/og-image.png",
-  "description": "Harare-based software studio specialising in custom platforms, Paynow and EcoCash payment integrations, and WhatsApp-first business tools for Zimbabwean and African enterprises.",
+  "description": "We engineer digital systems for Zimbabwean and African businesses - from operational workflows and integrations to custom platforms, automation and internal tools.",
   "priceRange": "$$",
   "currenciesAccepted": "USD, ZWL",
   "address": {
@@ -53,24 +53,24 @@ const professionalServiceSchema = {
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "Custom Platform Development",
-          "description": "End-to-end web platforms built for Zimbabwean conditions: ZESA-resilient architecture, offline-capable design, WhatsApp-native workflows, and USD/ZWL dual billing from day one.",
+          "name": "Digital Systems",
+          "description": "Customer-facing platforms, internal systems and business applications designed around the way your organisation actually operates.",
         },
       },
       {
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "Payment Integration",
-          "description": "Native integrations with Paynow, EcoCash, ZimSwitch, and international payment rails for businesses operating in Zimbabwe and across Africa.",
+          "name": "Integrations and automation",
+          "description": "Connect the systems you already use, remove repetitive handovers, and automate the parts of your operation that should not require someone copying information between WhatsApp, spreadsheets, email and business software.",
         },
       },
       {
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "WhatsApp Business Infrastructure",
-          "description": "Lead routing, automated qualification, and client communication systems built on the WhatsApp Business API - the default primary channel for Zimbabwean businesses.",
+          "name": "Solution architecture",
+          "description": "Not sure whether you need new software, an integration, automation or a change to the way your existing systems work? We map the problem, design the solution and give you a practical implementation plan before a build begins.",
         },
       },
       {
@@ -129,7 +129,7 @@ export default function Home() {
                 Selected work
               </p>
               <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
-                Things we&apos;ve shipped.
+                Problems we&apos;ve engineered around.
               </h2>
             </div>
             <Link
@@ -164,7 +164,7 @@ export default function Home() {
                 Latest writing
               </p>
               <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
-                What we&apos;ve been figuring out.
+                What we&apos;re learning from building in Zimbabwe.
               </h2>
             </div>
             <Link
@@ -183,7 +183,7 @@ export default function Home() {
               href="/blog"
               className="inline-flex items-center gap-2 text-base text-muted-foreground hover:text-foreground transition-colors"
             >
-              See all posts
+              See all our discoveries
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

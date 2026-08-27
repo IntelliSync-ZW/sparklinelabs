@@ -79,18 +79,7 @@ export default async function BlogPage({ searchParams }: Props) {
             Engineering for the Zimbabwean Reality.
           </h1>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-            Hard-won playbooks from shipping{" "}
-            <a
-              href="https://www.propzone.co.zw/en/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-foreground transition-colors"
-            >
-              Propertyzone
-            </a>{" "}
-            and high-stakes custom builds. We document how to navigate local
-            payment rails, deploy WhatsApp as primary infrastructure, and design
-            commercial models that actually capture revenue from African SMEs.
+            Hard-won lessons from engineering systems in Zimbabwe. We document what happens when software meets local payment rails, unreliable connectivity, WhatsApp-first customers, fragmented data and the operational realities of African businesses.
           </p>
         </div>
       </section>

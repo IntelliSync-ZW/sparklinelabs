@@ -24,9 +24,9 @@ const STATIC_LIVE: LiveProduct[] = [
     _id: "propertyzone",
     name: "Propertyzone",
     slug: { current: "propertyzone" },
-    tagline: "Zimbabwe's intent-first property platform",
+    tagline: "A digital operating system for Zimbabwean property agencies.",
     description:
-      "A property listing and lead management platform for verified buyers, renters, agents, and landlords. Built around intent, not just impressions.",
+      "A property platform engineered around the realities of Zimbabwean property agencies - structured listing data, verified demand, lead routing, agency workflows and direct WhatsApp communication.",
     status: "live",
     href: "https://www.propzone.co.zw/en/",
     features: [
@@ -64,7 +64,7 @@ export async function Products() {
             What we&apos;ve built
           </p>
           <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
-            One product live. More on the way.
+            Systems we&apos;ve put into production.
           </h2>
         </div>
 
@@ -144,7 +144,7 @@ export async function Products() {
         </div>
 
         <p className="text-sm text-muted-foreground text-center">
-          We ship one product to live status before announcing the next. No vapourware.
+          We ship one product to live status before announcing the next.
         </p>
 
         <div className="text-center mt-8">

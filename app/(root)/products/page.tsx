@@ -63,9 +63,9 @@ const STATIC_LIVE: LiveProduct[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "Products | Propertyzone and Agency CRM | Sparkline Labs",
+  title: "Digital Products Engineered in Zimbabwe | Sparkline Labs",
   description:
-    "Software products built and operated by Sparkline Labs. Propertyzone is Zimbabwe's intent-first property platform, and Agency CRM is its core sales pipeline tracking engine. WhatsApp Lead Router in active development. No vapourware.",
+    "Explore digital products engineered by Sparkline Labs for real African operating conditions, including Propertyzone, our Zimbabwe property platform.",
   keywords: [
     "Propertyzone Zimbabwe",
     "Agency CRM Zimbabwe",
@@ -184,7 +184,7 @@ export default async function ProductsPage() {
         <div className="container mx-auto">
           <div className="max-w-3xl">
             <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
-              Products
+              Products we&apos;ve engineered from real problems.
             </p>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 text-balance">
               Two products live.
@@ -194,10 +194,7 @@ export default async function ProductsPage() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-              We build products in the same domains we build for clients:
-              property, payments, and pipeline-heavy workflows. Propertyzone and
-              its Agency CRM pipeline engine are live and serving EAC-registered
-              agencies.
+              We don&apos;t build products because a technology trend makes them possible. We build them when a real operating problem is large enough to deserve a system.
             </p>
           </div>
         </div>

@@ -21,13 +21,13 @@ export async function LatestWork() {
   if (caseStudies.length === 0) {
     return (
       <div className="border border-border rounded-2xl p-8">
-        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600 mb-4 block">
+        <span className="items-center gap-1.5 text-sm font-medium text-green-600 mb-4 block">
           <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-          Live in production
+          In production
         </span>
-        <h3 className="text-2xl font-semibold mb-2">Building Propertyzone</h3>
+        <h3 className="text-2xl font-semibold mb-2">Propertyzone: Engineering a better property workflow</h3>
         <p className="text-base text-muted-foreground mb-4">
-          Zimbabwe&apos;s intent-first property platform. From zero to live agencies in production.
+          A property platform built around the way Zimbabwean agencies actually acquire, qualify, route and manage property demand from structured listing data to verified enquiries and WhatsApp-led communication
         </p>
         <Link
           href="/work/propertyzone"

@@ -3,27 +3,27 @@ import { Zap, Shield, Users, Clock } from "lucide-react";
 const reasons = [
   {
     icon: Zap,
-    title: "Outcome-tied pricing",
+    title: "Engineering tied to an outcome",
     description:
-      "Flat fee per deliverable. No hourly bills, no scope creep, no discovery extension invoices.",
+      "We define what is being solved, what will be delivered and what it will cost before implementation begins.",
   },
   {
     icon: Shield,
-    title: "Manual-first design",
+    title: "Workflow before automation",
     description:
-      "We run the workflow manually with you before we automate it. Saves you money. Stops you automating the wrong thing.",
+      "We understand the real process before automating it. That prevents expensive systems from being built around assumptions that don't survive contact with the business.",
   },
   {
     icon: Users,
-    title: "Zimbabwe-native stack",
+    title: "Engineered for local conditions",
     description:
-      "USD billing, WhatsApp routing, Paynow / EcoCash integration, ZESA-tolerant architecture. Each one shipped in production.",
+      "WhatsApp-first customers, local payment rails, unreliable connectivity, mobile-first users and the operational realities of African businesses are design inputs, not afterthoughts.",
   },
   {
     icon: Clock,
-    title: "Founder-led delivery",
+    title: "Direct engineering",
     description:
-      "Code is written by the founders. No offshoring. No agency middlemen. You talk to the people building it.",
+      "You work directly with the people understanding the problem, designing the solution and engineering the system. No layers of account managers translating your business into tickets.",
   },
 ];
 
@@ -38,42 +38,21 @@ export function WhySparkline() {
               Why Sparkline
             </p>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] mb-6">
-              We built{" "}
-              <a
-                href="https://www.propzone.co.zw/en/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-4"
-              >
-                Propertyzone
-              </a>
-              . Now we build for you.
+              We engineer around the business, not around the technology.
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              We don&apos;t sell retainers. We sell outcomes: a defined
-              deliverable for a fixed price, on a fixed timeline. That&apos;s
-              the same commercial model we use for{" "}
-              <a
-                href="https://www.propzone.co.zw/en/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-2"
-              >
-                Propertyzone
-              </a>
-              , and it&apos;s the only one we offer clients.
+              We don&apos;t start with a technology stack or a list of features. We start with the operational problem and work backwards to the simplest system capable of solving it. The result may be an integration, an automation, an internal tool, or an entirely new platform.
             </p>
           </div>
 
           {/* Right column */}
           <div className="md:col-span-7">
-            <div className="grid grid-cols-2 gap-4 md:gap-6">
+            <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
               {reasons.map((reason, index) => (
                 <div
                   key={index}
-                  className={`group p-6 md:p-8 border border-border rounded-xl transition-all hover:border-foreground hover:shadow-lg ${
-                    index % 2 === 1 ? "md:translate-y-8" : ""
-                  }`}
+                  className={`group p-6 md:p-8 border border-border rounded-xl transition-all hover:border-foreground hover:shadow-lg ${index % 2 === 1 ? "md:translate-y-8" : ""
+                    }`}
                 >
                   <div className="w-12 h-12 rounded-full bg-accent text-background flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
                     <reason.icon className="size-5" />

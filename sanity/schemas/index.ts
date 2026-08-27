@@ -4,6 +4,7 @@ import { categorySchema } from "./category";
 import { productSchema } from "./product";
 import { caseStudySchema } from "./caseStudy";
 import { postSchema } from "./post";
+import { servicesPageSchema } from "./servicesPage";
 
 export const schemaTypes = [
   // Reusable objects first
@@ -11,6 +12,7 @@ export const schemaTypes = [
   // Independent documents
   authorSchema,
   categorySchema,
+  servicesPageSchema,
   // Documents that reference others
   productSchema,
   caseStudySchema,

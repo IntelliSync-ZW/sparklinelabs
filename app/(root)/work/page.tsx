@@ -7,9 +7,9 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Case Studies | Software Built for Zimbabwe",
+  title: "Solutions Engineering Case Studies Zimbabwe | Sparkline Labs",
   description:
-    "How Sparkline Labs designs, builds, and ships software for the Zimbabwean market. From Propertyzone - an intent-first property platform serving EAC-registered agencies - to custom internal tools. Real problems, verifiable outcomes, documented process.",
+    "See how Sparkline Labs engineers digital systems around real operational problems in Zimbabwe, from property workflows and lead management to connectivity and automation.",
   keywords: [
     "software case studies Zimbabwe",
     "Propertyzone case study",
@@ -66,7 +66,7 @@ async function CaseStudiesGrid() {
     return (
       <div className="border border-border rounded-2xl overflow-hidden">
         <div className="p-8">
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600 mb-4 block">
+          <span className="items-center gap-1.5 text-sm font-medium text-green-600 mb-4 block">
             <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
             Live in production
           </span>
@@ -147,11 +147,10 @@ export default function WorkPage() {
             Selected work
           </p>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 text-balance">
-            Things we&apos;ve shipped.
+            Real problems. Engineered solutions.
           </h1>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-            Case studies from custom builds and our own products. Real problems,
-            real outcomes, real numbers.
+            We approach every project the same way: understand the actual workflow, identify the real bottlenecks, and build the smallest system that makes the work possible.
           </p>
         </div>
       </section>

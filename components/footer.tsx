@@ -27,7 +27,7 @@ export function Footer() {
               <span>sparkline labs</span>
             </Link>
             <p className="text-base text-muted-foreground">
-              Software for African businesses.
+              Solutions engineering for African businesses.
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export function Footer() {
               Company
             </p>
             <div className="flex flex-col gap-3 text-base text-muted-foreground">
-              <Link href="/#services" className="hover:text-accent transition-colors">
+              <Link href="/services" className="hover:text-accent transition-colors">
                 Services
               </Link>
               <Link href="/products" className="hover:text-accent transition-colors">

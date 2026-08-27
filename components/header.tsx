@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -12,10 +11,6 @@ const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-  const isHome = pathname === "/";
-
-  const getHref = (anchor: string) => (isHome ? anchor : `/${anchor}`);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -38,7 +33,7 @@ export function Header() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             <Link
-              href={getHref("#services")}
+              href="/services"
               className="text-base text-foreground/80 hover:text-foreground transition-colors"
             >
               Services
@@ -86,7 +81,7 @@ export function Header() {
           <div className="md:hidden pt-4 pb-2 border-t border-border mt-4">
             <div className="flex flex-col gap-4">
               <Link
-                href={getHref("#services")}
+                href="/services"
                 className="text-base text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >

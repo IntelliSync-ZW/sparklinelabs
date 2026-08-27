@@ -1,27 +1,27 @@
 const steps = [
   {
     number: "01",
-    title: "Discovery (paid, 1 week)",
+    title: "Understand the problem",
     description:
-      "A scoping call, a written brief, a 1-page architecture diagram, and a fixed-price build proposal. You leave week one with a yes/no decision, not a follow-up next steps deck.",
+      "We map the workflow, constraints, users, existing systems and business outcome. You leave with a clear definition of the problem, the recommended solution and a fixed-price implementation proposal.",
   },
   {
     number: "02",
-    title: "Pilot (2 weeks, fixed price)",
+    title: "Prove the solution",
     description:
-      "We build the riskiest slice first. If the pilot doesn't validate the approach, we stop. You keep everything we built, no cancellation fee.",
+      "We test the riskiest part of the solution first. If the approach does not work in your actual operating environment, we find that out before you commit to a full build.",
   },
   {
     number: "03",
-    title: "Build (4-8 weeks, fixed price)",
+    title: "Engineer and deploy",
     description:
-      "Weekly demo. Weekly progress note. Fixed scope, fixed price, fixed timeline. Scope changes get re-quoted, not absorbed.",
+      "We implement the agreed solution with weekly demonstrations, clear milestones and a fixed scope. Whether the solution involves software, integrations, automation or a combination of them, the objective stays the same: put the agreed capability into production.",
   },
   {
     number: "04",
-    title: "Handover and operate",
+    title: "Operate and improve",
     description:
-      "We train your team to run the system manually first. We automate after we've seen the workflow run for real, with real data, in your hands.",
+      "Your team takes ownership of the system. We document the important parts, train the people responsible for operating it, and only automate further once the real workflow has proven itself.",
   },
 ];
 
@@ -37,7 +37,7 @@ export function Process() {
             How we work
           </p>
           <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
-            Four stages. No retainers. No scope theatre.
+            Understand first. Engineer second.
           </h2>
         </div>
 

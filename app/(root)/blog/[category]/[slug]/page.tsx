@@ -109,8 +109,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: post.seo?.ogImage
         ? [{ url: post.seo.ogImage, width: 1200, height: 630 }]
         : post.coverImage?.url
-        ? [{ url: post.coverImage.url, width: 1200, height: 630 }]
-        : [],
+          ? [{ url: post.coverImage.url, width: 1200, height: 630 }]
+          : [],
     },
     twitter: {
       card: "summary_large_image",
@@ -176,25 +176,25 @@ export default async function BlogPostPage({ params }: Props) {
     ...(post.category && { articleSection: post.category.title }),
     author: post.authors && post.authors.length > 0
       ? post.authors.map((a) => ({
-          "@type": "Person",
-          name: a.author.name,
-          jobTitle: a.author.role,
-          worksFor: a.author.company ? { "@type": "Organization", name: a.author.company } : undefined,
-          ...(a.author.avatar?.url && { image: a.author.avatar.url }),
-          ...(a.author.slug?.current && {
-            url: `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}`,
-            "@id": `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}#person`,
-          }),
-          sameAs: [
-            a.author.website,
-            a.author.socials?.twitter,
-            a.author.socials?.linkedin,
-            a.author.socials?.github,
-            a.author.socials?.bluesky,
-            a.author.socials?.medium,
-            a.author.socials?.devto,
-          ].filter(Boolean),
-        }))
+        "@type": "Person",
+        name: a.author.name,
+        jobTitle: a.author.role,
+        worksFor: a.author.company ? { "@type": "Organization", name: a.author.company } : undefined,
+        ...(a.author.avatar?.url && { image: a.author.avatar.url }),
+        ...(a.author.slug?.current && {
+          url: `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}`,
+          "@id": `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}#person`,
+        }),
+        sameAs: [
+          a.author.website,
+          a.author.socials?.twitter,
+          a.author.socials?.linkedin,
+          a.author.socials?.github,
+          a.author.socials?.bluesky,
+          a.author.socials?.medium,
+          a.author.socials?.devto,
+        ].filter(Boolean),
+      }))
       : [{ "@type": "Organization", name: "Sparkline Labs" }],
     publisher: {
       "@id": "https://www.sparklinelabs.co.zw/#organization",
@@ -207,14 +207,14 @@ export default async function BlogPostPage({ params }: Props) {
         { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.sparklinelabs.co.zw/blog" },
         ...(post.category
           ? [
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: post.category.title,
-                item: `https://www.sparklinelabs.co.zw/blog/${post.category.slug.current}`,
-              },
-              { "@type": "ListItem", position: 4, name: post.title, item: postUrl },
-            ]
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: post.category.title,
+              item: `https://www.sparklinelabs.co.zw/blog/${post.category.slug.current}`,
+            },
+            { "@type": "ListItem", position: 4, name: post.title, item: postUrl },
+          ]
           : [{ "@type": "ListItem", position: 3, name: post.title, item: postUrl }]),
       ],
     },
@@ -256,7 +256,7 @@ export default async function BlogPostPage({ params }: Props) {
           </h1>
 
           {post.excerpt && (
-            <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+            <p className="text-xl text-muted-foreground leading-relaxed mb-8 text-justify">
               {post.excerpt}
             </p>
           )}
@@ -395,7 +395,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* Body */}
           {post.body && post.body.length > 0 && (
-            <PortableTextRenderer value={post.body as RichTextValue} />
+            <PortableTextRenderer value={post.body as RichTextValue} className="text-justify" />
           )}
 
           {/* Editorial Author Bio Section */}

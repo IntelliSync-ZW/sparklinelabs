@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonicalUrl = `${baseUrl}/blog/authors/${slug}`;
 
   return {
-    title: `${author.name} — Author & Engineer | Sparkline Labs`,
+    title: `${author.name} — ${author.role || "Author & Engineer"} | Sparkline Labs`,
     description:
       author.role
         ? `${author.name} (${author.role}${author.company ? ` at ${author.company}` : ""}). Read technical playbooks and articles on Sparkline Labs.`
@@ -207,7 +207,7 @@ export default async function AuthorDetailPage({ params }: Props) {
               <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-2">
                 Author & Contributor
               </p>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground mb-3 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground leading-tight">
                 {author.name}
               </h1>
 
@@ -219,16 +219,10 @@ export default async function AuthorDetailPage({ params }: Props) {
                 </p>
               )}
 
-              {/* Bio */}
-              {author.bio && author.bio.length > 0 && (
-                <div className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6 max-w-2xl">
-                  <PortableTextRenderer value={author.bio as RichTextValue} />
-                </div>
-              )}
 
               {/* Contact & Social Links */}
               {hasContactOrSocials && (
-                <div className="flex flex-wrap items-center gap-3 text-xs pt-5 border-t border-border">
+                <div className="flex flex-wrap items-center gap-3 text-xs py-4 border-b border-border">
                   {author.website && (
                     <a
                       href={author.website}
@@ -341,6 +335,11 @@ export default async function AuthorDetailPage({ params }: Props) {
               )}
             </div>
           </div>
+          {author.bio && author.bio.length > 0 && (
+            <div className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6 max-w-4xl mt-4">
+              <PortableTextRenderer value={author.bio as RichTextValue} className="text-justify" />
+            </div>
+          )}
 
           {/* Section Divider */}
           <div className="border-t border-border mt-14" />

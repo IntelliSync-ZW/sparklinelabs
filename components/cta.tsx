@@ -7,15 +7,12 @@ export function CTA() {
 
   return (
     <section className="py-20 md:py-32 px-6 bg-secondary">
-      <div className="max-w-3xl mx-auto text-center">
+      <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight mb-6 text-balance">
-          Got a project? Let&apos;s talk on WhatsApp.
+          Something in your business isn&apos;t working? Let&apos;s look at it.
         </h2>
-        <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-xl mx-auto leading-relaxed">
-          Send a message describing what you want built. We respond within two
-          working hours during weekdays (Harare time) with whether it&apos;s a
-          fit and what the next step is. No pitch deck. No discovery call until
-          we&apos;ve both decided it&apos;s worth one.
+        <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
+          Tell us what is slowing the business down, where work is being duplicated, what your customers struggle with, or what you wish your existing systems could do. We&apos;ll tell you whether technology can solve it, what we&apos;d recommend, and what the next step would be.
         </p>
         <Button
           size="lg"
@@ -23,7 +20,7 @@ export function CTA() {
           asChild
         >
           <a href={waLink} target="_blank" rel="noopener noreferrer">
-            Start on WhatsApp
+            Describe the problem
             <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
           </a>
         </Button>
