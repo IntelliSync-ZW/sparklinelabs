@@ -337,7 +337,7 @@ export default async function AuthorDetailPage({ params }: Props) {
           </div>
           {author.bio && author.bio.length > 0 && (
             <div className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6 max-w-4xl mt-4">
-              <PortableTextRenderer value={author.bio as RichTextValue} className="text-justify" />
+              <PortableTextRenderer value={author.bio as RichTextValue} />
             </div>
           )}
 

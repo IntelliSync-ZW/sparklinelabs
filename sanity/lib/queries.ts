@@ -150,8 +150,9 @@ export const allCaseStudySlugsQuery = `
 export const caseStudyBySlugQuery = `
   *[_type == "caseStudy" && slug.current == $slug][0] {
     _id, title, slug, summary, headline, industry, clientName,
-    publishedAt, readingTime, started, live,
+    publishedAt, readingTime, started, live, team,
     ${heroImageProjection},
+    ${richText("body")},
     ${richText("problem")},
     ${richText("solution")},
     ${richText("outcomes")},

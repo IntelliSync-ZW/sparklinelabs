@@ -152,52 +152,67 @@ export const caseStudySchema = defineType({
       ],
     }),
 
-    // ── Content sections — all portable text ──────────────────────────────────
+    // ── Flexible Body ────────────────────────────────────────────────────────
     defineField({
-      name: "problem",
-      title: "The Problem",
+      name: "body",
+      title: "Body",
+      description: "Full case study narrative with headings, images, quotes, lists, and tables",
       type: "array",
       of: richTextBlock,
     }),
-    defineField({
-      name: "solution",
-      title: "What We Built",
-      description: "Use H3 headings inside this field to separate each built component",
-      type: "array",
-      of: richTextBlock,
-    }),
-    defineField({
-      name: "outcomes",
-      title: "Outcomes",
-      type: "array",
-      of: richTextBlock,
-    }),
+
+    // ── Highlights & Key Metrics (Optional) ──────────────────────────────────
     defineField({
       name: "outcomeMetrics",
-      title: "Outcome Metrics",
-      description: "Key numbers shown as highlighted stat blocks",
+      title: "Key Metrics / Highlights",
+      description: "Highlight metrics or numbers shown as stat blocks (e.g. 13,223 enquiries, 2,410 unanswered)",
       type: "array",
       of: [
         defineArrayMember({
           type: "object",
           fields: [
-            defineField({ name: "value", title: "Value", type: "string", description: "e.g. 12" }),
-            defineField({ name: "label", title: "Label", type: "string", description: "e.g. agencies live" }),
+            defineField({ name: "value", title: "Value", type: "string", description: "e.g. 13,223 or 78%" }),
+            defineField({ name: "label", title: "Label", type: "string", description: "e.g. WhatsApp enquiries recorded" }),
           ],
           preview: { select: { title: "value", subtitle: "label" } },
         }),
       ],
     }),
-    defineField({
-      name: "whatsNext",
-      title: "What's Next",
-      type: "array",
-      of: richTextBlock,
-    }),
 
-    // ── Project metadata ──────────────────────────────────────────────────────
+    // ── Project metadata & Team ───────────────────────────────────────────────
+    defineField({ name: "team", title: "Team / Delivery", type: "string" }),
     defineField({ name: "started", title: "Started (year)", type: "string" }),
     defineField({ name: "live", title: "Live (year)", type: "string" }),
+
+    // ── Legacy structured sections (Optional for backwards compatibility) ────
+    defineField({
+      name: "problem",
+      title: "The Problem (Legacy)",
+      type: "array",
+      of: richTextBlock,
+      hidden: true,
+    }),
+    defineField({
+      name: "solution",
+      title: "What We Built (Legacy)",
+      type: "array",
+      of: richTextBlock,
+      hidden: true,
+    }),
+    defineField({
+      name: "outcomes",
+      title: "Outcomes (Legacy)",
+      type: "array",
+      of: richTextBlock,
+      hidden: true,
+    }),
+    defineField({
+      name: "whatsNext",
+      title: "What's Next (Legacy)",
+      type: "array",
+      of: richTextBlock,
+      hidden: true,
+    }),
 
     // ── Testimonial (optional) ────────────────────────────────────────────────
     defineField({

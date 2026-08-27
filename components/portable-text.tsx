@@ -28,11 +28,20 @@ const components: Partial<PortableTextReactComponents> = {
         {children}
       </p>
     ),
+    h1: ({ children, value }) => {
+      const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
+      const id = slugifyHeading(text);
+      return (
+        <h1 id={id} className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mt-14 mb-6 first:mt-0 scroll-mt-24 text-left">
+          {children}
+        </h1>
+      );
+    },
     h2: ({ children, value }) => {
       const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
       const id = slugifyHeading(text);
       return (
-        <h2 id={id} className="text-3xl font-semibold tracking-tight text-foreground mt-12 mb-5 first:mt-0 scroll-mt-24">
+        <h2 id={id} className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mt-12 mb-5 first:mt-0 scroll-mt-24 text-left">
           {children}
         </h2>
       );
@@ -41,18 +50,40 @@ const components: Partial<PortableTextReactComponents> = {
       const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
       const id = slugifyHeading(text);
       return (
-        <h3 id={id} className="text-xl font-semibold text-foreground mt-8 mb-3 first:mt-0 scroll-mt-24">
+        <h3 id={id} className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground mt-10 mb-4 first:mt-0 scroll-mt-24 text-left">
           {children}
         </h3>
       );
     },
-    h4: ({ children }) => (
-      <h4 className="text-lg font-semibold text-foreground mt-6 mb-2">
-        {children}
-      </h4>
-    ),
+    h4: ({ children, value }) => {
+      const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
+      const id = slugifyHeading(text);
+      return (
+        <h4 id={id} className="text-xl md:text-2xl font-semibold text-foreground mt-8 mb-3 first:mt-0 scroll-mt-24 text-left">
+          {children}
+        </h4>
+      );
+    },
+    h5: ({ children, value }) => {
+      const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
+      const id = slugifyHeading(text);
+      return (
+        <h5 id={id} className="text-lg md:text-xl font-semibold text-foreground mt-6 mb-2 first:mt-0 scroll-mt-24 text-left">
+          {children}
+        </h5>
+      );
+    },
+    h6: ({ children, value }) => {
+      const text = (value?.children as { text?: string }[] | undefined)?.map((c) => c.text ?? "").join("") ?? "";
+      const id = slugifyHeading(text);
+      return (
+        <h6 id={id} className="text-base font-semibold uppercase tracking-wider text-muted-foreground mt-6 mb-2 first:mt-0 scroll-mt-24 text-left">
+          {children}
+        </h6>
+      );
+    },
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-accent pl-6 py-1 my-6 italic text-muted-foreground">
+      <blockquote className="border-l-4 border-accent pl-6 py-2 my-6 italic text-muted-foreground text-left">
         {children}
       </blockquote>
     ),
@@ -60,20 +91,20 @@ const components: Partial<PortableTextReactComponents> = {
 
   list: {
     bullet: ({ children }) => (
-      <ul className="list-disc ml-6 space-y-2 my-5 text-lg text-muted-foreground">
+      <ul className="list-disc ml-6 space-y-2 my-5 text-lg text-muted-foreground text-left">
         {children}
       </ul>
     ),
     number: ({ children }) => (
-      <ol className="list-decimal ml-6 space-y-2 my-5 text-lg text-muted-foreground">
+      <ol className="list-decimal ml-6 space-y-2 my-5 text-lg text-muted-foreground text-left">
         {children}
       </ol>
     ),
   },
 
   listItem: {
-    bullet: ({ children }) => <li className="leading-relaxed pl-1">{children}</li>,
-    number: ({ children }) => <li className="leading-relaxed pl-1">{children}</li>,
+    bullet: ({ children }) => <li className="leading-relaxed pl-1 text-left">{children}</li>,
+    number: ({ children }) => <li className="leading-relaxed pl-1 text-left">{children}</li>,
   },
 
   marks: {

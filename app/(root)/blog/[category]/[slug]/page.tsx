@@ -395,7 +395,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* Body */}
           {post.body && post.body.length > 0 && (
-            <PortableTextRenderer value={post.body as RichTextValue} className="text-justify" />
+            <PortableTextRenderer value={post.body as RichTextValue} />
           )}
 
           {/* Editorial Author Bio Section */}

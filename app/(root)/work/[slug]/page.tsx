@@ -41,6 +41,7 @@ type CaseStudy = {
   started?: string;
   live?: string;
   heroImage?: { url: string; alt?: string };
+  body?: unknown[];
   problem?: unknown[];
   solution?: unknown[];
   outcomes?: unknown[];
@@ -251,8 +252,15 @@ export default async function CaseStudyPage({ params }: Props) {
             </div>
           )}
 
-          {/* Problem */}
-          {study.problem && study.problem.length > 0 && (
+          {/* Flexible Body or Legacy Sections */}
+          {study.body && study.body.length > 0 && (
+            <div className="space-y-12">
+              <PortableTextRenderer value={study.body as RichTextValue} />
+            </div>
+          )}
+
+          {/* Problem (Legacy fallback) */}
+          {!study.body && study.problem && study.problem.length > 0 && (
             <section>
               <h2 className="text-3xl font-semibold tracking-tight mb-6">
                 The problem
