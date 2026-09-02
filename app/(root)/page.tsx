@@ -9,6 +9,8 @@ import { WhySparkline } from "@/components/why-sparkline";
 import { CTA } from "@/components/cta";
 import { LatestWork, LatestWorkSkeleton } from "@/components/latest-work";
 import { LatestPosts, LatestPostsSkeleton } from "@/components/latest-posts";
+import { FaqSection } from "@/components/faq";
+import { homepageFaqs } from "@/lib/constants";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -23,6 +25,19 @@ export const metadata: Metadata = {
       "We engineer digital systems for Zimbabwean and African businesses - from operational workflows and integrations to custom platforms, automation and internal tools. The team behind Propertyzone.",
     url: "https://www.sparklinelabs.co.zw",
   },
+};
+
+const homepageFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: homepageFaqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
 };
 
 const professionalServiceSchema = {
@@ -111,6 +126,10 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageFaqSchema) }}
+      />
       <Hero />
       <Problem />
       <Services />
@@ -191,6 +210,11 @@ export default function Home() {
       </section>
 
       <CTA />
+
+      <FaqSection
+        faqs={homepageFaqs}
+        heading="Common questions about Sparkline Labs"
+      />
     </>
   );
 }

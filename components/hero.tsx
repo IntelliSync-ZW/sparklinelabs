@@ -13,11 +13,11 @@ export function Hero() {
             Solutions Engineering - Harare, Zimbabwe
           </p>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl max-w-6xl mx-auto font-semibold tracking-tight leading-[1.05] text-balance mb-8">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl max-w-6xl mx-auto font-semibold tracking-tight leading-[1.05] text-balance text-center mb-8">
             We engineer systems African businesses can actually run.
           </h1>
 
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-12 leading-relaxed text-pretty">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-12 leading-relaxed text-pretty text-center">
             We&apos;re the team behind Propertyzone. We design and engineer the digital systems businesses need to operate better: connecting people, processes, data and software around the conditions that actually exist in Zimbabwe and across Africa.
           </p>
 

@@ -6,6 +6,8 @@ import Image from "next/image";
 import { fetchServicesPage } from "@/sanity/lib/fetch";
 import { servicesPageQuery } from "@/sanity/lib/queries";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
+import { FaqSection } from "@/components/faq";
+import { servicesFaqs } from "@/lib/constants";
 
 type ServiceItem = {
   stepNumber: string;
@@ -13,6 +15,8 @@ type ServiceItem = {
   description: string;
   imageUrl?: string;
   image?: string;
+  alt?: string;
+  id?: string;
 };
 
 type ServicesPageData = {
@@ -30,30 +34,70 @@ const STATIC_SERVICES: ServiceItem[] = [
   {
     stepNumber: "01",
     title: "Solution architecture",
+    id: "solution-architecture",
     description:
-      "We understand the business problem, map the existing workflow and determine what the solution should actually look like before implementation begins.",
-    image: "/whiteboard-planning-strategy-minimal.jpg",
+      `<p>We work out what should actually be built before development begins.</p>
+
+<p>A business problem does not always require new software. We examine your workflow, existing systems, users and constraints to determine whether the right answer is a new platform, an integration, automation, modernisation or a change to the process itself.</p>
+
+<p>We turn that understanding into a practical technical plan covering the system structure, data, integrations, workflows and implementation priorities.</p>
+
+<p>Typical work: Workflow mapping, system architecture, technical requirements, feasibility studies, integration planning and prototypes.</p>
+
+<p>Related: <a href="/blog/solutions-engineering/zimbabwe-technology-decision-framework-build-buy-integrate">Build, Buy, Integrate or Change the Process?</a></p>`,
+    image: "/solutions-architecture.png",
+    alt: "Business workflow and system architecture being mapped before software implementation."
   },
   {
     stepNumber: "02",
     title: "Systems engineering",
+    id: "systems-engineering",
     description:
-      "We design and build the platforms, internal tools and business applications required to put the solution into operation.",
-    image: "/minimal-code-editor-dark-theme-interface.jpg",
+      `<p>We build the software that makes the solution work in practice.</p>
+
+<p>When an existing product cannot properly support the way your business operates, we design and engineer a system around those requirements.</p>
+
+<p>This can include customer-facing platforms, internal business systems, portals, dashboards and SaaS products. We consider the real environment in which the software will be used, including mobile usage, connectivity, integrations and operational workflows.</p>
+
+<p>Typical work: Custom platforms, business applications, portals, dashboards, SaaS products and workflow systems.</p>
+
+<p>Related: <a href="/work/propertyzone">Propertyzone</a> · <a href="/blog/solutions-engineering/what-zimbabwean-businesses-need-from-software">What Does a Zimbabwean Business Actually Need From Software?</a></p>`,
+    image: "/systems-engineering.png",
+    alt: "Business application interface being engineered as part of a custom digital system."
   },
   {
     stepNumber: "03",
     title: "Integration & automation",
+    id: "integration-automation",
     description:
-      "We connect the tools you already use and automate repetitive work across WhatsApp, payments, spreadsheets, CRMs, email and other business systems.",
-    image: "/connected-systems-flowchart-minimal-diagram.jpg",
+      `<p>Connect the systems you already use and remove unnecessary manual work.</p>
+
+<p>Many businesses do not have a software shortage. They have a systems disconnect. Information moves between WhatsApp, spreadsheets, websites, CRMs, payment systems and email through people manually copying and forwarding it.</p>
+
+<p>We connect those systems and automate the handoffs where doing so improves speed, accuracy and visibility.</p>
+
+<p>Typical work: WhatsApp integrations, lead capture, payment integrations, CRM connections, data synchronisation, notifications and workflow automation.</p>
+
+<p>Related: <a href="/blog/seo-and-digital-strategy/whatsapp-lead-capture-crm-scoring-zimbabwe-propertyzone">Can WhatsApp Leads Be Captured and Scored Automatically in Zimbabwe?</a></p>`,
+    image: "/automation.png",
+    alt: "Business systems connected into a single automated workflow."
   },
   {
     stepNumber: "04",
     title: "Technical modernisation",
+    id: "technical-modernisation",
     description:
-      "Already have software that almost works? We diagnose the bottlenecks, improve the architecture and replace what needs replacing without throwing away what still works.",
-    image: "/clean-code-editor-interface-minimal-dark-theme.jpg",
+      `<p>Improve the software you already have instead of replacing everything.</p>
+
+<p>Existing systems can become slow, fragile or difficult to change as a business grows. We assess what is worth keeping, identify the technical problems holding the system back and modernise the underlying architecture progressively.</p>
+
+<p>The goal is to make software more reliable, maintainable and easier to extend without creating unnecessary disruption.</p>
+
+<p>Typical work: Legacy-system assessment, architecture improvements, performance work, database improvements, codebase modernisation and incremental replacement.</p>
+
+<p>Related: <a href="/blog/software-industry/wordpress-era-ai-tools-zimbabwe-software-trust">The WordPress Era Never Ended. It Just Learned to Prompt.</a></p>`,
+    image: "/technical-modernisation.png",
+    alt: "Existing software architecture being modernised while functional components are retained."
   },
 ];
 
@@ -92,6 +136,38 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.sparklinelabs.co.zw",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Services",
+      item: "https://www.sparklinelabs.co.zw/services",
+    },
+  ],
+};
+
+const servicesFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: servicesFaqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+
 export default async function ServicesPage() {
   const waProjectLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
 
@@ -108,25 +184,39 @@ export default async function ServicesPage() {
 
   // Reusable fallback images for mapping sanity results
   const fallbackImages = [
-    "/whiteboard-planning-strategy-minimal.jpg",
-    "/minimal-code-editor-dark-theme-interface.jpg",
-    "/connected-systems-flowchart-minimal-diagram.jpg",
-    "/clean-code-editor-interface-minimal-dark-theme.jpg",
+    "/software-architecture.png",
+    "/solutions-engineering.png",
+    "/automation.png",
+    "/technical-modernisation.png",
   ];
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesFaqSchema) }}
+      />
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6 border-b border-border bg-background">
-        <div className="container mx-auto">
-          <div className="max-w-3xl">
-            <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
+      <section className="mt-18 pb-20 min-h-180 px-6 border-b border-border bg-background relative">
+        <Image
+          src="/services-hero.png"
+          alt="Services"
+          fill
+          className="object-cover aspect-9/16 md:aspect-auto absolute inset-0 z-1"
+        />
+        <div className="bg-foreground/80 z-5 text-background flex absolute inset-0 flex-col items-center justify-center text-center ">
+          <div className="max-w-3xl mx-auto w-full text-center ">
+            <p className="text-base uppercase tracking-widest text-muted mb-4">
               Services
             </p>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 text-balance">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 text-balance text-center">
               {h1}
             </h1>
-            <div className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl whitespace-pre-line">
+            <div className="text-xl md:text-2xl text-muted leading-relaxed whitespace-pre-line">
               {intro}
             </div>
           </div>
@@ -144,6 +234,7 @@ export default async function ServicesPage() {
               return (
                 <div
                   key={idx}
+                  id={service.id}
                   className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"
                     } gap-10 md:gap-16 items-center`}
                 >
@@ -155,14 +246,12 @@ export default async function ServicesPage() {
                     <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
                       {service.title}
                     </h2>
-                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                      {service.description}
-                    </p>
+                    <div className="text-base md:text-lg text-muted-foreground leading-relaxed typeset" dangerouslySetInnerHTML={{ __html: service.description }} />
                   </div>
 
                   {/* Image Column */}
                   <div className="flex-1 w-full">
-                    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border shadow-md group hover:border-accent transition-colors duration-300">
+                    <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl border border-border shadow-md group hover:border-accent transition-colors duration-300">
                       <Image
                         src={imgUrl || "/placeholder.svg"}
                         alt={service.title}
@@ -181,8 +270,8 @@ export default async function ServicesPage() {
       {/* CTA Section */}
       <section className="py-20 md:py-32 px-6 bg-foreground text-background">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-6 text-balance">
-            Let&apos;s build the right solution together.
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-6 text-balance text-center">
+            Not every problem needs new software.
           </h2>
           <p className="text-xl md:text-2xl opacity-80 mb-10 max-w-2xl mx-auto">
             We diagnose before we build. Let&apos;s map out your systems and workflows on a brief WhatsApp alignment call. No sales pitches, just engineering context.
@@ -212,6 +301,11 @@ export default async function ServicesPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection
+        faqs={servicesFaqs}
+        heading="Questions about our services"
+      />
     </>
   );
 }

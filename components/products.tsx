@@ -63,7 +63,7 @@ export async function Products() {
           <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
             What we&apos;ve built
           </p>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance text-center">
             Systems we&apos;ve put into production.
           </h2>
         </div>

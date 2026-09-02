@@ -21,9 +21,9 @@ export function Problem() {
             </p>
           </div>
 
-          <div className="relative aspect-square rounded-xl overflow-hidden">
+          <div className="relative aspect-4/3 rounded-xl overflow-hidden">
             <Image
-              src="/abstract-minimal-black-and-white-geometric-shapes-.jpg"
+              src="/reality.png"
               alt="Precision and clarity"
               fill
               className="object-cover"

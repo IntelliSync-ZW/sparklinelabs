@@ -10,6 +10,7 @@ type ServiceItem = {
   color?: string;
   textColor?: string;
   image?: string;
+  alt: string;
 };
 
 const STATIC_SERVICES: ServiceItem[] = [
@@ -20,7 +21,8 @@ const STATIC_SERVICES: ServiceItem[] = [
       "We understand the business problem, map the existing workflow and determine what the solution should actually look like before implementation begins.",
     color: "bg-neutral-900/70",
     textColor: "text-white",
-    image: "/whiteboard-planning-strategy-minimal.jpg",
+    image: "/solutions-architecture.png",
+    alt: "Business workflow and system architecture being mapped before software implementation."
   },
   {
     stepNumber: "02",
@@ -29,7 +31,8 @@ const STATIC_SERVICES: ServiceItem[] = [
       "We design and build the platforms, internal tools and business applications required to put the solution into operation.",
     color: "bg-neutral-200/80",
     textColor: "text-neutral-900",
-    image: "/minimal-code-editor-dark-theme-interface.jpg",
+    image: "/systems-engineering.png",
+    alt: "Business application interface being engineered as part of a custom digital system."
   },
   {
     stepNumber: "03",
@@ -38,7 +41,8 @@ const STATIC_SERVICES: ServiceItem[] = [
       "We connect the tools you already use and automate repetitive work across WhatsApp, payments, spreadsheets, CRMs, email and other business systems.",
     color: "bg-neutral-800/80",
     textColor: "text-neutral-100",
-    image: "/connected-systems-flowchart-minimal-diagram.jpg",
+    image: "/automation.png",
+    alt: "Business systems connected into a single automated workflow."
   },
   {
     stepNumber: "04",
@@ -47,16 +51,17 @@ const STATIC_SERVICES: ServiceItem[] = [
       "Already have software that almost works? We diagnose the bottlenecks, improve the architecture and replace what needs replacing without throwing away what still works.",
     color: "bg-neutral-900/70",
     textColor: "text-white",
-    image: "/clean-code-editor-interface-minimal-dark-theme.jpg",
+    image: "/technical-modernisation.png",
+    alt: "Existing software architecture being modernised while functional components are retained."
   },
 ];
 
 const getStyleForIndex = (index: number) => {
   const styles = [
-    { color: "bg-neutral-900/70", textColor: "text-white", image: "/whiteboard-planning-strategy-minimal.jpg" },
-    { color: "bg-neutral-200/80", textColor: "text-neutral-900", image: "/minimal-code-editor-dark-theme-interface.jpg" },
-    { color: "bg-neutral-800/80", textColor: "text-neutral-100", image: "/connected-systems-flowchart-minimal-diagram.jpg" },
-    { color: "bg-neutral-900/70", textColor: "text-white", image: "/clean-code-editor-interface-minimal-dark-theme.jpg" },
+    { color: "bg-neutral-900/70", textColor: "text-white", image: "/solutions-architecture.png" },
+    { color: "bg-neutral-200/80", textColor: "text-neutral-900", image: "/systems-engineering.png" },
+    { color: "bg-neutral-800/80", textColor: "text-neutral-100", image: "/automation.png" },
+    { color: "bg-neutral-900/70", textColor: "text-white", image: "/technical-modernisation.png" },
   ];
   return styles[index % styles.length];
 };
@@ -84,7 +89,7 @@ export async function Services() {
           <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
             Services
           </p>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance text-center">
             How we solve operational problems
           </h2>
         </div>
@@ -98,19 +103,19 @@ export async function Services() {
 
             return (
               <div key={index} className="group relative rounded-2xl min-h-95 overflow-hidden border border-border bg-card">
-                <div className="relative flex-1 mt-auto pt-8">
+                <div className="relative flex-1 mt-auto">
                   <div className="rounded-t-lg overflow-hidden shadow-2xl">
                     <Image
                       src={cardImg || "/placeholder.svg"}
-                      alt={service.title}
+                      alt={service.alt}
                       width={400}
                       height={300}
-                      className="w-full h-auto object-cover"
+                      className="w-full h-auto aspect-square object-cover"
                     />
                   </div>
                 </div>
                 <div
-                  className={`absolute inset-0 top-0 left-4 right-4 translate-y-6 ${cardColor} hover:border-accent flex rounded-2xl flex-col transition-transform hover:-translate-y-1`}
+                  className={`absolute inset-0 top-0 left-1 right-1 translate-y-6 ${cardColor} hover:border-accent flex rounded-2xl flex-col transition-transform hover:-translate-y-1`}
                 >
                   <div className="relative z-10 p-6 pb-0">
                     <span className={`text-xs font-mono uppercase tracking-wider block mb-2 ${textColor} opacity-60`}>

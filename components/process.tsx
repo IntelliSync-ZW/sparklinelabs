@@ -36,7 +36,7 @@ export function Process() {
           <p className="text-base uppercase tracking-widest text-primary-foreground/60 mb-4">
             How we work
           </p>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance text-center">
             Understand first. Engineer second.
           </h2>
         </div>

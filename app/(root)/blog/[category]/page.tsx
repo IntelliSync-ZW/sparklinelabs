@@ -2,17 +2,33 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound, redirect, RedirectType } from "next/navigation";
 import { BlogList, PostGridSkeleton } from "@/components/blog/blog-list";
+import { FaqSection } from "@/components/faq";
 import { fetchCategories, sanityFetch } from "@/sanity/lib/fetch";
 import {
   allCategoriesQuery,
   postCategoryBySlugQuery,
 } from "@/sanity/lib/queries";
+import {
+  solutionsEngineeringFaqs,
+  softwareIndustryFaqs,
+  seoDigitalStrategyFaqs,
+  proptechFaqs,
+} from "@/lib/constants";
 
 type Category = {
   _id: string;
   title: string;
   slug: { current: string };
   description?: string;
+};
+
+type FaqItem = { question: string; answer: string };
+
+const CATEGORY_FAQS: Record<string, FaqItem[]> = {
+  "solutions-engineering": solutionsEngineeringFaqs,
+  "software-industry": softwareIndustryFaqs,
+  "seo-and-digital-strategy": seoDigitalStrategyFaqs,
+  "proptech-real-estate": proptechFaqs,
 };
 
 type Props = {
@@ -80,8 +96,31 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     notFound();
   }
 
+  const categoryFaqs = CATEGORY_FAQS[categorySlug] ?? null;
+
+  const faqSchema = categoryFaqs
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: categoryFaqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      }
+    : null;
+
   return (
     <>
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       {/* Hero */}
       <section className="pt-32 pb-12 px-6">
         <div className="container mx-auto max-w-6xl">
@@ -107,6 +146,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           </Suspense>
         </div>
       </section>
+
+      {/* Category FAQ */}
+      {categoryFaqs && (
+        <FaqSection
+          faqs={categoryFaqs}
+          heading={`Questions about ${category.title}`}
+        />
+      )}
     </>
   );
 }
