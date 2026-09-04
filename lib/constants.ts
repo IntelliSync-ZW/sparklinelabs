@@ -131,6 +131,21 @@ export const servicesFaqs = [
       <p>Our current delivery model is based on a paid discovery, a fixed-price pilot, a defined build and handover into operation. You can see how we apply that model in <a href="/work/propertyzone">the Propertyzone case study</a>.</p>
     `,
   },
+  {
+    question:
+      "Do you always charge for a discovery phase, and does every project take two weeks to scope?",
+    answer: `
+    <p>No. Not every Sparkline Labs project requires a paid two-week discovery phase.</p>
+
+    <p>We use a deeper discovery process when the problem, workflow or proposed solution is genuinely uncertain. This is particularly useful for a unique proposition where the business is effectively asking us to work out what should exist before we can responsibly define what should be built. In those cases, discovery gives us time to understand the operation, map the workflow, identify technical risks, determine the appropriate architecture and establish a clear implementation path.</p>
+
+    <p>Many projects are much more straightforward. If the problem is already well understood, the workflow is known, the solution has already been designed or prototyped, or we are extending an existing system with clearly defined requirements, there may be no reason to spend two weeks rediscovering something that is already known. In those cases, we can move directly into a pilot, implementation or other appropriate engagement.</p>
+
+    <p>The same principle applies to pricing. We do not add a discovery fee simply because it is our standard process. The cost and structure of an engagement depend on the amount of uncertainty, the complexity of the problem and the work required before implementation can be properly defined.</p>
+
+    <p>Our approach is therefore <strong>proportionate to the problem</strong>: understand what needs to be understood, prove what needs to be proven, and only spend time on discovery where it creates genuine value. This is consistent with our broader <a href="/services">solutions engineering approach</a>, where we determine whether a project needs architecture work, a pilot, integration, custom development or technical modernisation before deciding how the engagement should proceed.</p>
+  `,
+  },
 ];
 
 export const solutionsEngineeringFaqs = [
@@ -200,9 +215,33 @@ export const softwareIndustryFaqs = [
       <p>Our <a href="/blog/software-industry/wordpress-era-ai-tools-zimbabwe-software-trust">WordPress and AI software analysis</a> looks at this shift from the perspective of Zimbabwe's software market.</p>
     `,
   },
+  {
+    question:
+      "Why doesn't Sparkline Labs have AI as a separate service category?",
+    answer: `
+      <p>Because AI is a capability that can sit inside a larger solution rather than a business problem in its own right.</p>
+
+      <p>A company may need AI-assisted search, document extraction, recommendations, content generation, classification or customer interaction. But the AI component still depends on the surrounding workflow, data and system architecture.</p>
+
+      <p>We therefore prefer to engineer the underlying system first and introduce AI where it provides a meaningful improvement. That might mean AI inside a custom platform, a business workflow, an integration or one of our own products.</p>
+
+      <p>We talk about AI deliberately rather than constantly because we do not want to confuse the availability of a technology with the existence of a problem worth solving.</p>
+    `,
+  },
 ];
 
 export const seoDigitalStrategyFaqs = [
+  {
+    question:
+      "Does Sparkline Labs build websites and do SEO as separate services?",
+    answer: `
+      <p>They can be separate pieces of work, but we do not assume they should be treated as completely separate problems.</p>
+
+      <p>A website may be responsible for explaining the business and converting a visitor. SEO may make that website discoverable. Content may answer the questions that create demand in the first place. AI visibility may determine whether the business is represented correctly in emerging answer-based search. WhatsApp or another channel may handle the actual enquiry, while a CRM or internal system manages what happens next.</p>
+
+      <p>Looking at those pieces together can reveal problems that would remain invisible if the engagement stopped at “build a better website”. This is why our digital strategy work considers the entire customer journey rather than treating the website as the beginning and end of the digital operation.</p>
+    `,
+  },
   {
     question:
       "Why does Sparkline Labs look beyond the website when working on SEO and digital strategy?",
@@ -250,6 +289,225 @@ export const proptechFaqs = [
       <p>It reinforced the idea that adoption is often determined by whether a system fits an existing operating environment. Propertyzone had to account for WhatsApp as a core communication behaviour, unreliable connectivity, mobile-first usage, structured property data and the way estate agents actually work rather than the way a conventional property portal assumes they work.</p>
       <p>That experience shaped the wider Sparkline Labs approach: understand the workflow, preserve useful behaviour, remove unnecessary manual work and engineer around the constraints that exist in production.</p>
       <p>We document those lessons in <a href="/blog/solutions-engineering/why-buying-software-before-understanding-the-problem-is-expensive">Why Buying Software Before Understanding the Problem Is Expensive</a> and <a href="/blog/solutions-engineering/why-zimbabwean-businesses-run-operations-through-whatsapp">Why So Many Zimbabwean Businesses Still Run Critical Operations Through WhatsApp</a>.</p>
+    `,
+  },
+];
+
+export const productsFaqs = [
+  {
+    question: "What products has Sparkline Labs actually built?",
+    answer: `
+      <p>Sparkline Labs currently has products in production in the areas where we have identified a real operational problem worth solving. <a href="/products">Propertyzone</a> is our intent-first property platform for Zimbabwe, while its <strong>Agency CRM</strong> is a sales pipeline and deal-tracking system built directly into Propertyzone for verified real estate agencies.</p>
+
+      <p>These are not demo applications created to showcase a technology stack. They are live systems that have to handle real users, real enquiries, real property data, real agency workflows and the operating conditions in which businesses actually work.</p>
+
+      <p>We build our own products for the same reason we build systems for clients: to understand where technology genuinely improves an operation and where an apparently good software idea breaks down when it meets real users.</p>
+    `,
+  },
+  {
+    question:
+      "Is Propertyzone a product of Sparkline Labs or a client project?",
+    answer: `
+      <p>Propertyzone is a Sparkline Labs product and is live in production. It was built around a specific problem in Zimbabwean real estate: large volumes of property enquiries were being generated, but the information, intent and follow-up required to turn those enquiries into useful opportunities were fragmented across listings, WhatsApp conversations and individual agents.</p>
+
+      <p>The result is more than a property catalogue. Propertyzone combines structured property information, verified buyer and renter profiles, intent-tagged enquiries, lead management, agency workflows and direct WhatsApp communication.</p>
+
+      <p>The engineering decisions behind the product are documented in the <a href="/work/propertyzone">Propertyzone case study</a>.</p>
+    `,
+  },
+  {
+    question: "Why does Sparkline Labs build its own products?",
+    answer: `
+      <p>Building our own products gives us something a conventional software vendor cannot get from a specification alone: direct experience with what happens after software goes live.</p>
+
+      <p>We have to deal with adoption, incomplete data, changing requirements, customer behaviour, connectivity, operational workflows, support, performance and the difference between a feature that sounds useful and one that actually changes the business.</p>
+
+      <p>That experience feeds back into the way we work with clients. Propertyzone, for example, forced us to deal with the relationship between structured data, WhatsApp, property search, lead qualification, agent workflows and unreliable connectivity as one system rather than as separate software features.</p>
+
+      <p>That is a large part of why our work is based on <a href="/blog/solutions-engineering">solutions engineering</a> rather than simply implementing a technology specification.</p>
+    `,
+  },
+  {
+    question:
+      "Can Sparkline Labs build a product from an idea that does not exist yet?",
+    answer: `
+      <p>Yes. We can work from a business problem, market opportunity or product idea rather than requiring a complete technical specification.</p>
+
+      <p>Where the proposition is genuinely new or uncertain, we first need to understand the users, workflow, business model and technical risks before committing to a full build. That may involve a discovery phase and a focused pilot to prove the riskiest part of the concept.</p>
+
+      <p>The goal is not to spend months producing a specification that has never encountered a real user. We prefer to identify the important assumptions early, test them and then build around what has actually been learned.</p>
+
+      <p>That approach is explained further in our <a href="/services">services</a> and in <a href="/blog/solutions-engineering">our Solutions Engineering writing</a>.</p>
+    `,
+  },
+  {
+    question:
+      "Can Sparkline Labs build a custom product for a business even if it already has existing software?",
+    answer: `
+      <p>Yes. A new product does not necessarily mean replacing every system the business already uses.</p>
+
+      <p>Sometimes the right architecture is a new customer-facing platform connected to existing systems. In other cases, an internal product can sit alongside accounting, CRM, payment or communication systems and become the operational layer connecting them.</p>
+
+      <p>We first determine which capabilities already work, which systems should remain authoritative, and where a new product would actually add value. Our approach may therefore result in a custom platform, an integration layer, an internal tool, or a combination of these rather than a complete replacement.</p>
+    `,
+  },
+];
+
+export const workFaqs = [
+  {
+    question: "What is Sparkline Labs trying to show through its case studies?",
+    answer: `
+      <p>Our case studies are intended to show more than the finished interface. They explain the business problem, the assumptions we challenged, the system we chose to build, the constraints we had to engineer around and what happened when the solution entered production.</p>
+
+      <p>That distinction matters because a screenshot cannot tell you whether software changed the underlying workflow. A system can look polished while leaving the original business problem untouched.</p>
+
+      <p>Our <a href="/work/propertyzone">Propertyzone case study</a>, for example, focuses on the distinction between an enquiry and a lead, the role of WhatsApp, structured property data, lead routing and unreliable connectivity because those were the actual engineering problems behind the product.</p>
+    `,
+  },
+  {
+    question:
+      "Are the projects on the Work page client projects or products Sparkline Labs built itself?",
+    answer: `
+      <p>Both are possible. The Work page includes case studies from custom builds as well as products that Sparkline Labs has built and operates itself.</p>
+
+      <p>Propertyzone is our clearest current example of the second category: it is a Sparkline Labs product that was built around a real market problem and taken into production.</p>
+
+      <p>For client work, the same principle applies. We focus on what problem the system was designed to solve and why particular technical decisions were made, rather than presenting a generic list of technologies used.</p>
+    `,
+  },
+  {
+    question:
+      "Why does the Propertyzone case study focus so much on the workflow instead of just the technology?",
+    answer: `
+      <p>Because the software was designed around a workflow problem rather than a technology problem.</p>
+
+      <p>The property market already had websites, listings, agents and WhatsApp. The harder problem was what happened after someone enquired: whether that enquiry carried meaningful intent, who was responsible for it, whether it could be matched to other properties, whether the agent could respond quickly and what happened to the information afterwards.</p>
+
+      <p>That is why the case study examines the system surrounding the interface. The <a href="/work/propertyzone">full Propertyzone case study</a> explains how structured data, intent, matching, WhatsApp and agent workflows became parts of the same system.</p>
+    `,
+  },
+  {
+    question:
+      "Why does Sparkline Labs publish the problems and trade-offs behind its projects?",
+    answer: `
+      <p>Because the difficult part of engineering is rarely the existence of a feature. The difficult part is deciding what the feature should actually do, what assumptions it depends on and what happens when the real operating environment does not behave as expected.</p>
+
+      <p>We therefore document decisions around workflow, data, connectivity, communication channels, adoption and technical risk. Those decisions are useful to potential clients because they show how we think before and during implementation.</p>
+
+      <p>They also feed directly into the wider <a href="/blog/solutions-engineering">Solutions Engineering</a> body of work we publish from projects we have actually built.</p>
+    `,
+  },
+];
+export const propertyzoneCaseStudyFaqs = [
+  {
+    question: "What exactly did Sparkline Labs build for Propertyzone?",
+    answer: `
+      <p>Sparkline Labs built Propertyzone as an intent-first property platform combining structured property listings, verified buyer and renter profiles, lead capture, agency workflows, matching and direct WhatsApp-routed communication.</p>
+
+      <p>The system was designed around the full journey rather than only the property-search screen. A property has structured attributes, a customer has an identifiable intent, an enquiry becomes part of a managed workflow, and agents can act on that information through the communication channel they already use.</p>
+
+      <p>The platform is live in production. The <a href="/products">Products page</a> describes the current product capabilities, while this case study explains why the system was engineered in this way.</p>
+    `,
+  },
+  {
+    question:
+      "Why does Propertyzone ask for more structured property information than a typical property advert?",
+    answer: `
+      <p>Because the information needs to remain useful after the property has been published.</p>
+
+      <p>A normal listing can work with a price, location, bedroom count and a paragraph. A system that needs to match demand to inventory, support useful search, power neighbourhood information, qualify enquiries or provide context to AI applications needs much more of the property represented as structured data.</p>
+
+      <p>Propertyzone therefore captures information about the property and its environment that would otherwise disappear into free text. This makes the data usable for matching, filtering, analysis and future intelligent applications instead of leaving everything inside a description written for humans alone.</p>
+
+      <p>Our <a href="/blog/proptech-real-estate">PropTech & Real Estate</a> writing goes deeper into why structured property data is becoming infrastructure rather than just listing information.</p>
+    `,
+  },
+  {
+    question:
+      "Why does Propertyzone use WhatsApp for agent communication instead of forcing agents into another messaging system?",
+    answer: `
+      <p>Because the agents and customers already use WhatsApp. Requiring them to change communication behaviour simply to use the software would introduce friction that the platform is supposed to remove.</p>
+
+      <p>Propertyzone therefore uses WhatsApp as part of the delivery layer while the structured system underneath handles the information and workflow. An enquiry can carry the property reference, intent and qualification context into the agent's conversation instead of arriving as an unstructured message with no operational record.</p>
+
+      <p>This is part of a wider Sparkline Labs principle: the system should adapt to the environment in which the business already operates where doing so produces a better outcome. We explore this in <a href="/blog/solutions-engineering/why-zimbabwean-businesses-run-operations-through-whatsapp">our writing on WhatsApp-driven business operations</a>.</p>
+    `,
+  },
+  {
+    question: "How does Propertyzone distinguish an enquiry from a real lead?",
+    answer: `
+      <p>Propertyzone treats the first interaction as the beginning of a process rather than assuming that every click is a qualified lead.</p>
+
+      <p>An enquiry can represent different levels of intent. Someone asking whether a property is available is different from someone actively trying to buy, rent or invest, and someone who is not ready for one property may still be a useful prospect for another one later.</p>
+
+      <p>The platform therefore captures intent and other relevant information so agencies can work from a more useful signal than a raw WhatsApp message. The objective is not to remove the agent's judgement. It is to give the agent more context before that judgement is required.</p>
+    `,
+  },
+  {
+    question:
+      "Why is connectivity treated as part of Propertyzone's architecture?",
+    answer: `
+      <p>Because a property agent may need the system while moving between properties, meeting a client or working in an area where connectivity is unreliable. A workflow that assumes a perfect connection can therefore fail at exactly the moment it is needed.</p>
+
+      <p>Propertyzone was engineered with those operating conditions in mind rather than treating poor connectivity as an unusual exception. Where appropriate, information can remain usable locally and the system can reconcile state when connectivity returns.</p>
+
+      <p>This principle extends beyond Propertyzone. We consider mobile-first usage, network reliability and other environmental constraints during architecture instead of trying to solve them after the system has already been built.</p>
+    `,
+  },
+  {
+    question:
+      "What makes Propertyzone different from simply building another property listings website?",
+    answer: `
+      <p>The difference is what the system is responsible for after the listing has been published.</p>
+
+      <p>A conventional portal primarily helps a customer discover a property and contact an agent. Propertyzone is designed to connect inventory with intent, retain structured information about demand, route enquiries, support agency workflows and create opportunities for matching properties with known requirements.</p>
+
+      <p>The goal is to move beyond an online catalogue towards a system that helps the property business manage what happens before and after the click.</p>
+
+      <p>That is the reasoning behind the title of the case study: <strong>The Property Lead Was Already There. The Workflow Wasn't.</strong></p>
+    `,
+  },
+];
+
+export const blogFaqs = [
+  {
+    question:
+      "Why does Sparkline Labs publish articles about business operations instead of only software development?",
+    answer: `
+      <p>Because the software problem usually starts before the software. A business may think it needs a CRM, automation, an AI feature or a new website when the underlying problem is actually a broken handoff, missing information, a disconnected workflow or a process that depends too heavily on one person.</p>
+
+      <p>Our writing starts from those operational problems and examines where technology can actually improve them. That is why the blog covers WhatsApp, connectivity, software procurement, AI readiness, manual work, digital visibility and property technology alongside conventional engineering topics.</p>
+
+      <p>The underlying principle is the same as our client work: understand the operation first, then determine what technology should do.</p>
+    `,
+  },
+  {
+    question: "Are the Sparkline Labs articles based on real projects?",
+    answer: `
+      <p>Much of the writing comes directly from problems encountered while building and operating systems such as <a href="/work/propertyzone">Propertyzone</a>, as well as from patterns we see across business technology in Zimbabwe.</p>
+
+      <p>That is why many articles focus on specific operational questions rather than generic technology trends. For example, <a href="/blog/solutions-engineering/why-buying-software-before-understanding-the-problem-is-expensive">our analysis of software procurement</a> comes from the same solutions-engineering perspective used when deciding what should actually be built, while our writing on WhatsApp examines a communication channel that has become part of everyday business operations.</p>
+    `,
+  },
+  {
+    question: "Who is the Sparkline Labs blog written for?",
+    answer: `
+      <p>The blog is primarily written for business owners, operators, founders and technical decision-makers who need to make better technology decisions in Zimbabwe and across Africa.</p>
+
+      <p>You do not need to be a software engineer to use it. Many articles start with a business problem and explain the technical implications afterwards: lost leads, manual work, disconnected systems, poor digital visibility, unreliable connectivity or software that no longer fits the business.</p>
+
+      <p>The deeper purpose is to help businesses understand the decisions behind the technology rather than simply telling them which tool to buy.</p>
+    `,
+  },
+  {
+    question:
+      "Why does Sparkline Labs focus so heavily on Zimbabwe when the technology it uses is global?",
+    answer: `
+      <p>Because software may be global while the environment in which it operates is not.</p>
+
+      <p>Payment systems, customer communication habits, connectivity, mobile usage, business workflows, procurement behaviour and market structure all affect whether a technically sound system actually works for a Zimbabwean business.</p>
+
+      <p>Our <a href="/blog/solutions-engineering">Solutions Engineering</a>, <a href="/blog/proptech-real-estate">PropTech & Real Estate</a>, <a href="/blog/seo-and-digital-strategy">SEO & Digital Strategy</a> and <a href="/blog/software-industry">Software Industry & AI</a> categories all explore different parts of that operating reality.</p>
     `,
   },
 ];

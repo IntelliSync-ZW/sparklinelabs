@@ -7,6 +7,8 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { caseStudyBySlugQuery } from "@/sanity/lib/queries";
 import { PortableTextRenderer, type RichTextValue } from "@/components/portable-text";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
+import { FaqSection } from "@/components/faq";
+import { propertyzoneCaseStudyFaqs } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Building Propertyzone — Engineering a Property Platform Around What Happens After the Click | Sparkline Labs",
@@ -175,7 +177,7 @@ export default async function PropertyzoneCaseStudy() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
         />
-        <section className="pt-32 pb-16 px-6">
+        <section className="pt-32 pb-8 px-6">
           <div className="container mx-auto max-w-3xl">
             <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
               Case study · Property Tech
@@ -215,7 +217,7 @@ export default async function PropertyzoneCaseStudy() {
           </div>
         )}
 
-        <article className="pb-20 md:pb-32 px-6">
+        <article className="pb-8 px-6">
           <div className="container mx-auto max-w-3xl space-y-16">
             {study.outcomeMetrics && study.outcomeMetrics.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -255,6 +257,10 @@ export default async function PropertyzoneCaseStudy() {
 
             <EndCTA waLink={waLink} />
           </div>
+          <FaqSection
+            faqs={propertyzoneCaseStudyFaqs}
+            heading="Questions about building Propertyzone"
+          />
         </article>
       </>
     );
@@ -703,6 +709,11 @@ export default async function PropertyzoneCaseStudy() {
           <EndCTA waLink={waLink} />
         </div>
       </article>
+
+      <FaqSection
+        faqs={propertyzoneCaseStudyFaqs}
+        heading="Questions about building Propertyzone"
+      />
     </>
   );
 }
@@ -711,7 +722,7 @@ function EndCTA({ waLink }: { waLink: string }) {
   return (
     <section className="border-t border-border pt-12 space-y-6">
       <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground text-left">
-        For businesses with the same kind of problem
+        For Businesses with the Same Kind of Problem
       </h2>
       <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
         Propertyzone is one example of a broader way we work at Sparkline Labs. We look for operational bottlenecks that are currently being handled through WhatsApp messages, spreadsheets, forms, manual follow-up and people remembering what happened yesterday. Then we turn those workflows into systems.

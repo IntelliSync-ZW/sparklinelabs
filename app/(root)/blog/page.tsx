@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { BlogList, PostGridSkeleton } from "@/components/blog/blog-list";
+import { FaqSection } from "@/components/faq";
+import { blogFaqs } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Engineering for Zimbabwe | Sparkline Labs",
@@ -54,6 +56,19 @@ const blogSchema = {
   },
 };
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: blogFaqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+
 type Props = {
   searchParams: Promise<{ page?: string }>;
 };
@@ -64,6 +79,10 @@ export default async function BlogPage({ searchParams }: Props) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
@@ -92,6 +111,8 @@ export default async function BlogPage({ searchParams }: Props) {
           </Suspense>
         </div>
       </section>
+
+      <FaqSection faqs={blogFaqs} heading="Questions about the Sparkline Labs blog" />
     </>
   );
 }

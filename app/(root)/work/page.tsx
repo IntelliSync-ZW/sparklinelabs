@@ -5,6 +5,8 @@ import { allCaseStudiesQuery } from "@/sanity/lib/queries";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { FaqSection } from "@/components/faq";
+import { workFaqs } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Solutions Engineering Case Studies Zimbabwe | Sparkline Labs",
@@ -52,6 +54,19 @@ const collectionSchema = {
       { "@type": "ListItem", "position": 2, "name": "Work", "item": "https://www.sparklinelabs.co.zw/work" },
     ],
   },
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: workFaqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
 };
 
 async function CaseStudiesGrid() {
@@ -139,6 +154,10 @@ export default function WorkPage() {
     <>
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
       <section className="pt-32 pb-20 px-6">
@@ -162,6 +181,8 @@ export default function WorkPage() {
           </Suspense>
         </div>
       </section>
+
+      <FaqSection faqs={workFaqs} heading="Questions about our work" />
     </>
   );
 }

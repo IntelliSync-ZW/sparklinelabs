@@ -6,6 +6,8 @@ import Image from "next/image";
 import { fetchProducts } from "@/sanity/lib/fetch";
 import { liveProductsQuery } from "@/sanity/lib/queries";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
+import { FaqSection } from "@/components/faq";
+import { productsFaqs } from "@/lib/constants";
 
 type LiveProduct = {
   _id: string;
@@ -172,8 +174,25 @@ export default async function ProductsPage() {
     "itemListElement": [propertyzoneSchemaItem, crmSchemaItem, ...otherProducts],
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: productsFaqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }}
@@ -316,10 +335,10 @@ export default async function ProductsPage() {
       {/* Bottom CTA */}
       <section className="py-20 md:py-32 px-6 bg-foreground text-background">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-6 text-balance">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-6 text-balance text-center">
             Need something we haven&apos;t built yet?
           </h2>
-          <p className="text-xl md:text-2xl opacity-80 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl opacity-80 mb-10 max-w-2xl mx-auto text-center">
             Most of our revenue comes from custom builds: internal tools, SaaS
             MVPs, and platform work for businesses that need something specific.
             If you&apos;ve got a project, send us a WhatsApp message and
@@ -350,6 +369,8 @@ export default async function ProductsPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection faqs={productsFaqs} heading="Questions about our products" />
     </>
   );
 }

@@ -504,7 +504,7 @@ export default async function BlogPostPage({ params }: Props) {
           {/* End-of-post CTA */}
           <div className="mt-16 border-t border-border pt-12">
             <h2 className="text-2xl font-semibold tracking-tight mb-3">
-              Building something like this?
+              Building Something Like This?
             </h2>
             <p className="text-base text-muted-foreground leading-relaxed mb-6 max-w-xl">
               We build platforms, internal tools, and integrations for

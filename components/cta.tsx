@@ -8,7 +8,7 @@ export function CTA() {
   return (
     <section className="py-20 md:py-32 px-6 bg-secondary">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight mb-6 text-balance">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight mb-6 text-balance text-center">
           Something in your business isn&apos;t working? Let&apos;s look at it.
         </h2>
         <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
