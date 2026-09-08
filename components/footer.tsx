@@ -7,6 +7,8 @@ import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
 
 export function Footer() {
+  // hide address from the 18th of September 2026  onwards
+  const hideAddress = new Date() >= new Date("2026-09-18");
   return (
     <footer className="py-12 px-6 border-t border-border bg-background">
       <div className="container mx-auto">
@@ -67,7 +69,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="hover:text-accent transition-colors"
               >
-                WhatsApp
+                WhatsApp ({WHATSAPP_NUMBER})
               </a>
               <a
                 href="mailto:sales@sparklinelabs.co.zw"
@@ -75,6 +77,12 @@ export function Footer() {
               >
                 sales@sparklinelabs.co.zw
               </a>
+              {!hideAddress && (
+                <>
+                  <p>2270 106 Close,</p>
+                  <p>Budiriro 1, Harare</p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -83,16 +91,25 @@ export function Footer() {
           <span>
             &copy; {new Date().getFullYear()} Sparkline Labs. All rights reserved.
           </span>
-          <a
-            href="https://www.propzone.co.zw/en/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-accent transition-colors"
-          >
-            We built Propertyzone.
-          </a>
+          <div className="flex flex-wrap items-center gap-6 text-sm">
+            <Link href="/terms-of-service" className="hover:text-accent transition-colors">
+              Terms of Service
+            </Link>
+            <Link href="/privacy-policy" className="hover:text-accent transition-colors">
+              Privacy Policy
+            </Link>
+            <a
+              href="https://www.propzone.co.zw/en/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-accent transition-colors"
+            >
+              We built Propertyzone.
+            </a>
+          </div>
         </div>
       </div>
     </footer>
+
   );
 }

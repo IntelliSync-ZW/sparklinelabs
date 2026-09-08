@@ -233,3 +233,47 @@ export const postBySlugQuery = `
     ${authorCard},
     ${seoProjection}
   }`;
+
+// ---------------------------------------------------------------------------
+// Legal Page queries (Terms of Service, Privacy Policy)
+// ---------------------------------------------------------------------------
+
+export const legalPageBySlugQuery = `
+  *[_type == "legalPage" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    h1,
+    version,
+    lastUpdated,
+    effectiveDate,
+    preambleHeading,
+    preamble,
+    sections[] {
+
+      _key,
+      id,
+      sectionNumber,
+      title,
+      icon,
+      summary,
+      "content": content[] {
+        ...,
+        _type == "stlTableBlock" => {
+          ...,
+          stlParsed,
+          stlString
+        }
+      }
+    },
+    ${seoProjection}
+  }
+`;
+
+export const allLegalPageSlugsQuery = `
+  *[_type == "legalPage" && defined(slug.current)] {
+    "slug": slug.current,
+    _updatedAt
+  }
+`;
+

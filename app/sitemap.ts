@@ -50,7 +50,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/work/propertyzone`, lastModified: now, changeFrequency: "monthly", priority: 0.95 },
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/blog/authors`, lastModified: now, changeFrequency: "weekly", priority: 0.75 },
+    { url: `${baseUrl}/terms-of-service`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/privacy-policy`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
   ];
+
 
   const categoryRoutes = categories.map((cat) => ({
     url: `${baseUrl}/blog/${cat.slug.current}`,
