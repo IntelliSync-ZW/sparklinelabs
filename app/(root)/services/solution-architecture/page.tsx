@@ -7,7 +7,7 @@ import { FaqSection } from "@/components/faq";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Solution Architecture",
+  title: "Solution Architecture for Zimbabwean Businesses",
   description:
     "Before you build software, make sure you are solving the right problem. Sparkline Labs maps business problems, workflows, systems and constraints to determine what should actually be built.",
   keywords: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     canonical: "https://www.sparklinelabs.co.zw/services/solution-architecture",
   },
   openGraph: {
-    title: "Solution Architecture | Sparkline Labs",
+    title: "Solution Architecture for Zimbabwean Businesses | Sparkline Labs",
     description:
       "Before you build software, make sure you are solving the right problem. We map business problems, workflows and constraints to determine what should actually be built.",
     url: "https://www.sparklinelabs.co.zw/services/solution-architecture",
@@ -40,7 +40,7 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       position: 3,
-      name: "Solution Architecture",
+      name: "Solution Architecture for Zimbabwean Businesses",
       item: "https://www.sparklinelabs.co.zw/services/solution-architecture",
     },
   ],
@@ -50,7 +50,7 @@ const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
   "@id": "https://www.sparklinelabs.co.zw/services/solution-architecture#service",
-  name: "Solution Architecture",
+  name: "Solution Architecture for Zimbabwean Businesses",
   description:
     "We map the business problem, the workflows, the information, the people and the constraints, then determine what should be built, integrated, automated, replaced or left alone.",
   provider: {
@@ -219,7 +219,7 @@ export default function SolutionArchitecturePage() {
       </div>
 
       {/* Main article */}
-      <article className="pb-16 md:pb-24 px-6">
+      <article className="pb-8 px-6">
         <div className="container mx-auto max-w-3xl space-y-12 md:space-y-16">
 
           {/* Software should solve the business */}
@@ -414,9 +414,9 @@ export default function SolutionArchitecturePage() {
               product handles structured property information, discovery, enquiries
               and the wider journey around a property.
             </p>
-            <div className="relative w-full overflow-hidden rounded-2xl border border-border group hover:border-accent transition-colors duration-300">
+            <div className="relative w-full overflow-hidden rounded-xl border border-border group hover:border-accent transition-colors duration-300">
               <Image
-                src="/propertyzone.png"
+                src="/pz-screenshot-seo-ai.png"
                 alt="Propertyzone listing and discovery experience — the visible result of careful system design"
                 width={1200}
                 height={675}

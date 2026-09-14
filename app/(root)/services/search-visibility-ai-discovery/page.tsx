@@ -132,8 +132,8 @@ const EXAMPLE_SEARCHES = [
 ];
 
 const RELATED_LINKS = [
-  { href: "/blog/seo-and-digital-strategy", label: "Built, But Not Found" },
-  { href: "/blog/seo-and-digital-strategy", label: "Digital Freshness" },
+  { href: "/blog/seo-and-digital-strategy/built-not-found-zimbabwe-seo-ai-visibility", label: "Built, But Not Found" },
+  { href: "/blog/seo-and-digital-strategy/digital-freshness-trust-zimbabwe-2026-website-audit", label: "Digital Freshness" },
   { href: "/work/propertyzone", label: "Propertyzone" },
   { href: "/blog/seo-and-digital-strategy", label: "Search & AI Visibility Research" },
 ];
@@ -448,7 +448,7 @@ export default function SearchVisibilityPage() {
             </blockquote>
 
             <Button variant="outline" size="sm" className="bg-transparent group" asChild>
-              <Link href="/blog/seo-and-digital-strategy">
+              <Link href="/blog/seo-and-digital-strategy/digital-freshness-trust-zimbabwe-2026-website-audit">
                 Read the Digital Freshness research
                 <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </Link>
@@ -528,9 +528,9 @@ export default function SearchVisibilityPage() {
               information, useful pages and clear relationships between properties,
               locations and the people searching for them.
             </p>
-            <div className="relative w-full overflow-hidden rounded-2xl border border-border group hover:border-accent transition-colors duration-300">
+            <div className="relative w-full overflow-hidden rounded-xl border border-border group hover:border-accent transition-colors duration-300">
               <Image
-                src="/propertyzone.png"
+                src="/pz-screenshot-seo-ai.png"
                 alt="Propertyzone property listing page showing structured location and listing information"
                 width={1200}
                 height={675}
@@ -660,7 +660,7 @@ export default function SearchVisibilityPage() {
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               That is why Search Visibility &amp; AI Discovery sits alongside
               Sparkline&apos;s wider work in{" "}
-              <Link href="/services#solution-architecture" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
+              <Link href="/services/solution-architecture" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
                 solution architecture
               </Link>
               ,{" "}
@@ -747,6 +747,7 @@ export default function SearchVisibilityPage() {
           </section>
         </div>
       </article>
+
     </>
   );
 }
