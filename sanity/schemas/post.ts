@@ -26,7 +26,7 @@ export const postSchema = defineType({
       description: "Short description shown in cards",
       type: "text",
       rows: 3,
-      validation: (r) => r.max(500),
+      validation: (r) => r.max(700),
     }),
 
     // ── Authors ───────────────────────────────────────────────────────────────

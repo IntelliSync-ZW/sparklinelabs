@@ -31,6 +31,14 @@ export const metadata: Metadata = {
       "Connect the work your business is already doing. We connect systems, automate repetitive work and design reliable handoffs between people and technology.",
     url: "https://www.sparklinelabs.co.zw/services/integration-automation",
     type: "website",
+    images: [
+      {
+        url: "/integration-automation-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Integration and Automation for Zimbabwean Businesses",
+      },
+    ],
   },
 };
 
@@ -263,12 +271,14 @@ export default function IntegrationAutomationPage() {
         <div className="container mx-auto max-w-3xl">
           <div className="relative w-full overflow-hidden rounded-2xl border border-border">
             <Image
-              src="/automation.png"
+              src="/integration-automation-og.jpg"
               alt="Business systems connected into a single automated workflow"
               width={1200}
-              height={675}
+              height={630}
               className="w-full h-auto object-cover"
               priority
+              fetchPriority="high"
+              sizes="(min-width: 768px) 768px, 100vw"
             />
           </div>
         </div>
@@ -499,6 +509,8 @@ export default function IntegrationAutomationPage() {
                 alt="Propertyzone property discovery and enquiry experience in production"
                 width={1200}
                 height={675}
+                loading="lazy"
+                sizes="(min-width: 768px) 768px, 100vw"
                 className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
             </div>

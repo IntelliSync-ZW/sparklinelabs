@@ -32,6 +32,14 @@ export const metadata: Metadata = {
       "Make your business easier to find, easier to understand, and easier to choose. Technical SEO, local search, content architecture and AI discovery for African businesses.",
     url: "https://www.sparklinelabs.co.zw/services/search-visibility-ai-discovery",
     type: "website",
+    images: [
+      {
+        url: "/search-visibility-ai-discovery-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Search Visibility and AI Discovery for Zimbabwean Businesses",
+      },
+    ],
   },
 };
 
@@ -299,12 +307,14 @@ export default function SearchVisibilityPage() {
         <div className="container mx-auto max-w-3xl">
           <div className="relative w-full overflow-hidden rounded-2xl border border-border">
             <Image
-              src="/search-visibility-ai-discovery.png"
+              src="/search-visibility-ai-discovery-og.jpg"
               alt="Business digital presence structured for search engine and AI discovery"
               width={1200}
-              height={675}
+              height={630}
               className="w-full h-auto object-cover"
               priority
+              fetchPriority="high"
+              sizes="(min-width: 768px) 768px, 100vw"
             />
           </div>
         </div>
@@ -637,6 +647,8 @@ export default function SearchVisibilityPage() {
                 alt="Propertyzone property listing page showing structured location and listing information"
                 width={1200}
                 height={675}
+                loading="lazy"
+                sizes="(min-width: 768px) 768px, 100vw"
                 className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
               <div className="absolute bottom-3 left-3 right-3">

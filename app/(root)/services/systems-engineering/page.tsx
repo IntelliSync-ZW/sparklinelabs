@@ -29,6 +29,14 @@ export const metadata: Metadata = {
       "Build software that works in the real world. We engineer business platforms, customer-facing products, internal systems, SaaS products and digital products around real operating conditions.",
     url: "https://www.sparklinelabs.co.zw/services/systems-engineering",
     type: "website",
+    images: [
+      {
+        url: "/systems-engineering-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Systems Engineering for Zimbabwean Businesses",
+      },
+    ],
   },
 };
 
@@ -280,12 +288,14 @@ export default function SystemsEngineeringPage() {
         <div className="container mx-auto max-w-3xl">
           <div className="relative w-full overflow-hidden rounded-2xl border border-border">
             <Image
-              src="/systems-engineering.png"
+              src="/systems-engineering-og.jpg"
               alt="Business application interface being engineered as part of a custom digital system"
               width={1200}
-              height={675}
+              height={630}
               className="w-full h-auto object-cover"
               priority
+              fetchPriority="high"
+              sizes="(min-width: 768px) 768px, 100vw"
             />
           </div>
         </div>
@@ -446,6 +456,8 @@ export default function SystemsEngineeringPage() {
                 alt="Propertyzone property discovery and enquiry experience in production"
                 width={1200}
                 height={675}
+                loading="lazy"
+                sizes="(min-width: 768px) 768px, 100vw"
                 className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
             </div>

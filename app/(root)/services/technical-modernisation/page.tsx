@@ -29,6 +29,14 @@ export const metadata: Metadata = {
       "Improve what already exists before you replace it. We modernise software, infrastructure and technical foundations so businesses can extend the useful life of what they already have.",
     url: "https://www.sparklinelabs.co.zw/services/technical-modernisation",
     type: "website",
+    images: [
+      {
+        url: "/technical-modernisation-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Technical Modernisation for Zimbabwean Businesses",
+      },
+    ],
   },
 };
 
@@ -335,12 +343,14 @@ export default function TechnicalModernisationPage() {
         <div className="container mx-auto max-w-3xl">
           <div className="relative w-full overflow-hidden rounded-2xl border border-border">
             <Image
-              src="/technical-modernisation.png"
+              src="/technical-modernisation-og.jpg"
               alt="Existing software architecture being modernised while functional components are retained"
               width={1200}
-              height={675}
+              height={630}
               className="w-full h-auto object-cover"
               priority
+              fetchPriority="high"
+              sizes="(min-width: 768px) 768px, 100vw"
             />
           </div>
         </div>
@@ -588,6 +598,8 @@ export default function TechnicalModernisationPage() {
                 alt="Propertyzone listing and discovery experience as a growing production system"
                 width={1200}
                 height={675}
+                loading="lazy"
+                sizes="(min-width: 768px) 768px, 100vw"
                 className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
             </div>

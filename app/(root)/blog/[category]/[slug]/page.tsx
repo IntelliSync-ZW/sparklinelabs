@@ -137,7 +137,7 @@ function formatDate(dateStr: string) {
 function roleLabel(role?: string): string | null {
   if (!role) return null;
   const labels: Record<string, string> = {
-    lead_author: "Lead Author",
+    lead_author: "Author",
     co_author: "Co-author",
     editor: "Editor",
     contributor: "Contributor",

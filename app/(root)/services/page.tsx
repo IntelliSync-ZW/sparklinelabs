@@ -44,7 +44,7 @@ const STATIC_SERVICES: ServiceItem[] = [
 <p>Typical work: Workflow mapping, system architecture, technical requirements, feasibility studies, integration planning and prototypes.</p>
 
 <p>Related: <a href="/blog/solutions-engineering/zimbabwe-technology-decision-framework-build-buy-integrate">Build, Buy, Integrate or Change the Process?</a></p>`,
-    image: "/solutions-architecture.png",
+    image: "/solution-architecture-og.jpg",
     alt: "Business workflow and system architecture being mapped before software implementation.",
   },
   {
@@ -60,7 +60,7 @@ const STATIC_SERVICES: ServiceItem[] = [
 <p>Typical work: Custom platforms, business applications, portals, dashboards, SaaS products and workflow systems.</p>
 
 <p>Related: <a href="/work/propertyzone">Propertyzone</a> · <a href="/blog/solutions-engineering/what-zimbabwean-businesses-need-from-software">What Does a Zimbabwean Business Actually Need From Software?</a></p>`,
-    image: "/systems-engineering.png",
+    image: "/systems-engineering-og.jpg",
     alt: "Business application interface being engineered as part of a custom digital system.",
   },
   {
@@ -76,7 +76,7 @@ const STATIC_SERVICES: ServiceItem[] = [
 <p>Typical work: WhatsApp integrations, lead capture, payment integrations, CRM connections, data synchronisation, notifications and workflow automation.</p>
 
 <p>Related: <a href="/blog/seo-and-digital-strategy/whatsapp-lead-capture-crm-scoring-zimbabwe-propertyzone">Can WhatsApp Leads Be Captured and Scored Automatically in Zimbabwe?</a></p>`,
-    image: "/automation.png",
+    image: "/integration-automation-og.jpg",
     alt: "Business systems connected into a single automated workflow.",
   },
   {
@@ -92,7 +92,7 @@ const STATIC_SERVICES: ServiceItem[] = [
 <p>Typical work: Technical SEO, structured data and schema markup, entity optimisation, content architecture, AI-readability audits, local search visibility and search-engine-friendly copywriting.</p>
 
 <p>Related: <a href="/blog/seo-and-digital-strategy">Digital strategy writing</a></p>`,
-    image: "/search-visibility-ai-discovery.png",
+    image: "/search-visibility-ai-discovery-og.jpg",
     alt: "Business digital presence structured for search engine and AI discovery.",
   },
   {
@@ -108,7 +108,7 @@ const STATIC_SERVICES: ServiceItem[] = [
 <p>Typical work: Legacy-system assessment, architecture improvements, performance work, database improvements, codebase modernisation and incremental replacement.</p>
 
 <p>Related: <a href="/blog/software-industry/wordpress-era-ai-tools-zimbabwe-software-trust">The WordPress Era Never Ended. It Just Learned to Prompt.</a></p>`,
-    image: "/technical-modernisation.png",
+    image: "/technical-modernisation-og.jpg",
     alt: "Existing software architecture being modernised while functional components are retained.",
   },
 ];
@@ -130,7 +130,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     seo?.description ||
     "Solutions engineering for Zimbabwean and African businesses. We diagnose operational problems and engineer the right combination of software, integrations, automation and digital systems.";
-  const ogImageUrl = seo?.ogImage;
+  const ogImageUrl =
+    seo?.ogImage || "https://www.sparklinelabs.co.zw/services-og.jpg";
 
   return {
     title,
@@ -141,9 +142,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url: "https://www.sparklinelabs.co.zw/services",
       type: "website",
-      ...(ogImageUrl && {
-        images: [{ url: ogImageUrl }],
-      }),
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Sparkline Labs services",
+        },
+      ],
     },
   };
 }
@@ -241,6 +247,9 @@ export default async function ServicesPage() {
           src="/services-hero.png"
           alt="Services"
           fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
           className="object-cover aspect-9/16 md:aspect-auto absolute inset-0 z-1"
         />
         <div className="bg-foreground/80 z-5 text-background flex absolute inset-0 flex-col items-center justify-center text-center ">
@@ -329,6 +338,8 @@ export default async function ServicesPage() {
                             src={imgUrl || "/placeholder.svg"}
                             alt={service.title}
                             fill
+                            loading="lazy"
+                            sizes="(min-width: 768px) 50vw, 100vw"
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         </div>
@@ -339,6 +350,8 @@ export default async function ServicesPage() {
                           src={imgUrl || "/placeholder.svg"}
                           alt={service.title}
                           fill
+                          loading="lazy"
+                          sizes="(min-width: 768px) 50vw, 100vw"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>

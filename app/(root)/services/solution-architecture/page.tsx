@@ -28,6 +28,14 @@ export const metadata: Metadata = {
       "Before you build software, make sure you are solving the right problem. We map business problems, workflows and constraints to determine what should actually be built.",
     url: "https://www.sparklinelabs.co.zw/services/solution-architecture",
     type: "website",
+    images: [
+      {
+        url: "/solution-architecture-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Solution Architecture for Zimbabwean Businesses",
+      },
+    ],
   },
 };
 
@@ -274,12 +282,14 @@ export default function SolutionArchitecturePage() {
         <div className="container mx-auto max-w-3xl">
           <div className="relative w-full overflow-hidden rounded-2xl border border-border">
             <Image
-              src="/solutions-architecture.png"
+              src="/solution-architecture-og.jpg"
               alt="Business workflow and system architecture being mapped before software implementation"
               width={1200}
-              height={675}
+              height={630}
               className="w-full h-auto object-cover"
               priority
+              fetchPriority="high"
+              sizes="(min-width: 768px) 768px, 100vw"
             />
           </div>
         </div>
@@ -516,6 +526,8 @@ export default function SolutionArchitecturePage() {
                 alt="Propertyzone listing and discovery experience — the visible result of careful system design"
                 width={1200}
                 height={675}
+                loading="lazy"
+                sizes="(min-width: 768px) 768px, 100vw"
                 className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
               <div className="absolute bottom-3 left-3 right-3">
