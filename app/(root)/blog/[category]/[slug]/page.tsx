@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, Clock } from "lucide-react";
+import { ArrowRight, Calendar, Clock, Download } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { fetchPosts, sanityFetch } from "@/sanity/lib/fetch";
@@ -55,6 +55,15 @@ type Post = {
   tags?: string[];
   category?: { title: string; slug: { current: string }; color?: string };
   coverImage?: { url: string; alt?: string };
+  resourceGroups?: {
+    heading: string;
+    resources?: {
+      title: string;
+      url: string;
+      fileName?: string;
+      mimeType?: string;
+    }[];
+  }[];
   body?: unknown[];
   authors?: ArticleAuthor[];
   seo?: { title?: string; description?: string; ogImage?: string };
@@ -437,6 +446,53 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Body */}
           {post.body && post.body.length > 0 && (
             <PortableTextRenderer value={post.body as RichTextValue} />
+          )}
+
+          {post.resourceGroups?.some((group) => group.resources?.length) && (
+            <section
+              className="mt-12 border-t border-border pt-8"
+              aria-label="Article resources"
+            >
+              <div className="space-y-10">
+                {post.resourceGroups.map((group) => {
+                  if (!group.resources?.length) return null;
+                  return (
+                    <section key={group.heading}>
+                      <h2 className="text-xl font-semibold tracking-tight text-foreground">
+                        {group.heading}
+                      </h2>
+                      <div className="mt-4 divide-y divide-border rounded-xl border border-border">
+                        {group.resources.map((resource) => (
+                          <a
+                            key={resource.url}
+                            href={resource.url}
+                            download={resource.fileName || true}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between gap-4 px-4 py-3.5 text-sm text-foreground transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-secondary"
+                          >
+                            <span className="min-w-0">
+                              <span className="block font-medium">
+                                {resource.title}
+                              </span>
+                              {resource.fileName && (
+                                <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                                  {resource.fileName}
+                                </span>
+                              )}
+                            </span>
+                            <Download
+                              className="h-4 w-4 shrink-0 text-muted-foreground"
+                              aria-hidden="true"
+                            />
+                          </a>
+                        ))}
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
+            </section>
           )}
 
           {/* Editorial Author Bio Section */}

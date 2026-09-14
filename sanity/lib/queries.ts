@@ -229,6 +229,15 @@ export const postBySlugQuery = `
     _id, title, slug, excerpt, publishedAt, updatedAt, tags, readingTime,
     "category": category->{ title, slug, color, "image": { "url": image.asset->url, "alt": image.alt } },
     "coverImage": { "url": coverImage.asset->url, "alt": coverImage.alt },
+    "resourceGroups": resourceGroups[] {
+      heading,
+      resources[] {
+        title,
+        "url": file.asset->url,
+        "fileName": file.asset->originalFilename,
+        "mimeType": file.asset->mimeType
+      }
+    },
     ${richText("body")},
     ${authorCard},
     ${seoProjection}
@@ -276,4 +285,3 @@ export const allLegalPageSlugsQuery = `
     _updatedAt
   }
 `;
-

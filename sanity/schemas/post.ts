@@ -114,6 +114,60 @@ export const postSchema = defineType({
     }),
 
     defineField({
+      name: "resourceGroups",
+      title: "Article Resource Groups",
+      description:
+        "Optional groups of downloadable files shown below the article body.",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "articleResourceGroup",
+          fields: [
+            defineField({
+              name: "heading",
+              title: "Group Heading",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "resources",
+              title: "Files",
+              type: "array",
+              of: [
+                defineArrayMember({
+                  type: "object",
+                  name: "articleResource",
+                  fields: [
+                    defineField({
+                      name: "title",
+                      title: "Link Label",
+                      type: "string",
+                      validation: (r) => r.required(),
+                    }),
+                    defineField({
+                      name: "file",
+                      title: "File",
+                      type: "file",
+                      validation: (r) => r.required(),
+                    }),
+                  ],
+                  preview: {
+                    select: { title: "title", media: "file" },
+                  },
+                }),
+              ],
+              validation: (r) => r.min(1),
+            }),
+          ],
+          preview: {
+            select: { title: "heading" },
+          },
+        }),
+      ],
+    }),
+
+    defineField({
       name: "category",
       title: "Category",
       type: "reference",
