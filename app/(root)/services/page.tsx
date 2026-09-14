@@ -35,8 +35,7 @@ const STATIC_SERVICES: ServiceItem[] = [
     stepNumber: "01",
     title: "Solution architecture",
     id: "solution-architecture",
-    description:
-      `<p>We work out what should actually be built before development begins.</p>
+    description: `<p>We work out what should actually be built before development begins.</p>
 
 <p>A business problem does not always require new software. We examine your workflow, existing systems, users and constraints to determine whether the right answer is a new platform, an integration, automation, modernisation or a change to the process itself.</p>
 
@@ -46,14 +45,13 @@ const STATIC_SERVICES: ServiceItem[] = [
 
 <p>Related: <a href="/blog/solutions-engineering/zimbabwe-technology-decision-framework-build-buy-integrate">Build, Buy, Integrate or Change the Process?</a></p>`,
     image: "/solutions-architecture.png",
-    alt: "Business workflow and system architecture being mapped before software implementation."
+    alt: "Business workflow and system architecture being mapped before software implementation.",
   },
   {
     stepNumber: "02",
     title: "Systems engineering",
     id: "systems-engineering",
-    description:
-      `<p>We build the software that makes the solution work in practice.</p>
+    description: `<p>We build the software that makes the solution work in practice.</p>
 
 <p>When an existing product cannot properly support the way your business operates, we design and engineer a system around those requirements.</p>
 
@@ -63,14 +61,13 @@ const STATIC_SERVICES: ServiceItem[] = [
 
 <p>Related: <a href="/work/propertyzone">Propertyzone</a> · <a href="/blog/solutions-engineering/what-zimbabwean-businesses-need-from-software">What Does a Zimbabwean Business Actually Need From Software?</a></p>`,
     image: "/systems-engineering.png",
-    alt: "Business application interface being engineered as part of a custom digital system."
+    alt: "Business application interface being engineered as part of a custom digital system.",
   },
   {
     stepNumber: "03",
     title: "Integration & automation",
     id: "integration-automation",
-    description:
-      `<p>Connect the systems you already use and remove unnecessary manual work.</p>
+    description: `<p>Connect the systems you already use and remove unnecessary manual work.</p>
 
 <p>Many businesses do not have a software shortage. They have a systems disconnect. Information moves between WhatsApp, spreadsheets, websites, CRMs, payment systems and email through people manually copying and forwarding it.</p>
 
@@ -80,14 +77,13 @@ const STATIC_SERVICES: ServiceItem[] = [
 
 <p>Related: <a href="/blog/seo-and-digital-strategy/whatsapp-lead-capture-crm-scoring-zimbabwe-propertyzone">Can WhatsApp Leads Be Captured and Scored Automatically in Zimbabwe?</a></p>`,
     image: "/automation.png",
-    alt: "Business systems connected into a single automated workflow."
+    alt: "Business systems connected into a single automated workflow.",
   },
   {
     stepNumber: "04",
     title: "Search Visibility & AI Discovery",
     id: "search-visibility-ai-discovery",
-    description:
-      `<p>Make your business easier to find, easier to understand, and easier to choose.</p>
+    description: `<p>Make your business easier to find, easier to understand, and easier to choose.</p>
 
 <p>Search has changed. Beyond ranking on Google, your business now needs to appear accurately in AI-generated answers, knowledge panels, voice results and LLM-powered tools that millions of people use to research decisions. Most African businesses are invisible in this new layer.</p>
 
@@ -97,14 +93,13 @@ const STATIC_SERVICES: ServiceItem[] = [
 
 <p>Related: <a href="/blog/seo-and-digital-strategy">Digital strategy writing</a></p>`,
     image: "/search-visibility-ai-discovery.png",
-    alt: "Business digital presence structured for search engine and AI discovery."
+    alt: "Business digital presence structured for search engine and AI discovery.",
   },
   {
     stepNumber: "05",
     title: "Technical modernisation",
     id: "technical-modernisation",
-    description:
-      `<p>Improve the software you already have instead of replacing everything.</p>
+    description: `<p>Improve the software you already have instead of replacing everything.</p>
 
 <p>Existing systems can become slow, fragile or difficult to change as a business grows. We assess what is worth keeping, identify the technical problems holding the system back and modernise the underlying architecture progressively.</p>
 
@@ -114,7 +109,7 @@ const STATIC_SERVICES: ServiceItem[] = [
 
 <p>Related: <a href="/blog/software-industry/wordpress-era-ai-tools-zimbabwe-software-trust">The WordPress Era Never Ended. It Just Learned to Prompt.</a></p>`,
     image: "/technical-modernisation.png",
-    alt: "Existing software architecture being modernised while functional components are retained."
+    alt: "Existing software architecture being modernised while functional components are retained.",
   },
 ];
 
@@ -197,7 +192,10 @@ export default async function ServicesPage() {
 
   const h1 = pageData?.h1 || DEFAULT_H1;
   const intro = pageData?.intro || DEFAULT_INTRO;
-  const services = pageData?.services && pageData.services.length > 0 ? pageData.services : STATIC_SERVICES;
+  const services =
+    pageData?.services && pageData.services.length > 0
+      ? pageData.services
+      : STATIC_SERVICES;
 
   // Reusable fallback images for mapping sanity results
   const fallbackImages = [
@@ -211,6 +209,15 @@ export default async function ServicesPage() {
   const getServiceDetailHref = (id?: string, stepNumber?: string) => {
     if (id === "solution-architecture" || stepNumber === "01") {
       return "/services/solution-architecture";
+    }
+    if (id === "systems-engineering" || stepNumber === "02") {
+      return "/services/systems-engineering";
+    }
+    if (id === "integration-automation" || stepNumber === "03") {
+      return "/services/integration-automation";
+    }
+    if (id === "technical-modernisation" || stepNumber === "05") {
+      return "/services/technical-modernisation";
     }
     if (id === "search-visibility-ai-discovery" || stepNumber === "04") {
       return "/services/search-visibility-ai-discovery";
@@ -257,15 +264,22 @@ export default async function ServicesPage() {
           <div className="flex flex-col gap-20 md:gap-32">
             {services.map((service, idx) => {
               const isEven = idx % 2 === 0;
-              const imgUrl = service.imageUrl || service.image || fallbackImages[idx % fallbackImages.length];
-              const detailHref = getServiceDetailHref(service.id, service.stepNumber);
+              const imgUrl =
+                service.imageUrl ||
+                service.image ||
+                fallbackImages[idx % fallbackImages.length];
+              const detailHref = getServiceDetailHref(
+                service.id,
+                service.stepNumber,
+              );
 
               return (
                 <div
                   key={idx}
                   id={service.id}
-                  className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"
-                    } gap-10 md:gap-16 items-center`}
+                  className={`flex flex-col ${
+                    isEven ? "md:flex-row" : "md:flex-row-reverse"
+                  } gap-10 md:gap-16 items-center`}
                 >
                   {/* Text Column */}
                   <div className="flex-1 w-full">
@@ -274,7 +288,10 @@ export default async function ServicesPage() {
                     </span>
                     <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
                       {detailHref ? (
-                        <Link href={detailHref} className="hover:text-accent transition-colors inline-flex items-center gap-2 group/title">
+                        <Link
+                          href={detailHref}
+                          className="hover:text-accent transition-colors inline-flex items-center gap-2 group/title"
+                        >
                           <span>{service.title}</span>
                           <ArrowRight className="h-6 w-6 opacity-0 -translate-x-2 transition-all group-hover/title:opacity-100 group-hover/title:translate-x-0" />
                         </Link>
@@ -282,10 +299,18 @@ export default async function ServicesPage() {
                         service.title
                       )}
                     </h2>
-                    <div className="text-base md:text-lg text-muted-foreground leading-relaxed typeset" dangerouslySetInnerHTML={{ __html: service.description }} />
+                    <div
+                      className="text-base md:text-lg text-muted-foreground leading-relaxed typeset"
+                      dangerouslySetInnerHTML={{ __html: service.description }}
+                    />
                     {detailHref && (
                       <div className="mt-6">
-                        <Button variant="outline" size="sm" asChild className="group">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                          className="group"
+                        >
                           <Link href={detailHref}>
                             Explore full service overview
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -333,7 +358,9 @@ export default async function ServicesPage() {
             Not every problem needs new software.
           </h2>
           <p className="text-xl md:text-2xl opacity-80 mb-10 max-w-2xl mx-auto">
-            We diagnose before we build. Let&apos;s map out your systems and workflows on a brief WhatsApp alignment call. No sales pitches, just engineering context.
+            We diagnose before we build. Let&apos;s map out your systems and
+            workflows on a brief WhatsApp alignment call. No sales pitches, just
+            engineering context.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button
@@ -341,7 +368,7 @@ export default async function ServicesPage() {
               className="group text-base px-8 bg-accent text-accent-foreground hover:bg-accent/90"
               asChild
             >
-              <a href={waProjectLink} target="_blank" rel="noopener noreferrer">
+              <a href="#whatsapp" data-whatsapp-href={waProjectLink}>
                 Tell us what isn&apos;t working
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
@@ -361,10 +388,7 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <FaqSection
-        faqs={servicesFaqs}
-        heading="Questions about our services"
-      />
+      <FaqSection faqs={servicesFaqs} heading="Questions about our services" />
     </>
   );
 }

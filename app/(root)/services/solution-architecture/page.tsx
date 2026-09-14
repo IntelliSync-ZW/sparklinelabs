@@ -7,9 +7,9 @@ import { FaqSection } from "@/components/faq";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Solution Architecture for Zimbabwean Businesses",
+  title: "Solution Architecture Zimbabwe",
   description:
-    "Before you build software, make sure you are solving the right problem. Sparkline Labs maps business problems, workflows, systems and constraints to determine what should actually be built.",
+    "Solution architecture for Zimbabwean businesses. We map the problem, workflows and systems before deciding what should be built, integrated or automated.",
   keywords: [
     "solution architecture Zimbabwe",
     "software architecture Africa",
@@ -35,8 +35,18 @@ const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
-    { "@type": "ListItem", position: 2, name: "Services", item: "https://www.sparklinelabs.co.zw/services" },
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.sparklinelabs.co.zw",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Services",
+      item: "https://www.sparklinelabs.co.zw/services",
+    },
     {
       "@type": "ListItem",
       position: 3,
@@ -49,7 +59,8 @@ const breadcrumbSchema = {
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  "@id": "https://www.sparklinelabs.co.zw/services/solution-architecture#service",
+  "@id":
+    "https://www.sparklinelabs.co.zw/services/solution-architecture#service",
   name: "Solution Architecture for Zimbabwean Businesses",
   description:
     "We map the business problem, the workflows, the information, the people and the constraints, then determine what should be built, integrated, automated, replaced or left alone.",
@@ -66,14 +77,39 @@ const serviceSchema = {
 
 const WHAT_WE_EXAMINE = [
   { area: "Business processes", covers: "How work actually happens today" },
-  { area: "Users and roles", covers: "Who does what, and where responsibility sits" },
-  { area: "Information", covers: "What data exists, where it lives and how it moves" },
-  { area: "Systems", covers: "What should connect, remain, change or disappear" },
-  { area: "Workflows", covers: "What should happen automatically and what still needs judgement" },
-  { area: "Exceptions", covers: "What happens when reality does not follow the happy path" },
-  { area: "Scale", covers: "What the solution needs to handle as the business grows" },
-  { area: "Constraints", covers: "Budget, infrastructure, connectivity, integrations and operational realities" },
-  { area: "Future change", covers: "What should be possible without rebuilding everything" },
+  {
+    area: "Users and roles",
+    covers: "Who does what, and where responsibility sits",
+  },
+  {
+    area: "Information",
+    covers: "What data exists, where it lives and how it moves",
+  },
+  {
+    area: "Systems",
+    covers: "What should connect, remain, change or disappear",
+  },
+  {
+    area: "Workflows",
+    covers: "What should happen automatically and what still needs judgement",
+  },
+  {
+    area: "Exceptions",
+    covers: "What happens when reality does not follow the happy path",
+  },
+  {
+    area: "Scale",
+    covers: "What the solution needs to handle as the business grows",
+  },
+  {
+    area: "Constraints",
+    covers:
+      "Budget, infrastructure, connectivity, integrations and operational realities",
+  },
+  {
+    area: "Future change",
+    covers: "What should be possible without rebuilding everything",
+  },
 ];
 
 const WHAT_WE_PRODUCE = [
@@ -90,11 +126,35 @@ const WHAT_WE_PRODUCE = [
 ];
 
 const HOW_WE_WORK = [
-  { step: "01", title: "Understand", description: "We map the business problem and how the work happens today." },
-  { step: "02", title: "Challenge", description: "We test assumptions, identify gaps and question whether software is actually the right intervention." },
-  { step: "03", title: "Structure", description: "We define workflows, information, systems, responsibilities and technical boundaries." },
-  { step: "04", title: "Design", description: "We turn those decisions into a practical architecture that engineering can build." },
-  { step: "05", title: "Build with intent", description: "Where Sparkline is responsible for implementation, the architecture becomes the foundation for the engineering work." },
+  {
+    step: "01",
+    title: "Understand",
+    description: "We map the business problem and how the work happens today.",
+  },
+  {
+    step: "02",
+    title: "Challenge",
+    description:
+      "We test assumptions, identify gaps and question whether software is actually the right intervention.",
+  },
+  {
+    step: "03",
+    title: "Structure",
+    description:
+      "We define workflows, information, systems, responsibilities and technical boundaries.",
+  },
+  {
+    step: "04",
+    title: "Design",
+    description:
+      "We turn those decisions into a practical architecture that engineering can build.",
+  },
+  {
+    step: "05",
+    title: "Build with intent",
+    description:
+      "Where Sparkline is responsible for implementation, the architecture becomes the foundation for the engineering work.",
+  },
 ];
 
 const GOOD_FIT = [
@@ -111,23 +171,28 @@ const GOOD_FIT = [
 const FAQS = [
   {
     question: "What does a solution architect do?",
-    answer: "A solution architect connects a business problem to a practical technical solution. That includes understanding workflows, users, information, systems, integrations, constraints and future requirements before major implementation decisions are made.",
+    answer:
+      "A solution architect connects a business problem to a practical technical solution. That includes understanding workflows, users, information, systems, integrations, constraints and future requirements before major implementation decisions are made.",
   },
   {
     question: "Do I need a solution architect for a small project?",
-    answer: "Not always. A small, well-understood project may not require a separate architecture phase. The larger the number of users, systems, workflows and business rules involved, the more valuable early architectural decisions tend to become.",
+    answer:
+      "Not always. A small, well-understood project may not require a separate architecture phase. The larger the number of users, systems, workflows and business rules involved, the more valuable early architectural decisions tend to become.",
   },
   {
     question: "Is solution architecture the same as software development?",
-    answer: "No. Architecture determines what the solution should be and how its major parts should work together. Software engineering is the implementation of those decisions. The two should work closely together.",
+    answer:
+      "No. Architecture determines what the solution should be and how its major parts should work together. Software engineering is the implementation of those decisions. The two should work closely together.",
   },
   {
     question: "Can you work with software we already have?",
-    answer: "Yes. Existing systems are often part of the solution rather than something to discard immediately. We can assess what should remain, what needs to change and what should connect to something new.",
+    answer:
+      "Yes. Existing systems are often part of the solution rather than something to discard immediately. We can assess what should remain, what needs to change and what should connect to something new.",
   },
   {
     question: "Do you only work with large businesses?",
-    answer: "No. The architecture required depends on the complexity of the problem, not simply the size of the company. A small business with several disconnected workflows can have a surprisingly complex systems problem.",
+    answer:
+      "No. The architecture required depends on the complexity of the problem, not simply the size of the company. A small business with several disconnected workflows can have a surprisingly complex systems problem.",
   },
 ];
 
@@ -140,7 +205,7 @@ function InlineCtaBar({ waLink, label }: { waLink: string; label: string }) {
         className="group shrink-0 bg-accent text-accent-foreground hover:bg-accent/90"
         asChild
       >
-        <a href={waLink} target="_blank" rel="noopener noreferrer">
+        <a href="#whatsapp" data-whatsapp-href={waLink}>
           Talk to us about your system
           <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
         </a>
@@ -173,28 +238,30 @@ export default function SolutionArchitecturePage() {
             Solution Architecture
           </h1>
           <p className="text-xl md:text-2xl text-foreground font-medium leading-relaxed mb-5">
-            Before you build software, make sure you are solving the right problem.
+            Before you build software, make sure you are solving the right
+            problem.
           </p>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-4 max-w-2xl">
-            The hardest part of a software project is often not writing the code.
-            It is deciding what the software should actually do.
+            The hardest part of a software project is often not writing the
+            code. It is deciding what the software should actually do.
           </p>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-4 max-w-2xl">
-            Businesses come to us with fragmented processes, spreadsheets, WhatsApp
-            conversations, existing systems, customer complaints and ideas for a new
-            platform. Our job is to turn that reality into a system that makes sense.
+            Businesses come to us with fragmented processes, spreadsheets,
+            WhatsApp conversations, existing systems, customer complaints and
+            ideas for a new platform. Our job is to turn that reality into a
+            system that makes sense.
           </p>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8 max-w-2xl">
-            We map the problem, the workflows, the information, the people and the
-            constraints, then determine what should be built, integrated, automated,
-            replaced or left alone.
+            We map the problem, the workflows, the information, the people and
+            the constraints, then determine what should be built, integrated,
+            automated, replaced or left alone.
           </p>
           <Button
             size="lg"
             className="group bg-accent text-accent-foreground hover:bg-accent/90"
             asChild
           >
-            <a href={waLink} target="_blank" rel="noopener noreferrer">
+            <a href="#whatsapp" data-whatsapp-href={waLink}>
               Talk to us about your system
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
@@ -221,7 +288,6 @@ export default function SolutionArchitecturePage() {
       {/* Main article */}
       <article className="pb-8 px-6">
         <div className="container mx-auto max-w-3xl space-y-12 md:space-y-16">
-
           {/* Software should solve the business */}
           <section className="space-y-5 pt-12">
             <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
@@ -231,24 +297,37 @@ export default function SolutionArchitecturePage() {
               A brief might say: <em>&ldquo;We need a CRM.&rdquo;</em>
             </p>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              But the real problem could be: sales enquiries are arriving from five
-              places, nobody knows who owns them, follow-ups are inconsistent and
-              management cannot see what is happening.
+              But the real problem could be: sales enquiries are arriving from
+              five places, nobody knows who owns them, follow-ups are
+              inconsistent and management cannot see what is happening.
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               <div className="p-5 rounded-xl border border-border bg-card space-y-1.5">
-                <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground/60">The brief</p>
-                <p className="text-base font-medium text-foreground">&ldquo;We need a CRM.&rdquo;</p>
-                <p className="text-sm text-muted-foreground">Asks for software.</p>
+                <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground/60">
+                  The brief
+                </p>
+                <p className="text-base font-medium text-foreground">
+                  &ldquo;We need a CRM.&rdquo;
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Asks for software.
+                </p>
               </div>
               <div className="p-5 rounded-xl border border-accent/30 bg-accent/5 space-y-1.5">
-                <p className="text-xs font-mono uppercase tracking-widest text-accent/70">The real problem</p>
-                <p className="text-base font-medium text-foreground">Enquiries are lost and invisible.</p>
-                <p className="text-sm text-muted-foreground">Asks for a solution.</p>
+                <p className="text-xs font-mono uppercase tracking-widest text-accent/70">
+                  The real problem
+                </p>
+                <p className="text-base font-medium text-foreground">
+                  Enquiries are lost and invisible.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Asks for a solution.
+                </p>
               </div>
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Those are very different problems. That distinction shapes everything we do.
+              Those are very different problems. That distinction shapes
+              everything we do.
             </p>
           </section>
 
@@ -261,16 +340,21 @@ export default function SolutionArchitecturePage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-secondary/60">
-                    <th className="text-left px-5 py-3 font-medium text-foreground">We examine</th>
-                    <th className="text-left px-5 py-3 font-medium text-foreground">What we are trying to understand</th>
+                    <th className="text-left px-5 py-3 font-medium text-foreground">
+                      We examine
+                    </th>
+                    <th className="text-left px-5 py-3 font-medium text-foreground">
+                      What we are trying to understand
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {WHAT_WE_EXAMINE.map(({ area, covers }, i) => (
                     <tr
                       key={area}
-                      className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-background" : "bg-secondary/30"
-                        }`}
+                      className={`border-b border-border last:border-0 ${
+                        i % 2 === 0 ? "bg-background" : "bg-secondary/30"
+                      }`}
                     >
                       <td className="px-5 py-3.5 font-semibold text-foreground align-top whitespace-nowrap">
                         {area}
@@ -284,10 +368,11 @@ export default function SolutionArchitecturePage() {
               </table>
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              The result is not a diagram for its own sake. It is a clearer answer
-              to:{" "}
+              The result is not a diagram for its own sake. It is a clearer
+              answer to:{" "}
               <strong className="text-foreground">
-                What should we build, why should we build it, and how should it work?
+                What should we build, why should we build it, and how should it
+                work?
               </strong>
             </p>
           </section>
@@ -295,14 +380,15 @@ export default function SolutionArchitecturePage() {
           {/* The most expensive decision */}
           <section className="space-y-5">
             <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
-              The Most Expensive Software Decision Can Happen Before Development Starts
+              The Most Expensive Software Decision Can Happen Before Development
+              Starts
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               It is easy to start building too early. A business sees a
-              competitor&apos;s platform and wants something similar. A team starts
-              designing screens. A developer starts setting up the database. Then
-              six months later, everyone discovers that the original assumption was
-              wrong.
+              competitor&apos;s platform and wants something similar. A team
+              starts designing screens. A developer starts setting up the
+              database. Then six months later, everyone discovers that the
+              original assumption was wrong.
             </p>
             <div className="grid gap-2.5">
               {[
@@ -320,7 +406,8 @@ export default function SolutionArchitecturePage() {
               ))}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              The system technically works, but the business has to work around it.
+              The system technically works, but the business has to work around
+              it.
             </p>
             <blockquote className="border-l-4 border-accent pl-5 py-0.5">
               <p className="text-lg md:text-xl font-semibold text-foreground leading-snug">
@@ -341,20 +428,28 @@ export default function SolutionArchitecturePage() {
               We Do Not Assume Everything Needs Custom Software
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Sometimes the right answer is a new application. Sometimes it is an
-              integration. Sometimes it is automation. Sometimes an existing platform
-              is sufficient. Sometimes the current system can be repaired. And
-              sometimes the business has a process problem that software should not
-              be used to hide.
+              Sometimes the right answer is a new application. Sometimes it is
+              an integration. Sometimes it is automation. Sometimes an existing
+              platform is sufficient. Sometimes the current system can be
+              repaired. And sometimes the business has a process problem that
+              software should not be used to hide.
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               <div className="p-5 rounded-xl border border-border bg-secondary/40 space-y-1">
-                <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground/60">The wrong starting question</p>
-                <p className="text-base font-medium text-muted-foreground italic">&ldquo;What technology should we use?&rdquo;</p>
+                <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground/60">
+                  The wrong starting question
+                </p>
+                <p className="text-base font-medium text-muted-foreground italic">
+                  &ldquo;What technology should we use?&rdquo;
+                </p>
               </div>
               <div className="p-5 rounded-xl border border-accent/30 bg-accent/5 space-y-1">
-                <p className="text-xs font-mono uppercase tracking-widest text-accent/70">The right starting question</p>
-                <p className="text-base font-semibold text-foreground">&ldquo;What needs to become better?&rdquo;</p>
+                <p className="text-xs font-mono uppercase tracking-widest text-accent/70">
+                  The right starting question
+                </p>
+                <p className="text-base font-semibold text-foreground">
+                  &ldquo;What needs to become better?&rdquo;
+                </p>
               </div>
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
@@ -369,8 +464,8 @@ export default function SolutionArchitecturePage() {
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               A system needs to know more than what happens when everything goes
-              correctly. Consider a property enquiry: someone sees a listing, asks
-              a question and an agent responds. But what happens if&hellip;
+              correctly. Consider a property enquiry: someone sees a listing,
+              asks a question and an agent responds. But what happens if&hellip;
             </p>
             <div className="p-5 rounded-xl border border-border bg-secondary/40 space-y-2">
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -392,7 +487,8 @@ export default function SolutionArchitecturePage() {
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               These are not minor development details. They are part of the
-              architecture. A system that only handles the happy path is not finished.
+              architecture. A system that only handles the happy path is not
+              finished.
             </p>
           </section>
 
@@ -403,16 +499,16 @@ export default function SolutionArchitecturePage() {
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               Propertyzone is a good example of why the distinction matters. The
-              platform is not simply a collection of property listings. Behind each
-              listing is a set of relationships between properties, locations,
-              agencies, enquiries, users and the information required to help someone
-              move from discovery toward an actual conversation.
+              platform is not simply a collection of property listings. Behind
+              each listing is a set of relationships between properties,
+              locations, agencies, enquiries, users and the information required
+              to help someone move from discovery toward an actual conversation.
             </p>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               The architecture had to account for both sides of the marketplace:
               what exists, and what someone is looking for. That shaped how the
-              product handles structured property information, discovery, enquiries
-              and the wider journey around a property.
+              product handles structured property information, discovery,
+              enquiries and the wider journey around a property.
             </p>
             <div className="relative w-full overflow-hidden rounded-xl border border-border group hover:border-accent transition-colors duration-300">
               <Image
@@ -424,11 +520,17 @@ export default function SolutionArchitecturePage() {
               />
               <div className="absolute bottom-3 left-3 right-3">
                 <div className="inline-block bg-background/90 backdrop-blur-sm border border-border rounded-lg px-3.5 py-1.5 text-xs text-muted-foreground">
-                  Propertyzone — architecture connects inventory, user intent and enquiry data
+                  Propertyzone — architecture connects inventory, user intent
+                  and enquiry data
                 </div>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="bg-transparent group" asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-transparent group"
+              asChild
+            >
               <Link href="/work/propertyzone">
                 See the Propertyzone work
                 <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
@@ -456,21 +558,22 @@ export default function SolutionArchitecturePage() {
               ))}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              The deliverable is not a document that gets filed away. It becomes the
-              foundation for the engineering work that follows.
+              The deliverable is not a document that gets filed away. It becomes
+              the foundation for the engineering work that follows.
             </p>
           </section>
 
           {/* The best architecture is usually less complicated */}
           <section className="space-y-5">
             <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
-              The Best Architecture Is Usually Less Complicated Than the First Idea
+              The Best Architecture Is Usually Less Complicated Than the First
+              Idea
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               Complexity can make a proposal sound impressive. It does not
               necessarily make the system better. We look for opportunities to
-              remove unnecessary steps, duplicated data, disconnected systems and
-              features that do not meaningfully improve the outcome.
+              remove unnecessary steps, duplicated data, disconnected systems
+              and features that do not meaningfully improve the outcome.
             </p>
             <div className="grid gap-2.5">
               {[
@@ -487,8 +590,12 @@ export default function SolutionArchitecturePage() {
               ))}
             </div>
             <blockquote className="border-l-4 border-border pl-5 py-0.5">
-              <p className="text-lg font-semibold text-foreground">Simpler is not always better.</p>
-              <p className="text-sm text-muted-foreground mt-1">Unnecessary complexity is always expensive.</p>
+              <p className="text-lg font-semibold text-foreground">
+                Simpler is not always better.
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Unnecessary complexity is always expensive.
+              </p>
             </blockquote>
 
             {/* Mid-page CTA #2 */}
@@ -530,8 +637,8 @@ export default function SolutionArchitecturePage() {
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               We do not design a theoretical system and leave the implementation
-              team to discover the difficult parts later. The difficult parts are
-              exactly what architecture is supposed to expose.
+              team to discover the difficult parts later. The difficult parts
+              are exactly what architecture is supposed to expose.
             </p>
           </section>
 
@@ -544,14 +651,19 @@ export default function SolutionArchitecturePage() {
               {HOW_WE_WORK.map(({ step, title, description }) => (
                 <div
                   key={step}
-                  className={`p-5 rounded-xl border border-border bg-card space-y-2 ${step === "05" ? "sm:col-span-2" : ""
-                    }`}
+                  className={`p-5 rounded-xl border border-border bg-card space-y-2 ${
+                    step === "05" ? "sm:col-span-2" : ""
+                  }`}
                 >
                   <span className="text-3xl font-light font-mono text-muted-foreground/20 block">
                     {step}
                   </span>
-                  <h3 className="text-base font-semibold text-foreground">{title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+                  <h3 className="text-base font-semibold text-foreground">
+                    {title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -569,7 +681,9 @@ export default function SolutionArchitecturePage() {
               {GOOD_FIT.map((item) => (
                 <li key={item} className="flex items-start gap-3.5">
                   <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                  <p className="text-base text-muted-foreground leading-relaxed">{item}</p>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {item}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -615,19 +729,25 @@ export default function SolutionArchitecturePage() {
               From Architecture to Engineering
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Once the decisions are clear, the next question is execution. That is
-              where Sparkline&apos;s{" "}
+              Once the decisions are clear, the next question is execution. That
+              is where Sparkline&apos;s{" "}
               <Link
                 href="/services#systems-engineering"
                 className="text-foreground underline underline-offset-4 hover:text-accent transition-colors"
               >
                 systems engineering
               </Link>{" "}
-              capability takes over. The architecture defines what needs to exist
-              and how the pieces should work together. Engineering turns that into
-              software that has to survive real users, real data and real exceptions.
+              capability takes over. The architecture defines what needs to
+              exist and how the pieces should work together. Engineering turns
+              that into software that has to survive real users, real data and
+              real exceptions.
             </p>
-            <Button variant="outline" size="sm" className="bg-transparent group" asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-transparent group"
+              asChild
+            >
               <Link href="/services#systems-engineering">
                 Explore Systems Engineering
                 <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
@@ -655,12 +775,17 @@ export default function SolutionArchitecturePage() {
                 className="group bg-accent text-accent-foreground hover:bg-accent/90"
                 asChild
               >
-                <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <a href="#whatsapp" data-whatsapp-href={waLink}>
                   Talk to Sparkline Labs
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
               </Button>
-              <Button variant="outline" size="lg" className="bg-transparent group" asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="bg-transparent group"
+                asChild
+              >
                 <Link href="/services">
                   All services
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -668,13 +793,25 @@ export default function SolutionArchitecturePage() {
               </Button>
             </div>
             <div className="pt-6 border-t border-border/50">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Related</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                Related
+              </p>
               <div className="flex flex-wrap gap-x-6 gap-y-2.5">
                 {[
-                  { href: "/blog/solutions-engineering/zimbabwe-technology-decision-framework-build-buy-integrate", label: "Build, Buy, Integrate or Change the Process?" },
-                  { href: "/blog/solutions-engineering/why-buying-software-before-understanding-the-problem-is-expensive", label: "Why Buying Software Before Understanding the Problem Is Expensive" },
+                  {
+                    href: "/blog/solutions-engineering/zimbabwe-technology-decision-framework-build-buy-integrate",
+                    label: "Build, Buy, Integrate or Change the Process?",
+                  },
+                  {
+                    href: "/blog/solutions-engineering/why-buying-software-before-understanding-the-problem-is-expensive",
+                    label:
+                      "Why Buying Software Before Understanding the Problem Is Expensive",
+                  },
                   { href: "/work/propertyzone", label: "Propertyzone" },
-                  { href: "/services/search-visibility-ai-discovery", label: "Search Visibility & AI Discovery" },
+                  {
+                    href: "/services/search-visibility-ai-discovery",
+                    label: "Search Visibility & AI Discovery",
+                  },
                 ].map(({ href, label }) => (
                   <Link
                     key={label}
@@ -691,10 +828,7 @@ export default function SolutionArchitecturePage() {
         </div>
       </article>
 
-      <FaqSection
-        faqs={FAQS}
-        heading="Questions about solution architecture"
-      />
+      <FaqSection faqs={FAQS} heading="Questions about solution architecture" />
     </>
   );
 }

@@ -50,7 +50,9 @@ function getSectionIcon(iconName?: string): React.ElementType {
 
 export function LegalPageView({ data }: { data: LegalPageData }) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >(() => {
     // Open all sections by default for readability
     const initial: Record<string, boolean> = {};
     data.sections.forEach((s) => {
@@ -108,7 +110,6 @@ export function LegalPageView({ data }: { data: LegalPageData }) {
   // Gather intro paragraphs (regular text, no alert box styling)
   const allIntroParagraphs = data.preamble.split("\n\n").filter(Boolean);
 
-
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
       {/* Header / Hero Section — Centered on large devices, alert-like removed */}
@@ -153,7 +154,6 @@ export function LegalPageView({ data }: { data: LegalPageData }) {
                 <p key={idx}>{para}</p>
               ))}
             </div>
-
           </div>
         </div>
       </section>
@@ -306,8 +306,9 @@ export function LegalPageView({ data }: { data: LegalPageData }) {
                       )}
                     </button>
                     <ChevronDown
-                      className={`size-5 text-muted-foreground transition-transform duration-200 ${isOpen ? "rotate-180 text-foreground" : ""
-                        }`}
+                      className={`size-5 text-muted-foreground transition-transform duration-200 ${
+                        isOpen ? "rotate-180 text-foreground" : ""
+                      }`}
                     />
                   </div>
                 </div>
@@ -331,7 +332,10 @@ export function LegalPageView({ data }: { data: LegalPageData }) {
                           </h3>
 
                           {sub.paragraphs.map((p, pIdx) => (
-                            <p key={pIdx} className="text-muted-foreground leading-relaxed">
+                            <p
+                              key={pIdx}
+                              className="text-muted-foreground leading-relaxed"
+                            >
                               {p}
                             </p>
                           ))}
@@ -362,12 +366,18 @@ export function LegalPageView({ data }: { data: LegalPageData }) {
                                 </thead>
                                 <tbody className="divide-y divide-border">
                                   {sub.table.rows.map((row, rIdx) => (
-                                    <tr key={rIdx} className="hover:bg-muted/30 transition-colors">
+                                    <tr
+                                      key={rIdx}
+                                      className="hover:bg-muted/30 transition-colors"
+                                    >
                                       {row.map((cell, cIdx) => (
                                         <td
                                           key={cIdx}
-                                          className={`p-3 text-muted-foreground ${cIdx === 0 ? "font-medium text-foreground" : ""
-                                            }`}
+                                          className={`p-3 text-muted-foreground ${
+                                            cIdx === 0
+                                              ? "font-medium text-foreground"
+                                              : ""
+                                          }`}
                                         >
                                           {cell}
                                         </td>
@@ -403,14 +413,17 @@ export function LegalPageView({ data }: { data: LegalPageData }) {
                 Legal & Compliance Bureau
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
-                For statutory requests under Chapter 12:07, formal inquiries, or service of process:
+                For statutory requests under Chapter 12:07, formal inquiries, or
+                service of process:
               </p>
             </div>
             <Link
               href={isPrivacy ? "/terms-of-service" : "/privacy-policy"}
               className="text-xs font-medium text-accent hover:underline flex items-center gap-1 shrink-0"
             >
-              {isPrivacy ? "Review Terms of Service →" : "Review Privacy Policy →"}
+              {isPrivacy
+                ? "Review Terms of Service →"
+                : "Review Privacy Policy →"}
             </Link>
           </div>
 
@@ -421,13 +434,16 @@ export function LegalPageView({ data }: { data: LegalPageData }) {
                 href={`mailto:${isPrivacy ? "privacy@sparklinelabs.co.zw" : "legal@sparklinelabs.co.zw"}`}
                 className="hover:text-foreground transition-colors truncate font-medium"
               >
-                {isPrivacy ? "privacy@sparklinelabs.co.zw" : "legal@sparklinelabs.co.zw"}
+                {isPrivacy
+                  ? "privacy@sparklinelabs.co.zw"
+                  : "legal@sparklinelabs.co.zw"}
               </a>
             </div>
             <div className="flex items-center gap-2.5">
               <Phone className="size-3.5 text-accent shrink-0" />
               <a
-                href="https://wa.me/263714638508"
+                href="#whatsapp"
+                data-whatsapp-href="https://wa.me/263714638508"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors font-medium"

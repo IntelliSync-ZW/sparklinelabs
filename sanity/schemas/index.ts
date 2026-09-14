@@ -6,6 +6,7 @@ import { caseStudySchema } from "./caseStudy";
 import { postSchema } from "./post";
 import { servicesPageSchema } from "./servicesPage";
 import { legalPageSchema } from "./legalPage";
+import { contactLeadSchema } from "./contactLead";
 
 export const schemaTypes = [
   // Reusable objects first
@@ -15,9 +16,9 @@ export const schemaTypes = [
   categorySchema,
   servicesPageSchema,
   legalPageSchema,
+  contactLeadSchema,
   // Documents that reference others
   productSchema,
   caseStudySchema,
   postSchema,
 ];
-

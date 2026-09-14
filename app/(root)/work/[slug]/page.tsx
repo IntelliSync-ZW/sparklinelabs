@@ -4,8 +4,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { fetchCaseStudies, sanityFetch } from "@/sanity/lib/fetch";
-import { caseStudyBySlugQuery, allCaseStudySlugsQuery } from "@/sanity/lib/queries";
-import { PortableTextRenderer, type RichTextValue } from "@/components/portable-text";
+import {
+  caseStudyBySlugQuery,
+  allCaseStudySlugsQuery,
+} from "@/sanity/lib/queries";
+import {
+  PortableTextRenderer,
+  type RichTextValue,
+} from "@/components/portable-text";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 import Link from "next/link";
 
@@ -61,7 +67,7 @@ export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const slugs = await fetchCaseStudies<{ slug: string }[]>(
-      allCaseStudySlugsQuery
+      allCaseStudySlugsQuery,
     );
     return slugs
       .filter((s) => s.slug !== "propertyzone")
@@ -100,8 +106,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: study.seo?.ogImage
         ? [{ url: study.seo.ogImage, width: 1200, height: 630 }]
         : study.heroImage?.url
-        ? [{ url: study.heroImage.url, width: 1200, height: 630 }]
-        : [],
+          ? [{ url: study.heroImage.url, width: 1200, height: 630 }]
+          : [],
     },
   };
 }
@@ -139,36 +145,53 @@ export default async function CaseStudyPage({ params }: Props) {
     "@id": `${pageUrl}#article`,
     headline: study.title,
     description: study.summary,
-    image: study.heroImage?.url ?? `https://www.sparklinelabs.co.zw/og-image.png`,
+    image:
+      study.heroImage?.url ?? `https://www.sparklinelabs.co.zw/og-image.png`,
     datePublished: study.publishedAt,
-    author: study.authors && study.authors.length > 0
-      ? study.authors.map((a) => ({
-          "@type": "Person",
-          name: a.author.name,
-          jobTitle: a.author.role,
-          worksFor: a.author.company ? { "@type": "Organization", name: a.author.company } : undefined,
-          ...(a.author.avatar?.url && { image: a.author.avatar.url }),
-          ...(a.author.slug?.current && {
-            url: `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}`,
-            "@id": `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}#person`,
-          }),
-        }))
-      : {
-          "@type": "Organization",
-          name: "Sparkline Labs",
-          url: "https://www.sparklinelabs.co.zw",
-        },
+    author:
+      study.authors && study.authors.length > 0
+        ? study.authors.map((a) => ({
+            "@type": "Person",
+            name: a.author.name,
+            jobTitle: a.author.role,
+            worksFor: a.author.company
+              ? { "@type": "Organization", name: a.author.company }
+              : undefined,
+            ...(a.author.avatar?.url && { image: a.author.avatar.url }),
+            ...(a.author.slug?.current && {
+              url: `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}`,
+              "@id": `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}#person`,
+            }),
+          }))
+        : {
+            "@type": "Organization",
+            name: "Sparkline Labs",
+            url: "https://www.sparklinelabs.co.zw",
+          },
     publisher: {
       "@type": "Organization",
       name: "Sparkline Labs",
-      logo: { "@type": "ImageObject", url: "https://www.sparklinelabs.co.zw/icon.svg" },
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.sparklinelabs.co.zw/icon.svg",
+      },
     },
     isPartOf: { "@id": "https://www.sparklinelabs.co.zw/work#collectionpage" },
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
-        { "@type": "ListItem", position: 2, name: "Work", item: "https://www.sparklinelabs.co.zw/work" },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://www.sparklinelabs.co.zw",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Work",
+          item: "https://www.sparklinelabs.co.zw/work",
+        },
         { "@type": "ListItem", position: 3, name: study.title, item: pageUrl },
       ],
     },
@@ -234,7 +257,6 @@ export default async function CaseStudyPage({ params }: Props) {
 
       <article className="pb-20 md:pb-32 px-6">
         <div className="container mx-auto max-w-3xl space-y-16">
-
           {/* Outcome metrics */}
           {study.outcomeMetrics && study.outcomeMetrics.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -246,7 +268,9 @@ export default async function CaseStudyPage({ params }: Props) {
                   <p className="text-3xl font-semibold tracking-tight text-foreground">
                     {m.value}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">{m.label}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {m.label}
+                  </p>
                 </div>
               ))}
             </div>
@@ -314,7 +338,10 @@ export default async function CaseStudyPage({ params }: Props) {
           )}
 
           {/* Team / Authors */}
-          {(study.team || study.started || study.live || (study.authors && study.authors.length > 0)) && (
+          {(study.team ||
+            study.started ||
+            study.live ||
+            (study.authors && study.authors.length > 0)) && (
             <section>
               <h2 className="text-3xl font-semibold tracking-tight mb-6">
                 Team & Delivery
@@ -380,7 +407,11 @@ export default async function CaseStudyPage({ params }: Props) {
                             </p>
                           )}
                           <p className="text-xs text-muted-foreground">
-                            {articleRole ? articleRole.replace(/_/g, " ") : (author.role ?? author.company ?? "Contributor")}
+                            {articleRole
+                              ? articleRole.replace(/_/g, " ")
+                              : (author.role ??
+                                author.company ??
+                                "Contributor")}
                           </p>
                         </div>
                       </div>
@@ -434,12 +465,17 @@ export default async function CaseStudyPage({ params }: Props) {
                 className="group bg-accent text-accent-foreground hover:bg-accent/90"
                 asChild
               >
-                <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <a href="#whatsapp" data-whatsapp-href={waLink}>
                   Book a call on WhatsApp
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
               </Button>
-              <Button variant="outline" size="lg" className="bg-transparent" asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="bg-transparent"
+                asChild
+              >
                 <Link href="/work">All case studies</Link>
               </Button>
             </div>

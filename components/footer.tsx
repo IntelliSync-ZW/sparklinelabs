@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
+import { WhatsAppLeadTrigger } from "@/components/whatsapp-lead-capture";
 
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
 
@@ -39,19 +40,34 @@ export function Footer() {
               Company
             </p>
             <div className="flex flex-col gap-3 text-base text-muted-foreground">
-              <Link href="/services" className="hover:text-accent transition-colors">
+              <Link
+                href="/services"
+                className="hover:text-accent transition-colors"
+              >
                 Services
               </Link>
-              <Link href="/products" className="hover:text-accent transition-colors">
+              <Link
+                href="/products"
+                className="hover:text-accent transition-colors"
+              >
                 Products
               </Link>
-              <Link href="/work" className="hover:text-accent transition-colors">
+              <Link
+                href="/work"
+                className="hover:text-accent transition-colors"
+              >
                 Work
               </Link>
-              <Link href="/blog" className="hover:text-accent transition-colors">
+              <Link
+                href="/blog"
+                className="hover:text-accent transition-colors"
+              >
                 Blog
               </Link>
-              <Link href="/blog/authors" className="hover:text-accent transition-colors">
+              <Link
+                href="/blog/authors"
+                className="hover:text-accent transition-colors"
+              >
                 Authors
               </Link>
             </div>
@@ -63,14 +79,13 @@ export function Footer() {
               Contact
             </p>
             <div className="flex flex-col gap-3 text-base text-muted-foreground">
-              <a
+              <WhatsAppLeadTrigger
                 href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-accent transition-colors"
+                variant="link"
+                className="h-auto justify-start p-0 text-base text-muted-foreground hover:text-accent"
               >
                 WhatsApp ({WHATSAPP_NUMBER})
-              </a>
+              </WhatsAppLeadTrigger>
               <a
                 href="mailto:sales@sparklinelabs.co.zw"
                 className="hover:text-accent transition-colors"
@@ -89,13 +104,20 @@ export function Footer() {
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-base text-muted-foreground">
           <span>
-            &copy; {new Date().getFullYear()} Sparkline Labs. All rights reserved.
+            &copy; {new Date().getFullYear()} Sparkline Labs. All rights
+            reserved.
           </span>
           <div className="flex flex-wrap items-center gap-6 text-sm">
-            <Link href="/terms-of-service" className="hover:text-accent transition-colors">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-accent transition-colors"
+            >
               Terms of Service
             </Link>
-            <Link href="/privacy-policy" className="hover:text-accent transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-accent transition-colors"
+            >
               Privacy Policy
             </Link>
             <a
@@ -110,6 +132,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-
   );
 }

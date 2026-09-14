@@ -9,10 +9,14 @@ import {
   postBySlugQuery,
   allPostSlugsWithCategoryQuery,
 } from "@/sanity/lib/queries";
-import { PortableTextRenderer, type RichTextValue } from "@/components/portable-text";
+import {
+  PortableTextRenderer,
+  type RichTextValue,
+} from "@/components/portable-text";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { TableOfContents } from "@/components/blog/table-of-contents";
+import { WhatsAppLeadTrigger } from "@/components/whatsapp-lead-capture";
 
 type ArticleAuthor = {
   articleRole?: string;
@@ -63,7 +67,7 @@ export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const posts = await fetchPosts<{ slug: string; category?: string }[]>(
-      allPostSlugsWithCategoryQuery
+      allPostSlugsWithCategoryQuery,
     );
     return posts.map(({ slug, category }) => ({
       category: category ?? "uncategorised",
@@ -92,7 +96,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const baseUrl = "https://www.sparklinelabs.co.zw";
   const postCategory = post.category?.slug.current ?? categorySlug;
   const canonicalUrl = `${baseUrl}/blog/${postCategory}/${slug}`;
-  const authorNames = post.authors?.map((a) => a.author.name) ?? ["Sparkline Labs"];
+  const authorNames = post.authors?.map((a) => a.author.name) ?? [
+    "Sparkline Labs",
+  ];
 
   return {
     title: post.seo?.title ?? `${post.title} | Sparkline Labs`,
@@ -168,34 +174,39 @@ export default async function BlogPostPage({ params }: Props) {
     "@id": `${postUrl}#article`,
     headline: post.title,
     description: post.excerpt,
-    image: post.coverImage?.url ?? `https://www.sparklinelabs.co.zw/og-image.png`,
+    image:
+      post.coverImage?.url ?? `https://www.sparklinelabs.co.zw/og-image.png`,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
     inLanguage: "en-ZW",
-    ...(post.tags && post.tags.length > 0 && { keywords: post.tags.join(", ") }),
+    ...(post.tags &&
+      post.tags.length > 0 && { keywords: post.tags.join(", ") }),
     ...(post.category && { articleSection: post.category.title }),
-    author: post.authors && post.authors.length > 0
-      ? post.authors.map((a) => ({
-        "@type": "Person",
-        name: a.author.name,
-        jobTitle: a.author.role,
-        worksFor: a.author.company ? { "@type": "Organization", name: a.author.company } : undefined,
-        ...(a.author.avatar?.url && { image: a.author.avatar.url }),
-        ...(a.author.slug?.current && {
-          url: `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}`,
-          "@id": `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}#person`,
-        }),
-        sameAs: [
-          a.author.website,
-          a.author.socials?.twitter,
-          a.author.socials?.linkedin,
-          a.author.socials?.github,
-          a.author.socials?.bluesky,
-          a.author.socials?.medium,
-          a.author.socials?.devto,
-        ].filter(Boolean),
-      }))
-      : [{ "@type": "Organization", name: "Sparkline Labs" }],
+    author:
+      post.authors && post.authors.length > 0
+        ? post.authors.map((a) => ({
+            "@type": "Person",
+            name: a.author.name,
+            jobTitle: a.author.role,
+            worksFor: a.author.company
+              ? { "@type": "Organization", name: a.author.company }
+              : undefined,
+            ...(a.author.avatar?.url && { image: a.author.avatar.url }),
+            ...(a.author.slug?.current && {
+              url: `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}`,
+              "@id": `https://www.sparklinelabs.co.zw/blog/authors/${a.author.slug.current}#person`,
+            }),
+            sameAs: [
+              a.author.website,
+              a.author.socials?.twitter,
+              a.author.socials?.linkedin,
+              a.author.socials?.github,
+              a.author.socials?.bluesky,
+              a.author.socials?.medium,
+              a.author.socials?.devto,
+            ].filter(Boolean),
+          }))
+        : [{ "@type": "Organization", name: "Sparkline Labs" }],
     publisher: {
       "@id": "https://www.sparklinelabs.co.zw/#organization",
     },
@@ -203,19 +214,41 @@ export default async function BlogPostPage({ params }: Props) {
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
-        { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.sparklinelabs.co.zw/blog" },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://www.sparklinelabs.co.zw",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: "https://www.sparklinelabs.co.zw/blog",
+        },
         ...(post.category
           ? [
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: post.category.title,
-              item: `https://www.sparklinelabs.co.zw/blog/${post.category.slug.current}`,
-            },
-            { "@type": "ListItem", position: 4, name: post.title, item: postUrl },
-          ]
-          : [{ "@type": "ListItem", position: 3, name: post.title, item: postUrl }]),
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: post.category.title,
+                item: `https://www.sparklinelabs.co.zw/blog/${post.category.slug.current}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 4,
+                name: post.title,
+                item: postUrl,
+              },
+            ]
+          : [
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: post.title,
+                item: postUrl,
+              },
+            ]),
       ],
     },
   };
@@ -235,7 +268,10 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="container mx-auto max-w-3xl">
           {/* Breadcrumbs */}
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-6">
-            <Link href="/blog" className="hover:text-foreground transition-colors">
+            <Link
+              href="/blog"
+              className="hover:text-foreground transition-colors"
+            >
               Blog
             </Link>
             {post.category && (
@@ -322,7 +358,10 @@ export default async function BlogPostPage({ params }: Props) {
                           </span>
                         )}
                         <span className="text-xs text-muted-foreground block mt-0.5">
-                          {roleLabel(articleRole) ?? author.role ?? author.company ?? "Author"}
+                          {roleLabel(articleRole) ??
+                            author.role ??
+                            author.company ??
+                            "Author"}
                         </span>
                       </div>
                     </div>
@@ -330,7 +369,9 @@ export default async function BlogPostPage({ params }: Props) {
                 })}
               </div>
             ) : (
-              <span className="font-medium text-foreground">Sparkline Labs</span>
+              <span className="font-medium text-foreground">
+                Sparkline Labs
+              </span>
             )}
 
             {/* Publishing Date & Reading Time */}
@@ -479,7 +520,9 @@ export default async function BlogPostPage({ params }: Props) {
                         )}
                         {author.bio && author.bio.length > 0 && (
                           <div className="text-base text-muted-foreground leading-relaxed mb-4">
-                            <PortableTextRenderer value={author.bio as RichTextValue} />
+                            <PortableTextRenderer
+                              value={author.bio as RichTextValue}
+                            />
                           </div>
                         )}
                         {authorHref && (
@@ -489,7 +532,9 @@ export default async function BlogPostPage({ params }: Props) {
                               className="inline-flex items-center gap-1 text-sm font-semibold text-foreground hover:text-accent transition-colors group/authorlink"
                             >
                               <span>All articles by {author.name}</span>
-                              <span className="transition-transform group-hover/authorlink:translate-x-1">→</span>
+                              <span className="transition-transform group-hover/authorlink:translate-x-1">
+                                →
+                              </span>
                             </Link>
                           </div>
                         )}
@@ -508,19 +553,17 @@ export default async function BlogPostPage({ params }: Props) {
             </h2>
             <p className="text-base text-muted-foreground leading-relaxed mb-6 max-w-xl">
               We build platforms, internal tools, and integrations for
-              Zimbabwean and African businesses. Outcome-tied pricing, two-week
-              paid discovery.
+              Zimbabwean and African businesses. Bring us the problem, the idea,
+              or the system that is no longer working as it should.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button
+              <WhatsAppLeadTrigger
                 className="group bg-accent text-accent-foreground hover:bg-accent/90"
-                asChild
+                href={waLink}
               >
-                <a href={waLink} target="_blank" rel="noopener noreferrer">
-                  Start on WhatsApp
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-              </Button>
+                Start on WhatsApp
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </WhatsAppLeadTrigger>
               <Button variant="outline" className="bg-transparent" asChild>
                 <Link href="/blog">All posts</Link>
               </Button>

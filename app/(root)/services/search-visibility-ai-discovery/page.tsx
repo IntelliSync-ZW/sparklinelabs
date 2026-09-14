@@ -6,7 +6,7 @@ import Image from "next/image";
 import { WHATSAPP_NUMBER, WHATSAPP_SEO_MESSAGE } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Search Visibility & AI Discovery for Zimbabwean Businesses",
+  title: "SEO Zimbabwe & AI Search Visibility",
   description:
     "Improve how your business is discovered across Google, local search and AI search. Sparkline Labs combines technical SEO, content, digital freshness and engineering.",
   keywords: [
@@ -26,7 +26,8 @@ export const metadata: Metadata = {
       "https://www.sparklinelabs.co.zw/services/search-visibility-ai-discovery",
   },
   openGraph: {
-    title: "Search Visibility & AI Discovery for Zimbabwean Businesses | Sparkline Labs",
+    title:
+      "Search Visibility & AI Discovery for Zimbabwean Businesses | Sparkline Labs",
     description:
       "Make your business easier to find, easier to understand, and easier to choose. Technical SEO, local search, content architecture and AI discovery for African businesses.",
     url: "https://www.sparklinelabs.co.zw/services/search-visibility-ai-discovery",
@@ -38,8 +39,18 @@ const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
-    { "@type": "ListItem", position: 2, name: "Services", item: "https://www.sparklinelabs.co.zw/services" },
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.sparklinelabs.co.zw",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Services",
+      item: "https://www.sparklinelabs.co.zw/services",
+    },
     {
       "@type": "ListItem",
       position: 3,
@@ -52,7 +63,8 @@ const breadcrumbSchema = {
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  "@id": "https://www.sparklinelabs.co.zw/services/search-visibility-ai-discovery#service",
+  "@id":
+    "https://www.sparklinelabs.co.zw/services/search-visibility-ai-discovery#service",
   name: "Search Visibility & AI Discovery for Zimbabwean Businesses",
   description:
     "Make your business easier to find, easier to understand, and easier to choose. We combine technical SEO, local search, content architecture and AI discovery to help businesses surface in both traditional and AI-powered search.",
@@ -69,23 +81,65 @@ const serviceSchema = {
     "@type": "OfferCatalog",
     name: "Search Visibility Services",
     itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Technical SEO" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Local Search" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Search Architecture" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Content" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Digital Freshness" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI Discovery" } },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Technical SEO" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Local Search" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Search Architecture" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Content" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Digital Freshness" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "AI Discovery" },
+      },
     ],
   },
 };
 
 const WHAT_WE_WORK_ON = [
-  { area: "Technical SEO", covers: "Crawlability, indexation, site structure, performance, metadata and technical issues" },
-  { area: "Local Search", covers: "Google Business Profile, location signals, local relevance and service-area visibility" },
-  { area: "Search Architecture", covers: "Designing pages and internal links around how customers actually search" },
-  { area: "Content", covers: "Useful commercial pages, supporting articles, original research and first-hand expertise" },
-  { area: "Digital Freshness", covers: "Keeping important business information current, consistent and trustworthy" },
-  { area: "AI Discovery", covers: "Strengthening the information and authority that help businesses surface in AI-mediated search" },
+  {
+    area: "Technical SEO",
+    covers:
+      "Crawlability, indexation, site structure, performance, metadata and technical issues",
+  },
+  {
+    area: "Local Search",
+    covers:
+      "Google Business Profile, location signals, local relevance and service-area visibility",
+  },
+  {
+    area: "Search Architecture",
+    covers:
+      "Designing pages and internal links around how customers actually search",
+  },
+  {
+    area: "Content",
+    covers:
+      "Useful commercial pages, supporting articles, original research and first-hand expertise",
+  },
+  {
+    area: "Digital Freshness",
+    covers:
+      "Keeping important business information current, consistent and trustworthy",
+  },
+  {
+    area: "AI Discovery",
+    covers:
+      "Strengthening the information and authority that help businesses surface in AI-mediated search",
+  },
 ];
 
 const SEARCH_SIGNALS = [
@@ -94,14 +148,37 @@ const SEARCH_SIGNALS = [
   { search: "Local visibility", business: "Bookings" },
   { search: "Important page traffic", business: "Sales" },
   { search: "Search Console performance", business: "Sign-ups" },
-  { search: "AI search visibility where measurable", business: "Other defined business outcomes" },
+  {
+    search: "AI search visibility where measurable",
+    business: "Other defined business outcomes",
+  },
 ];
 
 const HOW_WE_APPROACH = [
-  { step: "01", title: "Diagnose", description: "We understand the business, audience, search landscape and current digital presence." },
-  { step: "02", title: "Structure", description: "We determine what information needs to exist, where it belongs and how the different parts connect." },
-  { step: "03", title: "Improve", description: "We make the technical, content, local and experience changes required." },
-  { step: "04", title: "Measure", description: "We track whether visibility is improving and whether that visibility is producing something useful for the business." },
+  {
+    step: "01",
+    title: "Diagnose",
+    description:
+      "We understand the business, audience, search landscape and current digital presence.",
+  },
+  {
+    step: "02",
+    title: "Structure",
+    description:
+      "We determine what information needs to exist, where it belongs and how the different parts connect.",
+  },
+  {
+    step: "03",
+    title: "Improve",
+    description:
+      "We make the technical, content, local and experience changes required.",
+  },
+  {
+    step: "04",
+    title: "Measure",
+    description:
+      "We track whether visibility is improving and whether that visibility is producing something useful for the business.",
+  },
 ];
 
 const GOOD_FIT = [
@@ -132,10 +209,19 @@ const EXAMPLE_SEARCHES = [
 ];
 
 const RELATED_LINKS = [
-  { href: "/blog/seo-and-digital-strategy/built-not-found-zimbabwe-seo-ai-visibility", label: "Built, But Not Found" },
-  { href: "/blog/seo-and-digital-strategy/digital-freshness-trust-zimbabwe-2026-website-audit", label: "Digital Freshness" },
+  {
+    href: "/blog/seo-and-digital-strategy/built-not-found-zimbabwe-seo-ai-visibility",
+    label: "Built, But Not Found",
+  },
+  {
+    href: "/blog/seo-and-digital-strategy/digital-freshness-trust-zimbabwe-2026-website-audit",
+    label: "Digital Freshness",
+  },
   { href: "/work/propertyzone", label: "Propertyzone" },
-  { href: "/blog/seo-and-digital-strategy", label: "Search & AI Visibility Research" },
+  {
+    href: "/blog/seo-and-digital-strategy",
+    label: "Search & AI Visibility Research",
+  },
 ];
 
 function InlineCtaBar({ waLink }: { waLink: string }) {
@@ -149,7 +235,7 @@ function InlineCtaBar({ waLink }: { waLink: string }) {
         className="group shrink-0 bg-accent text-accent-foreground hover:bg-accent/90"
         asChild
       >
-        <a href={waLink} target="_blank" rel="noopener noreferrer">
+        <a href="#whatsapp" data-whatsapp-href={waLink}>
           Commission a site audit
           <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
         </a>
@@ -185,10 +271,11 @@ export default function SearchVisibilityPage() {
             Be found when the right people are looking.
           </p>
           <p className="text-lg text-muted-foreground leading-relaxed mb-4 max-w-2xl">
-            A good website is not automatically a visible one. We help businesses
-            improve how they are discovered across Google Search, Google Maps and
-            AI-powered search experiences, then make sure the experience after the
-            click is good enough to turn attention into action.
+            A good website is not automatically a visible one. We help
+            businesses improve how they are discovered across Google Search,
+            Google Maps and AI-powered search experiences, then make sure the
+            experience after the click is good enough to turn attention into
+            action.
           </p>
           <p className="text-base text-muted-foreground mb-8">
             Our work combines technical SEO, local search, content architecture,
@@ -199,7 +286,7 @@ export default function SearchVisibilityPage() {
             className="group bg-accent text-accent-foreground hover:bg-accent/90"
             asChild
           >
-            <a href={waLink} target="_blank" rel="noopener noreferrer">
+            <a href="#whatsapp" data-whatsapp-href={waLink}>
               Assess your search visibility
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
@@ -226,15 +313,14 @@ export default function SearchVisibilityPage() {
       {/* Main article */}
       <article className="pb-16 md:pb-24 px-6">
         <div className="container mx-auto max-w-3xl space-y-12 md:space-y-16">
-
           {/* Search visibility is more than rankings */}
           <section className="space-y-5 pt-12">
             <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
               Search Visibility Is More Than Rankings
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Ranking for a keyword is only useful when it helps the right person
-              discover your business. We look at the full path.
+              Ranking for a keyword is only useful when it helps the right
+              person discover your business. We look at the full path.
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               {[
@@ -255,13 +341,13 @@ export default function SearchVisibilityPage() {
               ))}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              That means search work can involve your website structure, technical
-              foundations, local presence, content, Google Business Profile,
-              outdated information, or even the enquiry journey itself.
+              That means search work can involve your website structure,
+              technical foundations, local presence, content, Google Business
+              Profile, outdated information, or even the enquiry journey itself.
             </p>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Sometimes the problem is SEO. Sometimes SEO simply exposes a bigger
-              problem.
+              Sometimes the problem is SEO. Sometimes SEO simply exposes a
+              bigger problem.
             </p>
           </section>
 
@@ -274,16 +360,21 @@ export default function SearchVisibilityPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-secondary/60">
-                    <th className="text-left px-5 py-3 font-medium text-foreground">Area</th>
-                    <th className="text-left px-5 py-3 font-medium text-foreground">What it covers</th>
+                    <th className="text-left px-5 py-3 font-medium text-foreground">
+                      Area
+                    </th>
+                    <th className="text-left px-5 py-3 font-medium text-foreground">
+                      What it covers
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {WHAT_WE_WORK_ON.map(({ area, covers }, i) => (
                     <tr
                       key={area}
-                      className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-background" : "bg-secondary/30"
-                        }`}
+                      className={`border-b border-border last:border-0 ${
+                        i % 2 === 0 ? "bg-background" : "bg-secondary/30"
+                      }`}
                     >
                       <td className="px-5 py-3.5 font-semibold text-foreground align-top whitespace-nowrap">
                         {area}
@@ -298,7 +389,8 @@ export default function SearchVisibilityPage() {
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               We do not sell a fixed list of SEO activities and call the job
-              finished. We start with the problem, then decide what needs to change.
+              finished. We start with the problem, then decide what needs to
+              change.
             </p>
 
             {/* Mid-page CTA #1 — natural after showing the scope of work */}
@@ -312,8 +404,8 @@ export default function SearchVisibilityPage() {
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               AI Overviews, AI Mode and other generative search experiences have
-              changed how people can discover information. They have not made the
-              foundations of search irrelevant.
+              changed how people can discover information. They have not made
+              the foundations of search irrelevant.
             </p>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               Google&apos;s current guidance is unusually direct on this point:
@@ -329,8 +421,8 @@ export default function SearchVisibilityPage() {
             </blockquote>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               The terminology may keep changing. Useful information, technical
-              accessibility, relevance, expertise and a good website remain useful
-              regardless of what the search interface looks like.
+              accessibility, relevance, expertise and a good website remain
+              useful regardless of what the search interface looks like.
             </p>
           </section>
 
@@ -341,9 +433,9 @@ export default function SearchVisibilityPage() {
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               There is a lot of bad advice around AI search. You do not need to
-              rewrite your website into awkward snippets for bots. You do not need
-              to manufacture mentions of your brand. You do not need to create
-              content that sounds like it was written for a machine.
+              rewrite your website into awkward snippets for bots. You do not
+              need to manufacture mentions of your brand. You do not need to
+              create content that sounds like it was written for a machine.
             </p>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               Google explicitly advises against these approaches and says that
@@ -351,8 +443,9 @@ export default function SearchVisibilityPage() {
               <code className="text-sm font-mono bg-secondary px-1.5 py-0.5 rounded">
                 llms.txt
               </code>{" "}
-              are not required for Google Search. It instead recommends focusing on
-              people, useful content, genuine expertise and strong web experiences.
+              are not required for Google Search. It instead recommends focusing
+              on people, useful content, genuine expertise and strong web
+              experiences.
             </p>
             <div className="p-6 rounded-2xl border border-border bg-secondary/50 space-y-4">
               <p className="text-xs uppercase font-mono tracking-widest text-muted-foreground">
@@ -386,9 +479,9 @@ export default function SearchVisibilityPage() {
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               A website can be technically live and still feel abandoned. Old
-              service information, outdated dates, broken journeys, neglected pages
-              and information that no longer reflects the real business can quietly
-              reduce trust. That is the problem we describe as{" "}
+              service information, outdated dates, broken journeys, neglected
+              pages and information that no longer reflects the real business
+              can quietly reduce trust. That is the problem we describe as{" "}
               <strong className="text-foreground">digital freshness</strong>.
             </p>
 
@@ -411,29 +504,31 @@ export default function SearchVisibilityPage() {
                   ].map(({ label, status }) => (
                     <div
                       key={label}
-                      className={`rounded-lg border px-3.5 py-2.5 flex items-center gap-2 text-sm ${status === "current"
-                        ? "border-green-500/30 bg-green-500/5 text-foreground"
-                        : status === "stale"
-                          ? "border-yellow-500/40 bg-yellow-500/5 text-muted-foreground"
-                          : "border-destructive/30 bg-destructive/5 text-muted-foreground"
-                        }`}
+                      className={`rounded-lg border px-3.5 py-2.5 flex items-center gap-2 text-sm ${
+                        status === "current"
+                          ? "border-green-500/30 bg-green-500/5 text-foreground"
+                          : status === "stale"
+                            ? "border-yellow-500/40 bg-yellow-500/5 text-muted-foreground"
+                            : "border-destructive/30 bg-destructive/5 text-muted-foreground"
+                      }`}
                     >
                       <span
-                        className={`w-2 h-2 rounded-full shrink-0 ${status === "current"
-                          ? "bg-green-500"
-                          : status === "stale"
-                            ? "bg-yellow-400"
-                            : "bg-destructive"
-                          }`}
+                        className={`w-2 h-2 rounded-full shrink-0 ${
+                          status === "current"
+                            ? "bg-green-500"
+                            : status === "stale"
+                              ? "bg-yellow-400"
+                              : "bg-destructive"
+                        }`}
                       />
                       <span className="font-medium">{label}</span>
                     </div>
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground/60 mt-4 leading-relaxed">
-                  The website is still online. Some of the information it presents
-                  no longer matches the real business. Both things can be true at
-                  the same time.
+                  The website is still online. Some of the information it
+                  presents no longer matches the real business. Both things can
+                  be true at the same time.
                 </p>
               </div>
             </div>
@@ -443,11 +538,17 @@ export default function SearchVisibilityPage() {
                 Freshness is not changing a date.
               </p>
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-                It means keeping the information people rely on aligned with reality.
+                It means keeping the information people rely on aligned with
+                reality.
               </p>
             </blockquote>
 
-            <Button variant="outline" size="sm" className="bg-transparent group" asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-transparent group"
+              asChild
+            >
               <Link href="/blog/seo-and-digital-strategy/digital-freshness-trust-zimbabwe-2026-website-audit">
                 Read the Digital Freshness research
                 <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
@@ -461,8 +562,8 @@ export default function SearchVisibilityPage() {
               We Build for How People Actually Search
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              A customer does not always search for your company name. They might
-              search for:
+              A customer does not always search for your company name. They
+              might search for:
             </p>
             <div className="grid sm:grid-cols-2 gap-2.5">
               {EXAMPLE_SEARCHES.map((q) => (
@@ -475,13 +576,13 @@ export default function SearchVisibilityPage() {
               ))}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Or they may ask a much longer question that combines location, intent
-              and specific requirements. Our job is not simply to add those phrases
-              to a page. It is to make sure the business has useful, relevant
-              information that can answer those questions. That means building
-              around{" "}
-              <strong className="text-foreground">search intent</strong>, not just
-              keywords.
+              Or they may ask a much longer question that combines location,
+              intent and specific requirements. Our job is not simply to add
+              those phrases to a page. It is to make sure the business has
+              useful, relevant information that can answer those questions. That
+              means building around{" "}
+              <strong className="text-foreground">search intent</strong>, not
+              just keywords.
             </p>
           </section>
 
@@ -491,9 +592,9 @@ export default function SearchVisibilityPage() {
               Original Information Matters More Than More Content
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              The internet already has enough generic articles. Businesses have a
-              much stronger advantage when they publish information that comes from
-              their own experience, expertise, research and work.
+              The internet already has enough generic articles. Businesses have
+              a much stronger advantage when they publish information that comes
+              from their own experience, expertise, research and work.
             </p>
             <div className="grid sm:grid-cols-2 gap-2.5">
               {ORIGINAL_INFO_TYPES.map((type) => (
@@ -508,9 +609,10 @@ export default function SearchVisibilityPage() {
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               Google&apos;s current guidance encourages exactly this type of
-              non-commodity content and emphasises first-hand experience, internal
-              expertise and unique perspectives. This is one reason our search work
-              is closely connected to the research and engineering work we publish.
+              non-commodity content and emphasises first-hand experience,
+              internal expertise and unique perspectives. This is one reason our
+              search work is closely connected to the research and engineering
+              work we publish.
             </p>
           </section>
 
@@ -520,13 +622,14 @@ export default function SearchVisibilityPage() {
               Propertyzone: Building Visibility Into the Product
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Propertyzone is a useful example of what this looks like when search
-              is considered as part of the product rather than added afterwards.
-              Property discovery involves more than listing properties. Someone
-              might search for a specific property, a suburb, a type of home, a
-              location or guidance about where to live. That requires structured
-              information, useful pages and clear relationships between properties,
-              locations and the people searching for them.
+              Propertyzone is a useful example of what this looks like when
+              search is considered as part of the product rather than added
+              afterwards. Property discovery involves more than listing
+              properties. Someone might search for a specific property, a
+              suburb, a type of home, a location or guidance about where to
+              live. That requires structured information, useful pages and clear
+              relationships between properties, locations and the people
+              searching for them.
             </p>
             <div className="relative w-full overflow-hidden rounded-xl border border-border group hover:border-accent transition-colors duration-300">
               <Image
@@ -538,11 +641,17 @@ export default function SearchVisibilityPage() {
               />
               <div className="absolute bottom-3 left-3 right-3">
                 <div className="inline-block bg-background/90 backdrop-blur-sm border border-border rounded-lg px-3.5 py-1.5 text-xs text-muted-foreground">
-                  Propertyzone — search visibility built into the product architecture
+                  Propertyzone — search visibility built into the product
+                  architecture
                 </div>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="bg-transparent group" asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-transparent group"
+              asChild
+            >
               <Link href="/work/propertyzone">
                 See the Propertyzone work
                 <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
@@ -575,21 +684,27 @@ export default function SearchVisibilityPage() {
                   {SEARCH_SIGNALS.map(({ search, business }, i) => (
                     <tr
                       key={search}
-                      className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-background" : "bg-secondary/30"
-                        }`}
+                      className={`border-b border-border last:border-0 ${
+                        i % 2 === 0 ? "bg-background" : "bg-secondary/30"
+                      }`}
                     >
-                      <td className="px-5 py-3 text-muted-foreground">{search}</td>
-                      <td className="px-5 py-3 text-muted-foreground">{business}</td>
+                      <td className="px-5 py-3 text-muted-foreground">
+                        {search}
+                      </td>
+                      <td className="px-5 py-3 text-muted-foreground">
+                        {business}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Google similarly recommends focusing measurement on concrete business
-              goals such as leads, sales and sign-ups rather than becoming
-              distracted by noisy metrics. Its current guidance also notes new
-              Search Console reporting for impressions from AI features.
+              Google similarly recommends focusing measurement on concrete
+              business goals such as leads, sales and sign-ups rather than
+              becoming distracted by noisy metrics. Its current guidance also
+              notes new Search Console reporting for impressions from AI
+              features.
             </p>
           </section>
 
@@ -605,7 +720,9 @@ export default function SearchVisibilityPage() {
               {GOOD_FIT.map((item) => (
                 <li key={item} className="flex items-start gap-3.5">
                   <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                  <p className="text-base text-muted-foreground leading-relaxed">{item}</p>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {item}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -615,8 +732,8 @@ export default function SearchVisibilityPage() {
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 A search campaign will not fix a confusing proposition, a broken
-                enquiry process or a website that no longer represents the business.
-                When that happens, we address the underlying problem.
+                enquiry process or a website that no longer represents the
+                business. When that happens, we address the underlying problem.
               </p>
             </div>
 
@@ -638,7 +755,9 @@ export default function SearchVisibilityPage() {
                   <span className="text-3xl font-light font-mono text-muted-foreground/20 block">
                     {step}
                   </span>
-                  <h3 className="text-base font-semibold text-foreground">{title}</h3>
+                  <h3 className="text-base font-semibold text-foreground">
+                    {title}
+                  </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {description}
                   </p>
@@ -660,19 +779,31 @@ export default function SearchVisibilityPage() {
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               That is why Search Visibility &amp; AI Discovery sits alongside
               Sparkline&apos;s wider work in{" "}
-              <Link href="/services/solution-architecture" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
+              <Link
+                href="/services/solution-architecture"
+                className="text-foreground underline underline-offset-4 hover:text-accent transition-colors"
+              >
                 solution architecture
               </Link>
               ,{" "}
-              <Link href="/services#systems-engineering" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
+              <Link
+                href="/services#systems-engineering"
+                className="text-foreground underline underline-offset-4 hover:text-accent transition-colors"
+              >
                 systems engineering
               </Link>
               ,{" "}
-              <Link href="/services#integration-automation" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
+              <Link
+                href="/services#integration-automation"
+                className="text-foreground underline underline-offset-4 hover:text-accent transition-colors"
+              >
                 integration and automation
               </Link>{" "}
               and{" "}
-              <Link href="/services#technical-modernisation" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
+              <Link
+                href="/services#technical-modernisation"
+                className="text-foreground underline underline-offset-4 hover:text-accent transition-colors"
+              >
                 technical modernisation
               </Link>
               .
@@ -713,12 +844,17 @@ export default function SearchVisibilityPage() {
                 className="group bg-accent text-accent-foreground hover:bg-accent/90"
                 asChild
               >
-                <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <a href="#whatsapp" data-whatsapp-href={waLink}>
                   Assess your search visibility
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
               </Button>
-              <Button variant="outline" size="lg" className="bg-transparent group" asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="bg-transparent group"
+                asChild
+              >
                 <Link href="/services">
                   All services
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -747,7 +883,6 @@ export default function SearchVisibilityPage() {
           </section>
         </div>
       </article>
-
     </>
   );
 }

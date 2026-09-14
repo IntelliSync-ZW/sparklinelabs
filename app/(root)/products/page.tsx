@@ -29,7 +29,7 @@ const STATIC_LIVE: LiveProduct[] = [
     slug: { current: "propertyzone" },
     tagline: "Zimbabwe's intent-first property platform.",
     description:
-      "Propertyzone is a property listing and lead management platform that connects verified buyers, renters, agents, and landlords. Built around intent, not just impressions. Every enquiry carries a \"what are you here to do\" signal so agents stop drowning in unqualified leads.",
+      'Propertyzone is a property listing and lead management platform that connects verified buyers, renters, agents, and landlords. Built around intent, not just impressions. Every enquiry carries a "what are you here to do" signal so agents stop drowning in unqualified leads.',
     status: "live",
     statusDate: "2026",
     href: "https://www.propzone.co.zw/en/",
@@ -104,74 +104,83 @@ export default async function ProductsPage() {
 
   const propertyzoneSchemaItem = {
     "@type": "ListItem",
-    "position": 1,
-    "item": {
+    position: 1,
+    item: {
       "@type": "SoftwareApplication",
-      "name": "Propertyzone",
-      "alternateName": "propzone.co.zw",
-      "applicationCategory": "BusinessApplication",
-      "applicationSubCategory": "Real Estate Platform",
-      "operatingSystem": "Web",
-      "url": "https://www.propzone.co.zw/en/",
-      "description": "Zimbabwe's intent-first property listing and lead management platform. Connects verified buyers, renters, EAC-registered agents, and landlords. Quality Score ranking based on imagery, verified utility data (borehole yield, solar capacity, ZESA reliability), and listing completeness.",
-      "featureList": [
+      name: "Propertyzone",
+      alternateName: "propzone.co.zw",
+      applicationCategory: "BusinessApplication",
+      applicationSubCategory: "Real Estate Platform",
+      operatingSystem: "Web",
+      url: "https://www.propzone.co.zw/en/",
+      description:
+        "Zimbabwe's intent-first property listing and lead management platform. Connects verified buyers, renters, EAC-registered agents, and landlords. Quality Score ranking based on imagery, verified utility data (borehole yield, solar capacity, ZESA reliability), and listing completeness.",
+      featureList: [
         "Intent-tagged listings: buy, rent, invest, viewing-only",
         "Verified buyer and renter profiles",
         "WhatsApp-routed agent enquiries",
         "Quality Score ranking algorithm",
         "Suburb-level content with ZESA reliability, borehole yield, and solar capacity data",
       ],
-      "offers": {
+      offers: {
         "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "description": "10 free leads for the first 10 agencies; volume-based pricing thereafter.",
+        price: "0",
+        priceCurrency: "USD",
+        description:
+          "10 free leads for the first 10 agencies; volume-based pricing thereafter.",
       },
-      "creator": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
-      "inLanguage": "en-ZW",
-      "areaServed": { "@type": "Country", "name": "Zimbabwe" },
+      creator: { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+      inLanguage: "en-ZW",
+      areaServed: { "@type": "Country", name: "Zimbabwe" },
     },
   };
 
   const crmSchemaItem = {
     "@type": "ListItem",
-    "position": 2,
-    "item": {
+    position: 2,
+    item: {
       "@type": "SoftwareApplication",
-      "name": "Agency CRM",
-      "applicationCategory": "BusinessApplication",
-      "applicationSubCategory": "CRM & Sales Pipeline Tracking",
-      "operatingSystem": "Web",
-      "url": "https://www.propzone.co.zw/en/",
-      "description": "Core sales pipeline and deal tracking system for Propertyzone subscribers. WhatsApp-first lead handling, stage-based deal progression, and commission tracking.",
-      "creator": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
-      "inLanguage": "en-ZW",
-      "areaServed": { "@type": "Country", "name": "Zimbabwe" },
+      name: "Agency CRM",
+      applicationCategory: "BusinessApplication",
+      applicationSubCategory: "CRM & Sales Pipeline Tracking",
+      operatingSystem: "Web",
+      url: "https://www.propzone.co.zw/en/",
+      description:
+        "Core sales pipeline and deal tracking system for Propertyzone subscribers. WhatsApp-first lead handling, stage-based deal progression, and commission tracking.",
+      creator: { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+      inLanguage: "en-ZW",
+      areaServed: { "@type": "Country", name: "Zimbabwe" },
     },
   };
 
   const otherProducts = liveProducts
-    .filter((p) => p.slug?.current !== "propertyzone" && p._id !== "propertyzone" && p._id !== "agency-crm" && p.name !== "Agency CRM")
+    .filter(
+      (p) =>
+        p.slug?.current !== "propertyzone" &&
+        p._id !== "propertyzone" &&
+        p._id !== "agency-crm" &&
+        p.name !== "Agency CRM",
+    )
     .map((p, i) => ({
       "@type": "ListItem",
-      "position": i + 3,
-      "item": {
+      position: i + 3,
+      item: {
         "@type": "SoftwareApplication",
-        "name": p.name,
-        "description": p.description ?? p.tagline,
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Web",
-        "creator": { "@id": "https://www.sparklinelabs.co.zw/#organization" },
-        ...(p.href && { "url": p.href }),
+        name: p.name,
+        description: p.description ?? p.tagline,
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        creator: { "@id": "https://www.sparklinelabs.co.zw/#organization" },
+        ...(p.href && { url: p.href }),
       },
     }));
 
   const productsSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Sparkline Labs Products",
-    "url": "https://www.sparklinelabs.co.zw/products",
-    "itemListElement": [propertyzoneSchemaItem, crmSchemaItem, ...otherProducts],
+    name: "Sparkline Labs Products",
+    url: "https://www.sparklinelabs.co.zw/products",
+    itemListElement: [propertyzoneSchemaItem, crmSchemaItem, ...otherProducts],
   };
 
   const faqSchema = {
@@ -213,7 +222,9 @@ export default async function ProductsPage() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-              We don&apos;t build products because a technology trend makes them possible. We build them when a real operating problem is large enough to deserve a system.
+              We don&apos;t build products because a technology trend makes them
+              possible. We build them when a real operating problem is large
+              enough to deserve a system.
             </p>
           </div>
         </div>
@@ -222,9 +233,12 @@ export default async function ProductsPage() {
       {/* Live products */}
       {liveProducts.map((product, idx) => {
         const isPropertyzone =
-          product.slug?.current === "propertyzone" || product._id === "propertyzone";
+          product.slug?.current === "propertyzone" ||
+          product._id === "propertyzone";
         const isAgencyCRM =
-          product.slug?.current === "agency-crm" || product._id === "agency-crm" || product.name === "Agency CRM";
+          product.slug?.current === "agency-crm" ||
+          product._id === "agency-crm" ||
+          product.name === "Agency CRM";
 
         return (
           <section
@@ -236,9 +250,7 @@ export default async function ProductsPage() {
               <div className="flex items-center gap-2 mb-4">
                 <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600">
                   <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-                  {isAgencyCRM
-                    ? "Live · Core Propertyzone Module"
-                    : "Live"}
+                  {isAgencyCRM ? "Live · Core Propertyzone Module" : "Live"}
                 </span>
               </div>
 
@@ -256,7 +268,9 @@ export default async function ProductsPage() {
                 </a>
               )}
               {product.tagline && (
-                <p className="text-xl text-muted-foreground mb-2">{product.tagline}</p>
+                <p className="text-xl text-muted-foreground mb-2">
+                  {product.tagline}
+                </p>
               )}
 
               {product.description && (
@@ -315,15 +329,28 @@ export default async function ProductsPage() {
                     className="group bg-accent text-accent-foreground hover:bg-accent/90"
                     asChild
                   >
-                    <a href={product.href} target="_blank" rel="noopener noreferrer">
-                      {isAgencyCRM ? "Access on Propertyzone" : `Visit ${new URL(product.href).hostname.replace("www.", "")}`}
+                    <a
+                      href={product.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {isAgencyCRM
+                        ? "Access on Propertyzone"
+                        : `Visit ${new URL(product.href).hostname.replace("www.", "")}`}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </a>
                   </Button>
                 )}
                 {isPropertyzone && (
-                  <Button variant="outline" size="lg" className="bg-transparent" asChild>
-                    <Link href="/work/propertyzone">Read the full case study</Link>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="bg-transparent"
+                    asChild
+                  >
+                    <Link href="/work/propertyzone">
+                      Read the full case study
+                    </Link>
                   </Button>
                 )}
               </div>
@@ -350,7 +377,7 @@ export default async function ProductsPage() {
               className="group text-base px-8 bg-accent text-accent-foreground hover:bg-accent/90"
               asChild
             >
-              <a href={waProjectLink} target="_blank" rel="noopener noreferrer">
+              <a href="#whatsapp" data-whatsapp-href={waProjectLink}>
                 Start on WhatsApp
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>

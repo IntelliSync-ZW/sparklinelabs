@@ -5,7 +5,10 @@ import Link from "next/link";
 import { Globe, Mail } from "lucide-react";
 import { fetchAuthors, sanityFetch } from "@/sanity/lib/fetch";
 import { authorBySlugQuery, allAuthorSlugsQuery } from "@/sanity/lib/queries";
-import { PortableTextRenderer, type RichTextValue } from "@/components/portable-text";
+import {
+  PortableTextRenderer,
+  type RichTextValue,
+} from "@/components/portable-text";
 
 import { PostCard, type Post } from "@/components/blog/blog-list";
 
@@ -66,10 +69,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${author.name} — ${author.role || "Author & Engineer"} | Sparkline Labs`,
-    description:
-      author.role
-        ? `${author.name} (${author.role}${author.company ? ` at ${author.company}` : ""}). Read technical playbooks and articles on Sparkline Labs.`
-        : `Read articles and technical playbooks authored by ${author.name} on Sparkline Labs.`,
+    description: author.role
+      ? `${author.name} (${author.role}${author.company ? ` at ${author.company}` : ""}). Read technical playbooks and articles on Sparkline Labs.`
+      : `Read articles and technical playbooks authored by ${author.name} on Sparkline Labs.`,
     alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${author.name} | Sparkline Labs`,
@@ -77,7 +79,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: canonicalUrl,
       type: "profile",
       images: author.avatar?.url
-        ? [{ url: author.avatar.url, width: 800, height: 800, alt: author.name }]
+        ? [
+            {
+              url: author.avatar.url,
+              width: 800,
+              height: 800,
+              alt: author.name,
+            },
+          ]
         : [],
     },
     twitter: {
@@ -149,15 +158,31 @@ export default async function AuthorDetailPage({ params }: Props) {
         "@id": `${canonicalUrl}#breadcrumb`,
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
-          { "@type": "ListItem", position: 2, name: "Blog", item: `${baseUrl}/blog` },
-          { "@type": "ListItem", position: 3, name: "Authors", item: `${baseUrl}/blog/authors` },
-          { "@type": "ListItem", position: 4, name: author.name, item: canonicalUrl },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Blog",
+            item: `${baseUrl}/blog`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Authors",
+            item: `${baseUrl}/blog/authors`,
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: author.name,
+            item: canonicalUrl,
+          },
         ],
       },
     ],
   };
 
   const posts = author.posts ?? [];
+  const visiblePosts = posts.slice(0, 10);
   const hasContactOrSocials = Boolean(author.email || sameAsLinks.length > 0);
 
   return (
@@ -172,11 +197,17 @@ export default async function AuthorDetailPage({ params }: Props) {
         <div className="container mx-auto max-w-5xl">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
-            <Link href="/blog" className="hover:text-foreground transition-colors">
+            <Link
+              href="/blog"
+              className="hover:text-foreground transition-colors"
+            >
               Blog
             </Link>
             <span>/</span>
-            <Link href="/blog/authors" className="hover:text-foreground transition-colors">
+            <Link
+              href="/blog/authors"
+              className="hover:text-foreground transition-colors"
+            >
               Authors
             </Link>
             <span>/</span>
@@ -218,7 +249,6 @@ export default async function AuthorDetailPage({ params }: Props) {
                   {author.company}
                 </p>
               )}
-
 
               {/* Contact & Social Links */}
               {hasContactOrSocials && (
@@ -357,7 +387,8 @@ export default async function AuthorDetailPage({ params }: Props) {
               Articles by {author.name}
             </h2>
             <p className="text-sm text-muted-foreground">
-              {posts.length} {posts.length === 1 ? "article" : "articles"} published
+              {posts.length} {posts.length === 1 ? "article" : "articles"}{" "}
+              published
             </p>
           </div>
 
@@ -369,9 +400,19 @@ export default async function AuthorDetailPage({ params }: Props) {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
+              {visiblePosts.map((post) => (
                 <PostCard key={post.slug.current} post={post} />
               ))}
+            </div>
+          )}
+          {posts.length > 10 && (
+            <div className="mt-10 flex justify-center">
+              <Link
+                href="/blog"
+                className="inline-flex items-center rounded-md border border-border bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+              >
+                View all posts
+              </Link>
             </div>
           )}
         </div>

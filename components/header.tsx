@@ -60,7 +60,7 @@ export function Header() {
               className="ml-4 bg-accent text-accent-foreground hover:bg-accent/90"
               asChild
             >
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
+              <a href="#whatsapp" data-whatsapp-href={waLink}>
                 Book a call
               </a>
             </Button>
@@ -108,8 +108,11 @@ export function Header() {
               >
                 Blog
               </Link>
-              <Button className="w-fit bg-accent text-accent-foreground" asChild>
-                <a href={waLink} target="_blank" rel="noopener noreferrer">
+              <Button
+                className="w-fit bg-accent text-accent-foreground"
+                asChild
+              >
+                <a href="#whatsapp" data-whatsapp-href={waLink}>
                   Book a call
                 </a>
               </Button>
