@@ -15,7 +15,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Solutions Engineering Zimbabwe | Sparkline Labs",
+  title: "Solutions Engineering Zimbabwe",
   description:
     "We engineer digital systems for Zimbabwean and African businesses - from operational workflows and integrations to custom platforms, automation and internal tools. The team behind Propertyzone.",
   alternates: { canonical: "https://www.sparklinelabs.co.zw" },
@@ -86,6 +86,14 @@ const professionalServiceSchema = {
           "@type": "Service",
           "name": "Solution architecture",
           "description": "Not sure whether you need new software, an integration, automation or a change to the way your existing systems work? We map the problem, design the solution and give you a practical implementation plan before a build begins.",
+        },
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Search Visibility & AI Discovery",
+          "description": "Make your business easier to find, easier to understand, and easier to choose. We structure your digital presence so search engines and AI tools surface you accurately when it matters.",
         },
       },
       {

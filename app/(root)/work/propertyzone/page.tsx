@@ -11,7 +11,7 @@ import { FaqSection } from "@/components/faq";
 import { propertyzoneCaseStudyFaqs } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Building Propertyzone — Engineering a Property Platform Around What Happens After the Click | Sparkline Labs",
+  title: "Building Propertyzone — Engineering a Property Platform Around What Happens After the Click",
   description:
     "Propertyzone is not a better-looking property directory. It is an attempt to solve what happens between a property enquiry and an actual conversation, viewing and sale. How Sparkline Labs engineered a lead infrastructure platform for Zimbabwean real estate.",
   keywords: [

@@ -8,8 +8,12 @@ export const WHATSAPP_BETA_MESSAGE = encodeURIComponent(
 export const WHATSAPP_NOTIFY_MESSAGE = encodeURIComponent(
   "Hi Sparkline, please notify me when WhatsApp Lead Router launches"
 );
+export const WHATSAPP_SEO_MESSAGE = encodeURIComponent(
+  "Hi Sparkline, I'd like to assess my search visibility"
+);
 
 export const waLink = (message: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 
 export const WA_PROJECT_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
+

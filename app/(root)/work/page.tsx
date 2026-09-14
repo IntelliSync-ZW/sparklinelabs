@@ -9,7 +9,7 @@ import { FaqSection } from "@/components/faq";
 import { workFaqs } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Solutions Engineering Case Studies Zimbabwe | Sparkline Labs",
+  title: "Solutions Engineering Case Studies Zimbabwe",
   description:
     "See how Sparkline Labs engineers digital systems around real operational problems in Zimbabwe, from property workflows and lead management to connectivity and automation.",
   keywords: [

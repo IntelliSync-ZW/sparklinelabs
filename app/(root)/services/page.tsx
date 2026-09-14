@@ -84,6 +84,23 @@ const STATIC_SERVICES: ServiceItem[] = [
   },
   {
     stepNumber: "04",
+    title: "Search Visibility & AI Discovery",
+    id: "search-visibility-ai-discovery",
+    description:
+      `<p>Make your business easier to find, easier to understand, and easier to choose.</p>
+
+<p>Search has changed. Beyond ranking on Google, your business now needs to appear accurately in AI-generated answers, knowledge panels, voice results and LLM-powered tools that millions of people use to research decisions. Most African businesses are invisible in this new layer.</p>
+
+<p>We structure your digital presence — your website content, schema markup, entity data and information architecture — so that both search engines and AI systems can read, understand and confidently surface your business when it is relevant.</p>
+
+<p>Typical work: Technical SEO, structured data and schema markup, entity optimisation, content architecture, AI-readability audits, local search visibility and search-engine-friendly copywriting.</p>
+
+<p>Related: <a href="/blog/seo-and-digital-strategy">Digital strategy writing</a></p>`,
+    image: "/search-visibility-ai-discovery.png",
+    alt: "Business digital presence structured for search engine and AI discovery."
+  },
+  {
+    stepNumber: "05",
     title: "Technical modernisation",
     id: "technical-modernisation",
     description:
@@ -114,7 +131,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const seo = pageData?.seo;
-  const title = seo?.title || "Solutions Engineering Services Zimbabwe | Sparkline Labs";
+  const title = seo?.title || "Solutions Engineering Services Zimbabwe";
   const description =
     seo?.description ||
     "Solutions engineering for Zimbabwean and African businesses. We diagnose operational problems and engineer the right combination of software, integrations, automation and digital systems.";
@@ -184,11 +201,22 @@ export default async function ServicesPage() {
 
   // Reusable fallback images for mapping sanity results
   const fallbackImages = [
-    "/software-architecture.png",
-    "/solutions-engineering.png",
+    "/solutions-architecture.png",
+    "/systems-engineering.png",
     "/automation.png",
+    "/search-visibility-ai-discovery.png",
     "/technical-modernisation.png",
   ];
+
+  const getServiceDetailHref = (id?: string, stepNumber?: string) => {
+    if (id === "solution-architecture" || stepNumber === "01") {
+      return "/services/solution-architecture";
+    }
+    if (id === "search-visibility-ai-discovery" || stepNumber === "04") {
+      return "/services/search-visibility-ai-discovery";
+    }
+    return null;
+  };
 
   return (
     <>
@@ -230,6 +258,7 @@ export default async function ServicesPage() {
             {services.map((service, idx) => {
               const isEven = idx % 2 === 0;
               const imgUrl = service.imageUrl || service.image || fallbackImages[idx % fallbackImages.length];
+              const detailHref = getServiceDetailHref(service.id, service.stepNumber);
 
               return (
                 <div
@@ -244,21 +273,51 @@ export default async function ServicesPage() {
                       {service.stepNumber}
                     </span>
                     <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-                      {service.title}
+                      {detailHref ? (
+                        <Link href={detailHref} className="hover:text-accent transition-colors inline-flex items-center gap-2 group/title">
+                          <span>{service.title}</span>
+                          <ArrowRight className="h-6 w-6 opacity-0 -translate-x-2 transition-all group-hover/title:opacity-100 group-hover/title:translate-x-0" />
+                        </Link>
+                      ) : (
+                        service.title
+                      )}
                     </h2>
                     <div className="text-base md:text-lg text-muted-foreground leading-relaxed typeset" dangerouslySetInnerHTML={{ __html: service.description }} />
+                    {detailHref && (
+                      <div className="mt-6">
+                        <Button variant="outline" size="sm" asChild className="group">
+                          <Link href={detailHref}>
+                            Explore full service overview
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </Button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Image Column */}
                   <div className="flex-1 w-full">
-                    <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl border border-border shadow-md group hover:border-accent transition-colors duration-300">
-                      <Image
-                        src={imgUrl || "/placeholder.svg"}
-                        alt={service.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
+                    {detailHref ? (
+                      <Link href={detailHref} className="block group">
+                        <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl border border-border shadow-md hover:border-accent transition-colors duration-300">
+                          <Image
+                            src={imgUrl || "/placeholder.svg"}
+                            alt={service.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl border border-border shadow-md group hover:border-accent transition-colors duration-300">
+                        <Image
+                          src={imgUrl || "/placeholder.svg"}
+                          alt={service.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               );

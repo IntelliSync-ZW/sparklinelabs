@@ -24,7 +24,7 @@ async function getTermsData(): Promise<LegalPageData> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getTermsData();
-  const title = data.seo?.title || `${data.title} | Sparkline Labs`;
+  const title = data.seo?.title || `${data.title}`;
   const description =
     data.seo?.description ||
     "Statutory Terms of Service, technical SLA conditions, IP allocation, and operating mandate for Sparkline Labs (Private) Limited. Governed by Zimbabwean law.";
