@@ -115,7 +115,7 @@ const STATIC_SERVICES: ServiceItem[] = [
 
 const DEFAULT_H1 = "We solve operational problems with technology.";
 const DEFAULT_INTRO =
-  "You don't always need new software. Sometimes you need two systems connected. Sometimes a manual process needs automation. Sometimes the problem is the workflow itself. And sometimes the only sensible answer is to build something new.\n\nSparkline Labs works across all four.";
+  "You don't always need new software. Sometimes you need two systems connected. Sometimes a manual process needs automation. Sometimes the problem is the workflow itself. And sometimes the only sensible answer is to build something new.\n\nSparkline Labs works across all five.";
 
 export async function generateMetadata(): Promise<Metadata> {
   let pageData: ServicesPageData | null = null;
