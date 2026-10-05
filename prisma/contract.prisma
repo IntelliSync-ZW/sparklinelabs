@@ -1,0 +1,181 @@
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  SUSPENDED
+}
+
+enum ProgressStatus {
+  LOCKED
+  AVAILABLE
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  PASSED
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Enrollment {
+  id             String           @id @default(cuid())
+  clerkUserId    String
+  sanityCourseId String
+  status         EnrollmentStatus @default(ACTIVE)
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  progressPercent Int  @default(0)
+  finalScore      Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lessonProgress     LessonProgress[]
+  taskAttempts       TaskAttempt[]
+  assessmentAttempts AssessmentAttempt[]
+  certificate        Certificate?
+
+  @@unique([clerkUserId, sanityCourseId])
+  @@index([clerkUserId])
+  @@index([sanityCourseId])
+}
+
+model LessonProgress {
+  id             String @id @default(cuid())
+  enrollmentId   String
+  sanityLessonId String
+
+  status ProgressStatus @default(LOCKED)
+
+  contentStartedAt   DateTime?
+  contentCompletedAt DateTime?
+
+  requiredTasksPassed Boolean @default(false)
+
+  bestAssessmentScore Int?
+  assessmentPassed    Boolean @default(false)
+
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  taskAttempts       TaskAttempt[]
+  assessmentAttempts AssessmentAttempt[]
+
+  @@unique([enrollmentId, sanityLessonId])
+  @@index([enrollmentId])
+  @@index([sanityLessonId])
+}
+
+model TaskAttempt {
+  id               String @id @default(cuid())
+  enrollmentId     String
+  lessonProgressId String
+  sanityTaskId     String
+
+  attemptNumber Int           @default(1)
+  status        AttemptStatus @default(IN_PROGRESS)
+
+  submission Json?
+  score      Int?
+  passed     Boolean @default(false)
+  feedback   String?
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  lessonProgress LessonProgress @relation(fields: [lessonProgressId], references: [id], onDelete: Cascade)
+
+  @@index([enrollmentId, sanityTaskId])
+  @@index([lessonProgressId])
+}
+
+model AssessmentAttempt {
+  id               String  @id @default(cuid())
+  enrollmentId     String
+  lessonProgressId String?
+
+  sanityAssessmentId String
+
+  attemptNumber Int           @default(1)
+  status        AttemptStatus @default(IN_PROGRESS)
+
+  score  Int?
+  passed Boolean @default(false)
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  lessonProgress LessonProgress? @relation(fields: [lessonProgressId], references: [id], onDelete: Cascade)
+
+  responses AssessmentResponse[]
+
+  @@index([enrollmentId, sanityAssessmentId])
+  @@index([lessonProgressId])
+}
+
+model AssessmentResponse {
+  id                  String @id @default(cuid())
+  assessmentAttemptId String
+  sanityQuestionId    String
+
+  response      Json?
+  isCorrect     Boolean?
+  pointsAwarded Int      @default(0)
+
+  createdAt DateTime @default(now())
+
+  assessmentAttempt AssessmentAttempt @relation(fields: [assessmentAttemptId], references: [id], onDelete: Cascade)
+
+  @@unique([assessmentAttemptId, sanityQuestionId])
+  @@index([sanityQuestionId])
+}
+
+model Certificate {
+  id String @id @default(cuid())
+
+  enrollmentId String @unique
+  clerkUserId  String
+
+  certificateNumber String @unique
+  recipientName     String
+
+  courseTitle    String
+  completionDate DateTime
+
+  certificatePrice Int    @default(500)
+  currency         String @default("USD")
+
+  paymentStatus    PaymentStatus @default(PENDING)
+  paymentReference String?
+
+  issuedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@index([clerkUserId])
+  @@index([certificateNumber])
+}

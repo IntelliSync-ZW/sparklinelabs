@@ -6,7 +6,23 @@ export const seoObject = defineType({
   type: "object",
   fields: [
     defineField({ name: "title", title: "SEO Title", type: "string" }),
-    defineField({ name: "description", title: "Meta Description", type: "text", rows: 3 }),
+    defineField({
+      name: "description",
+      title: "Meta Description",
+      type: "text",
+      rows: 3,
+    }),
     defineField({ name: "ogImage", title: "OG Image", type: "image" }),
+    defineField({
+      name: "canonicalUrl",
+      title: "Canonical URL",
+      type: "url",
+    }),
+    defineField({
+      name: "noIndex",
+      title: "No index",
+      type: "boolean",
+      initialValue: false,
+    }),
   ],
 });
