@@ -19,12 +19,43 @@ export const courseAssessment = defineType({
       type: "string",
       options: {
         list: [
+          { title: "Section", value: "section" },
           { title: "Lesson", value: "lesson" },
           { title: "Module", value: "module" },
           { title: "Final", value: "final" },
         ],
       },
       validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: "course",
+      title: "Course",
+      type: "reference",
+      to: [{ type: "course" }],
+      description: "Link this assessment directly to a course (for final assessments).",
+      hidden: ({ parent }) => parent?.assessmentType && parent?.assessmentType !== "final",
+    }),
+
+    defineField({
+      name: "module",
+      title: "Course Module",
+      type: "reference",
+      to: [{ type: "courseModule" }],
+      description: "Link this assessment directly to a module (for module assessments).",
+      hidden: ({ parent }) => parent?.assessmentType && parent?.assessmentType !== "module",
+    }),
+
+    defineField({
+      name: "lesson",
+      title: "Course Lesson",
+      type: "reference",
+      to: [{ type: "courseLesson" }],
+      description: "Link this assessment directly to a lesson (for lesson assessments).",
+      hidden: ({ parent }) =>
+        parent?.assessmentType &&
+        parent?.assessmentType !== "lesson" &&
+        parent?.assessmentType !== "section",
     }),
 
     defineField({

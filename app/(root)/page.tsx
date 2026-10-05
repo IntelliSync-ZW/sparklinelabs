@@ -147,7 +147,57 @@ export default function Home() {
       <Process />
       <WhySparkline />
 
+      {/* AI Training */}
+      <section className="py-20 md:py-32 px-6 bg-secondary">
+        <div className="container mx-auto">
+          <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+            <div className="md:col-span-7">
+              <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
+                AI Training
+              </p>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] mb-6 text-balance">
+                Free AI training for Zimbabwe.
+              </h2>
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
+                Learn to use ChatGPT and Gemini for research, writing and everyday work.
+                Verify what AI tells you. Understand the limits. Apply it properly.
+                Free, self-paced, built around how people actually work in Zimbabwe.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/ai-training"
+                  className="inline-flex items-center gap-2 text-base font-medium text-accent hover:underline"
+                >
+                  Explore AI Training
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="md:col-span-5">
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: "Free course", detail: "Sparkline AI Foundations" },
+                  { label: "Self-paced", detail: "15 lessons" },
+                  { label: "Practical assessments", detail: "Earn each lesson" },
+                  { label: "Certificate available", detail: "US$5 optional" },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="p-5 border border-border rounded-xl bg-background"
+                  >
+                    <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
+                    <p className="text-base font-medium">{item.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Selected work */}
+
       <section className="py-20 md:py-32 px-6 bg-secondary">
         <div className="container mx-auto">
           <div className="flex items-end justify-between mb-12">

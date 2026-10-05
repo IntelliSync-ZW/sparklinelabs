@@ -42,3 +42,6 @@ export const fetchServicesPage = <T>(query: string, params?: QueryParams) =>
 export const fetchLegalPage = <T>(query: string, params?: QueryParams) =>
   sanityFetch<T>({ query, params, tags: ["legalPage"], revalidate: 300 });
 
+export const fetchLearning = <T>(query: string, params?: QueryParams) =>
+  sanityFetch<T>({ query, params, tags: ["course", "courseLesson", "courseModule"], revalidate: 120 });
+

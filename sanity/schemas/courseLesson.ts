@@ -64,9 +64,35 @@ export const courseLesson = defineType({
     }),
 
     defineField({
-      name: "estimatedMinutes",
-      title: "Estimated minutes",
-      type: "number",
+      name: "duration",
+      title: "Estimated duration",
+      type: "object",
+      fields: [
+        defineField({
+          name: "value",
+          title: "Value",
+          type: "number",
+          validation: (Rule) => Rule.positive(),
+        }),
+        defineField({
+          name: "unit",
+          title: "Unit",
+          type: "string",
+          options: {
+            list: [
+              { title: "Seconds", value: "seconds" },
+              { title: "Minutes", value: "minutes" },
+              { title: "Hours", value: "hours" },
+            ],
+            layout: "radio",
+            direction: "horizontal",
+          },
+          initialValue: "minutes",
+        }),
+      ],
+      options: {
+        columns: 2,
+      },
     }),
 
     defineField({
@@ -97,16 +123,25 @@ export const courseLesson = defineType({
     }),
 
     defineField({
-      name: "body",
-      title: "Lesson body",
-      type: "array",
-      of: [
-        { type: "block" },
-        { type: "callout" },
-        { type: "promptBlock" },
-        { type: "image" },
-        { type: "stlTableBlock" },
+      name: "image",
+      title: "Lesson Image (Optional)",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({ name: "alt", title: "Alt text", type: "string" }),
+        defineField({ name: "caption", title: "Caption", type: "string" }),
       ],
+      description: "Optional cover or visual banner for this lesson.",
+    }),
+
+    defineField({
+      name: "body",
+      title: "Lesson Sections",
+      description:
+        "The lesson body is composed of ordered sections. Students progress through the lesson section by section. Each section title renders as an H2, with internal headings starting strictly at H3.",
+      type: "array",
+      of: [{ type: "lessonSection" }],
+      validation: (Rule) => Rule.required().min(1),
     }),
 
     defineField({

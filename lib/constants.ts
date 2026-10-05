@@ -511,3 +511,54 @@ export const blogFaqs = [
     `,
   },
 ];
+
+// ─── AI Training ──────────────────────────────────────────────────────────────────────────────
+
+export const aiTrainingFaqs = [
+  {
+    question: "Is Sparkline AI Foundations free, and what does the certificate cost?",
+    answer: `
+      <p>Yes. Sparkline AI Foundations is free to take. Not every course on this platform will be free — each course states its price clearly before you enrol. Sparkline AI Foundations is the free starting point.</p>
+
+      <p>On completion you receive a free digital learning record confirming you finished the course and passed all assessments. If you want an official Certificate of Completion — a shareable, verifiable document — there is a one-time fee of US$5. The certificate is entirely optional.</p>
+    `,
+  },
+  {
+    question: "Do I need technical knowledge or a paid AI subscription?",
+    answer: `
+      <p>No technical knowledge is required. If you can use a smartphone or a web browser, you have everything you need. The course does not cover how AI models are built — it focuses on how to use them effectively, how to check what they tell you and how to apply them in practical work.</p>
+
+      <p>You do not need ChatGPT Plus or any paid subscription. The course works with the free version of ChatGPT and with Google Gemini, which is also free. The skills taught apply equally to ChatGPT, Gemini, Claude and other tools — you are not locked to one platform.</p>
+    `,
+  },
+  {
+    question: "How does the progression and assessment system work?",
+    answer: `
+      <p>You cannot skip ahead. Each lesson must be completed before the next one unlocks. Completion requires two things: finishing the required practical task and passing the assessment for that lesson. Reading the material alone does not count.</p>
+
+      <p>If you do not pass an assessment, you can redo it. The system shows you what was incorrect so you can review the relevant material before trying again. There is no penalty and no limit on attempts. Most lessons can be completed in under an hour.</p>
+    `,
+  },
+  {
+    question: "What does the certificate confirm, and is it an accreditation?",
+    answer: `
+      <p>The Certificate of Completion confirms that you completed the course and passed all required assessments. It is a record of learning — not a professional qualification, industry accreditation or regulated certification.</p>
+
+      <p>We are not an accreditation body and do not claim to be. The certificate is honest about what it represents: evidence that you did the work.</p>
+    `,
+  },
+  {
+    question: "Can I do the course on a phone?",
+    answer: `
+      <p>Yes. The course is designed to work on a smartphone. You do not need a laptop or desktop, although either will also work. The AI tools used throughout — ChatGPT and Gemini — are both accessible from a phone browser or their respective apps, and all practical tasks can be completed on a phone.</p>
+    `,
+  },
+  {
+    question: "Can organisations use this training for their staff?",
+    answer: `
+      <p>Yes. Sparkline AI Foundations is open to anyone and can be taken by any number of people in an organisation individually. Other courses will state their own pricing and terms.</p>
+
+      <p>If you need group training, tracked completion across a team, a structured corporate delivery or a customised programme for your organisation’s specific context, <a href="mailto:sales@sparklinelabs.co.zw">contact us</a> to discuss what that would look like. Corporate AI training is in development as a separate offering.</p>
+    `,
+  },
+];

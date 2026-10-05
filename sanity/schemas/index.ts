@@ -21,6 +21,10 @@ import { callout } from "./objects/callout";
 import { promptBlock } from "./objects/promptBlock";
 import { lessonTaskRef } from "./objects/lessonTaskRef";
 import { assessmentQuestionRef } from "./objects/assessmentQuestionRef";
+import { lessonSection } from "./objects/lessonSection";
+import { sectionAssessment } from "./objects/sectionAssessment";
+import { sectionTask } from "./objects/sectionTask";
+import { scenarioBlock } from "./objects/scenarioBlock";
 
 export const schemaTypes = [
   // Reusable objects first
@@ -29,6 +33,10 @@ export const schemaTypes = [
   promptBlock,
   lessonTaskRef,
   assessmentQuestionRef,
+  sectionTask,
+  sectionAssessment,
+  scenarioBlock,
+  lessonSection,
   // Documents
   authorSchema,
   categorySchema,

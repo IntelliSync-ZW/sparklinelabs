@@ -56,6 +56,12 @@ export function Header() {
             >
               Blog
             </Link>
+            <Link
+              href="/ai-training"
+              className="text-base text-foreground/80 hover:text-foreground transition-colors"
+            >
+              AI Training
+            </Link>
             <Button
               className="ml-4 bg-accent text-accent-foreground hover:bg-accent/90"
               asChild
@@ -107,6 +113,13 @@ export function Header() {
                 onClick={() => setIsOpen(false)}
               >
                 Blog
+              </Link>
+              <Link
+                href="/ai-training"
+                className="text-base text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                AI Training
               </Link>
               <Button
                 className="w-fit bg-accent text-accent-foreground"

@@ -285,3 +285,11 @@ export const allLegalPageSlugsQuery = `
     _updatedAt
   }
 `;
+
+// ---------------------------------------------------------------------------
+// Course, Module & Section-Progressive Learning Queries
+// (Organized under lib/learning-queries/)
+// ---------------------------------------------------------------------------
+export * from "@/lib/learning-queries";
+
+

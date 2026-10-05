@@ -13,7 +13,7 @@ export function Footer() {
   return (
     <footer className="py-12 px-6 border-t border-border bg-background">
       <div className="container mx-auto">
-        <div className="grid md:grid-cols-4 gap-8 mb-10">
+        <div className="grid md:grid-cols-5 gap-8 mb-10">
           {/* Brand */}
           <div className="md:col-span-2">
             <Link
@@ -69,6 +69,21 @@ export function Footer() {
                 className="hover:text-accent transition-colors"
               >
                 Authors
+              </Link>
+            </div>
+          </div>
+
+          {/* Learn */}
+          <div>
+            <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground mb-4">
+              Learn
+            </p>
+            <div className="flex flex-col gap-3 text-base text-muted-foreground">
+              <Link
+                href="/ai-training"
+                className="hover:text-accent transition-colors"
+              >
+                AI Training
               </Link>
             </div>
           </div>

@@ -97,22 +97,10 @@ export const course = defineType({
       type: "array",
       of: [{ type: "string" }],
     }),
-
-    defineField({
-      name: "modules",
-      title: "Modules",
-      type: "array",
-      of: [
-        {
-          type: "reference",
-          to: [{ type: "courseModule" }],
-        },
-      ],
-    }),
-
     defineField({
       name: "finalAssessment",
-      title: "Final assessment",
+      title: "Final assessment (Optional override)",
+      description: "Optional. You can also link this course directly from a Course Assessment document.",
       type: "reference",
       to: [{ type: "courseAssessment" }],
     }),
