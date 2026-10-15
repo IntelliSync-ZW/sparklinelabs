@@ -24,7 +24,7 @@ async function getPrivacyData(): Promise<LegalPageData> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getPrivacyData();
-  const title = data.seo?.title || `${data.title} | Sparkline Labs`;
+  const title = data.seo?.title || `${data.title}`;
   const description =
     data.seo?.description ||
     "Official Data Governance and Privacy Policy of Sparkline Labs (Private) Limited under the Cyber Security and Data Protection Act [Chapter 12:07] of Zimbabwe.";

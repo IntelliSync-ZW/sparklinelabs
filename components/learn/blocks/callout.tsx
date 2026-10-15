@@ -19,7 +19,7 @@ function Body({ body }: { body?: PortableTextValue }) {
  */
 export function Callout({ value }: { value: CalloutValue }) {
   switch (value.type) {
-    // Tip — soft green card with a floating bulb badge.
+    // Tip - soft green card with a floating bulb badge.
     case "tip":
       return (
         <aside className="relative my-9 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-6 pb-5 pt-7">
@@ -31,7 +31,7 @@ export function Callout({ value }: { value: CalloutValue }) {
         </aside>
       );
 
-    // Warning — amber, hazard-stripe edge.
+    // Warning - amber, hazard-stripe edge.
     case "warning":
       return (
         <aside className="my-9 overflow-hidden rounded-xl border border-amber-500/40 bg-amber-500/10">
@@ -52,7 +52,7 @@ export function Callout({ value }: { value: CalloutValue }) {
         </aside>
       );
 
-    // Example — a card with a folder tab.
+    // Example - a card with a folder tab.
     case "example":
       return (
         <aside className="relative my-10">
@@ -66,7 +66,7 @@ export function Callout({ value }: { value: CalloutValue }) {
         </aside>
       );
 
-    // Zimbabwe context — flag-colour stripe.
+    // Zimbabwe context - flag-colour stripe.
     case "zimbabwe":
       return (
         <aside className="my-9 flex overflow-hidden rounded-xl border border-border bg-card">
@@ -84,7 +84,7 @@ export function Callout({ value }: { value: CalloutValue }) {
         </aside>
       );
 
-    // Important — accent rule with a solid chip.
+    // Important - accent rule with a solid chip.
     default:
       return (
         <aside className="my-9 rounded-r-xl border-l-4 border-accent bg-accent/10 py-4 pl-5 pr-5">

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Course outline helpers (pure — safe to import from server or client code).
+// Course outline helpers (pure - safe to import from server or client code).
 // ---------------------------------------------------------------------------
 
 export type CurriculumLesson = {

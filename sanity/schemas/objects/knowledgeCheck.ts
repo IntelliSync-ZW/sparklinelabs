@@ -55,21 +55,27 @@ export const knowledgeCheck = defineType({
       type: "boolean",
       initialValue: true,
     }),
+    defineField({
+      name: "scored",
+      title: "Scored (counts towards the certificate)",
+      type: "boolean",
+      initialValue: false,
+      description: "Only for required checks. Optional checks are practice and never scored.",
+      hidden: ({ parent }) => !parent?.required,
+    }),
     defineField({ name: "feedbackOnPass", title: "Feedback on pass", type: "text", rows: 2 }),
     defineField({ name: "feedbackOnFail", title: "Feedback on retry", type: "text", rows: 2 }),
   ],
   validation: (Rule) =>
-    Rule.custom((value: { source?: string; questions?: unknown[]; ref?: unknown } | undefined) => {
-      if (!value) return true;
-      if (value.source === "library" && !value.ref) return "Pick a library assessment";
-      if (value.source !== "library" && !value.questions?.length) return "Add at least one question";
-      return true;
-    }),
+    // Optional: with no questions (or no library pick) the section simply has no check.
+    Rule.custom((value: { source?: string; ref?: unknown } | undefined) =>
+      value?.source === "library" && !value.ref ? "Pick a library assessment, or switch back to writing questions here" : true
+    ),
   preview: {
-    select: { title: "title", refTitle: "ref.title", source: "source", required: "required", passingScore: "passingScore" },
-    prepare: ({ title, refTitle, source, required, passingScore }) => ({
+    select: { title: "title", refTitle: "ref.title", source: "source", required: "required", scored: "scored", passingScore: "passingScore" },
+    prepare: ({ title, refTitle, source, required, scored, passingScore }) => ({
       title: (source === "library" ? refTitle : title) || "Knowledge check",
-      subtitle: `${required ? "Required" : "Optional"} · pass ${passingScore ?? 80}%`,
+      subtitle: `${required ? (scored ? "Required · scored" : "Required") : "Optional"} · pass ${passingScore ?? 80}%`,
     }),
   },
 });

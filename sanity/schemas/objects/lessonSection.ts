@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { removableObjectInput } from "../../components/removable-object-input";
 
 // A lesson is an ordered list of sections. Each section has three parts:
 //   content  — reading material and ungraded blocks
@@ -125,6 +126,7 @@ export const lessonSection = defineType({
       title: "Practice task (optional)",
       type: "taskSlot",
       group: "practice",
+      components: { input: removableObjectInput("task") },
     }),
 
     defineField({
@@ -132,6 +134,7 @@ export const lessonSection = defineType({
       title: "Knowledge check (optional)",
       type: "knowledgeCheck",
       group: "practice",
+      components: { input: removableObjectInput("knowledge check") },
     }),
   ],
 
@@ -142,17 +145,36 @@ export const lessonSection = defineType({
       content: "content",
       practiceRequired: "practice.required",
       practiceSource: "practice.source",
+      practiceTitle: "practice.inline.title",
+      practiceRef: "practice.ref",
       checkRequired: "check.required",
       checkSource: "check.source",
+      checkQuestions: "check.questions",
+      checkRef: "check.ref",
     },
-    prepare({ title, minutes, content, practiceRequired, practiceSource, checkRequired, checkSource }) {
+    prepare({
+      title,
+      minutes,
+      content,
+      practiceRequired,
+      practiceSource,
+      practiceTitle,
+      practiceRef,
+      checkRequired,
+      checkSource,
+      checkQuestions,
+      checkRef,
+    }) {
+      // Mirrors the site: an untouched (default-filled) task or check doesn't count.
+      const hasTask = practiceSource === "library" ? Boolean(practiceRef) : Boolean(practiceTitle);
+      const hasCheck = checkSource === "library" ? Boolean(checkRef) : Array.isArray(checkQuestions) && checkQuestions.length > 0;
       const blocks = Array.isArray(content) ? content.length : 0;
       const parts = [
         `${blocks} block${blocks === 1 ? "" : "s"}`,
         minutes ? `⏱ ${minutes} min` : null,
-        practiceSource ? `📝 Task${practiceRequired ? " (req)" : ""}` : null,
-        checkSource ? `🎯 Check${checkRequired ? " (req)" : ""}` : null,
-        !practiceSource && !checkSource ? "Completes when read" : null,
+        hasTask ? `📝 Task${practiceRequired ? " (req)" : ""}` : null,
+        hasCheck ? `🎯 Check${checkRequired ? " (req)" : ""}` : null,
+        !hasTask && !hasCheck ? "Completes when read" : null,
       ].filter(Boolean);
       return { title: title || "Untitled section", subtitle: parts.join(" · ") };
     },

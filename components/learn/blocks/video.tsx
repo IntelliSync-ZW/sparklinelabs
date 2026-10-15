@@ -35,7 +35,7 @@ function embedUrl(url: string, start: number): string | null {
       return id ? `https://www.loom.com/embed/${id}${start ? `?t=${start}` : ""}` : null;
     }
   } catch {
-    // Not a valid URL — fall through to the plain link.
+    // Not a valid URL - fall through to the plain link.
   }
   return null;
 }

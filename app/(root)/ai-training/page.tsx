@@ -17,7 +17,7 @@ import { freeCourseOverviewQuery } from "@/sanity/lib/queries";
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: "AI Training in Zimbabwe — ChatGPT, Gemini & Practical AI Skills",
+  title: "AI Training in Zimbabwe: ChatGPT, Gemini & Practical AI Skills",
   description:
     "Free, practical AI training for Zimbabweans. Learn to use ChatGPT and Gemini for research, writing, analysis and work. Verify AI answers, understand limitations and apply AI responsibly.",
   keywords: [
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     canonical: "https://www.sparklinelabs.co.zw/ai-training",
   },
   openGraph: {
-    title: "AI Training in Zimbabwe — Practical Skills for Work and Business",
+    title: "AI Training in Zimbabwe: Practical Skills for Work and Business",
     description:
       "Free, practical AI training for Zimbabweans. Learn ChatGPT, Gemini, fact-checking and responsible AI use. Self-paced. Certificate available.",
     url: "https://www.sparklinelabs.co.zw/ai-training",
@@ -118,7 +118,7 @@ export default async function AiTrainingPage() {
       <FaqSection
         faqs={aiTrainingFaqs}
         heading="Common questions about the AI course"
-        subheading="Straightforward answers — no marketing copy."
+        subheading="Straightforward answers. No marketing copy."
       />
 
       <AiTrainingCta courseHref={courseHref} />

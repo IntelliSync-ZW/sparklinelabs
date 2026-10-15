@@ -3,7 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { lessonAnswerKeysQuery } from "@/lib/learning-queries/player";
-import { gradeCheck, gradeTask, type CheckKey, type TaskKey } from "./grading";
+import { gradeCheck, gradeEndAssessment, gradeTask, type CheckKey, type EndKey, type TaskKey } from "./grading";
 import {
   recordCheckAttempt,
   recordLessonTime,
@@ -11,7 +11,8 @@ import {
   recordTaskAttempt,
   type SectionCompletionResult,
 } from "./progress";
-import { PROJECT_KEY, type GradeResult } from "./results";
+import { END_KEY, type GradeResult } from "./results";
+import { issueCertificate } from "./certificates";
 import type { PortableTextValue } from "@/components/learn/blocks/types";
 
 /**
@@ -42,7 +43,7 @@ type KeyedTask = { required?: boolean; taskId?: string | null; task?: (TaskKey &
 type KeyedCheck = { required?: boolean; assessmentId?: string | null } & CheckKey;
 type AnswerKeys = {
   sections?: { _key: string; practice?: KeyedTask | null; check?: KeyedCheck | null }[] | null;
-  project?: KeyedTask | null;
+  endAssessment?: EndKey | null;
 } | null;
 
 // Never cached: answers must match what the author last published.
@@ -53,11 +54,12 @@ const failure = (reason: Extract<GradeResult, { ok: false }>["reason"], message?
 
 function failureFrom(reason: string): GradeResult {
   if (reason === "locked") return failure("locked", "Finish the previous lesson first.");
+  if (reason === "gated") return failure("locked", "Finish every section of this lesson first.");
   if (reason === "unavailable") return failure("unavailable", "We couldn't save that just now. Please try again.");
   return failure("unknown");
 }
 
-/** Grade a task attempt on the server. `sectionKey` is a section's key, or PROJECT_KEY for the lesson project. */
+/** Grade a section's practice task on the server. */
 export async function submitTaskAction(input: {
   lessonId: string;
   sectionKey: string;
@@ -69,8 +71,7 @@ export async function submitTaskAction(input: {
 
   const keys = await loadKeys(input.lessonId);
   if (!keys) return failure("unknown");
-  const slot =
-    input.sectionKey === PROJECT_KEY ? keys.project : keys.sections?.find((s) => s._key === input.sectionKey)?.practice;
+  const slot = keys.sections?.find((s) => s._key === input.sectionKey)?.practice;
   const task = slot?.task;
   if (!slot || !task) return failure("unknown");
 
@@ -143,4 +144,56 @@ export async function submitCheckAction(input: {
     lessonCompleted: saved.lessonCompleted,
     progressPercent: saved.progressPercent,
   };
+}
+
+/**
+ * Grade the end-of-lesson assessment on the server. It is the scored part of the
+ * lesson: passing it completes the lesson, and its best score counts towards
+ * the certificate.
+ */
+export async function submitEndAssessmentAction(input: { lessonId: string; answers: unknown }): Promise<GradeResult> {
+  const { userId } = await auth();
+  if (!userId) return failure("unauthenticated", "Sign in to submit your answers.");
+  if (!input?.lessonId) return failure("unknown");
+
+  const keys = await loadKeys(input.lessonId);
+  const assessment = keys?.endAssessment;
+  if (!assessment?.items?.length) return failure("unknown");
+
+  const outcome = gradeEndAssessment(assessment, input.answers);
+  if (outcome.kind === "invalid") return failure("invalid", outcome.message);
+
+  const saved = await recordCheckAttempt({
+    userId,
+    lessonId: input.lessonId,
+    sectionKey: END_KEY,
+    assessmentId: `${input.lessonId}:end`,
+    outcome,
+  });
+  if (!saved.ok) return failureFrom(saved.reason);
+
+  return {
+    ok: true,
+    passed: outcome.passed,
+    score: outcome.score,
+    attempt: saved.attempt,
+    feedback: outcome.feedback,
+    message: outcome.message,
+    sectionCompleted: saved.sectionCompleted,
+    completedSectionKeys: saved.completedSectionKeys,
+    lessonCompleted: saved.lessonCompleted,
+    progressPercent: saved.progressPercent,
+  };
+}
+
+/** Issue the signed-in learner's certificate for a course, after re-checking eligibility. */
+export async function claimCertificateAction(input: {
+  courseId: string;
+  recipientName: string;
+}): Promise<{ ok: true; number: string } | { ok: false; message: string }> {
+  const { userId } = await auth();
+  if (!userId) return { ok: false, message: "Sign in to claim your certificate." };
+  if (!input?.courseId || typeof input.recipientName !== "string") return { ok: false, message: "Something went wrong." };
+  const result = await issueCertificate({ userId, courseId: input.courseId, recipientName: input.recipientName });
+  return result.ok ? { ok: true, number: result.certificate.number } : { ok: false, message: result.message };
 }

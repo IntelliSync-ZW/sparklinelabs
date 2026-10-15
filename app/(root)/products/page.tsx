@@ -65,7 +65,7 @@ const STATIC_LIVE: LiveProduct[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "Digital Products Engineered in Zimbabwe | Sparkline Labs",
+  title: "Digital Products Engineered in Zimbabwe",
   description:
     "Explore digital products engineered by Sparkline Labs for real African operating conditions, including Propertyzone, our Zimbabwe property platform.",
   keywords: [

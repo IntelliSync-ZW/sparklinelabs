@@ -41,19 +41,27 @@ export const taskSlot = defineType({
       type: "boolean",
       initialValue: true,
     }),
+    defineField({
+      name: "scored",
+      title: "Scored (counts towards the certificate)",
+      type: "boolean",
+      initialValue: false,
+      description:
+        "Only for required tasks. Self-checked types (written response, prompt practice, checklist) are never scored.",
+      hidden: ({ parent }) => !parent?.required,
+    }),
   ],
   validation: (Rule) =>
-    Rule.custom((value: { source?: string; inline?: unknown; ref?: unknown } | undefined) => {
-      if (!value) return true;
-      if (value.source === "library" && !value.ref) return "Pick a library task";
-      if (value.source !== "library" && !value.inline) return "Fill in the task";
-      return true;
-    }),
+    // Optional: an untouched slot means "no task". The inline task's own fields
+    // validate once the author starts filling it in.
+    Rule.custom((value: { source?: string; ref?: unknown } | undefined) =>
+      value?.source === "library" && !value.ref ? "Pick a library task, or switch back to writing one here" : true
+    ),
   preview: {
-    select: { inlineTitle: "inline.title", refTitle: "ref.title", required: "required", source: "source" },
-    prepare: ({ inlineTitle, refTitle, required, source }) => ({
+    select: { inlineTitle: "inline.title", refTitle: "ref.title", required: "required", scored: "scored", source: "source" },
+    prepare: ({ inlineTitle, refTitle, required, scored, source }) => ({
       title: (source === "library" ? refTitle : inlineTitle) || "Untitled task",
-      subtitle: `${required ? "Required" : "Optional"} · ${source === "library" ? "Library" : "Inline"}`,
+      subtitle: `${required ? (scored ? "Required · scored" : "Required") : "Optional"} · ${source === "library" ? "Library" : "Inline"}`,
     }),
   },
 });

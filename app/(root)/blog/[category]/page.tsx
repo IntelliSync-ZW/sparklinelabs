@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!category) return { title: "Blog" };
 
   return {
-    title: `${category.title} Articles | Sparkline Labs`,
+    title: `${category.title} Articles`,
     description:
       category.description ??
       `Read the latest engineering playbooks and insights on ${category.title} from Sparkline Labs.`,
@@ -90,7 +90,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
     if (postData?.slug) {
       const targetCategory = postData.category ?? "uncategorised";
-      redirect(`/blog/${targetCategory}/${postData.slug}`, RedirectType.replace);
+      redirect(
+        `/blog/${targetCategory}/${postData.slug}`,
+        RedirectType.replace,
+      );
     }
 
     notFound();

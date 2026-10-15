@@ -38,7 +38,7 @@ export function WhyDifferent() {
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
               Most AI courses teach you to click buttons. This course teaches you to
-              think — and then verify what the AI is telling you.
+              think, and then verify what the AI is telling you.
             </p>
           </div>
 

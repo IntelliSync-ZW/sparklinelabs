@@ -10,6 +10,10 @@ import { CTA } from "@/components/cta";
 import { LatestWork, LatestWorkSkeleton } from "@/components/latest-work";
 import { LatestPosts, LatestPostsSkeleton } from "@/components/latest-posts";
 import { FaqSection } from "@/components/faq";
+import {
+  AiTrainingHome,
+  AiTrainingHomeSkeleton,
+} from "@/components/ai-training-home";
 import { homepageFaqs } from "@/lib/constants";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -44,64 +48,70 @@ const professionalServiceSchema = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "@id": "https://www.sparklinelabs.co.zw/#professionalservice",
-  "name": "Sparkline Labs",
-  "url": "https://www.sparklinelabs.co.zw",
-  "image": "https://www.sparklinelabs.co.zw/og-image.png",
-  "description": "We engineer digital systems for Zimbabwean and African businesses - from operational workflows and integrations to custom platforms, automation and internal tools.",
-  "priceRange": "$$",
-  "currenciesAccepted": "USD, ZWL",
-  "address": {
+  name: "Sparkline Labs",
+  url: "https://www.sparklinelabs.co.zw",
+  image: "https://www.sparklinelabs.co.zw/og-image.png",
+  description:
+    "We engineer digital systems for Zimbabwean and African businesses - from operational workflows and integrations to custom platforms, automation and internal tools.",
+  priceRange: "$$",
+  currenciesAccepted: "USD, ZWL",
+  address: {
     "@type": "PostalAddress",
-    "addressLocality": "Harare",
-    "addressRegion": "Harare Province",
-    "addressCountry": "ZW",
+    addressLocality: "Harare",
+    addressRegion: "Harare Province",
+    addressCountry: "ZW",
   },
-  "areaServed": [
-    { "@type": "Country", "name": "Zimbabwe" },
-    { "@type": "Country", "name": "Nigeria" },
+  areaServed: [
+    { "@type": "Country", name: "Zimbabwe" },
+    { "@type": "Country", name: "Nigeria" },
   ],
-  "hasOfferCatalog": {
+  hasOfferCatalog: {
     "@type": "OfferCatalog",
-    "name": "Software Development Services",
-    "itemListElement": [
+    name: "Software Development Services",
+    itemListElement: [
       {
         "@type": "Offer",
-        "itemOffered": {
+        itemOffered: {
           "@type": "Service",
-          "name": "Digital Systems",
-          "description": "Customer-facing platforms, internal systems and business applications designed around the way your organisation actually operates.",
+          name: "Digital Systems",
+          description:
+            "Customer-facing platforms, internal systems and business applications designed around the way your organisation actually operates.",
         },
       },
       {
         "@type": "Offer",
-        "itemOffered": {
+        itemOffered: {
           "@type": "Service",
-          "name": "Integrations and automation",
-          "description": "Connect the systems you already use, remove repetitive handovers, and automate the parts of your operation that should not require someone copying information between WhatsApp, spreadsheets, email and business software.",
+          name: "Integrations and automation",
+          description:
+            "Connect the systems you already use, remove repetitive handovers, and automate the parts of your operation that should not require someone copying information between WhatsApp, spreadsheets, email and business software.",
         },
       },
       {
         "@type": "Offer",
-        "itemOffered": {
+        itemOffered: {
           "@type": "Service",
-          "name": "Solution architecture",
-          "description": "Not sure whether you need new software, an integration, automation or a change to the way your existing systems work? We map the problem, design the solution and give you a practical implementation plan before a build begins.",
+          name: "Solution architecture",
+          description:
+            "Not sure whether you need new software, an integration, automation or a change to the way your existing systems work? We map the problem, design the solution and give you a practical implementation plan before a build begins.",
         },
       },
       {
         "@type": "Offer",
-        "itemOffered": {
+        itemOffered: {
           "@type": "Service",
-          "name": "Search Visibility & AI Discovery",
-          "description": "Make your business easier to find, easier to understand, and easier to choose. We structure your digital presence so search engines and AI tools surface you accurately when it matters.",
+          name: "Search Visibility & AI Discovery",
+          description:
+            "Make your business easier to find, easier to understand, and easier to choose. We structure your digital presence so search engines and AI tools surface you accurately when it matters.",
         },
       },
       {
         "@type": "Offer",
-        "itemOffered": {
+        itemOffered: {
           "@type": "Service",
-          "name": "Technical Discovery",
-          "description": "A structured two-week engagement producing architecture docs, a build roadmap, and a flat-fee proposal. Outcome-tied pricing, zero retainers.",
+          name: "Technical Discovery",
+          description:
+            "A structured two-week engagement producing architecture docs, a build roadmap, and a flat-fee proposal. Outcome-tied pricing, zero retainers.",
         },
       },
     ],
@@ -132,7 +142,9 @@ export default function Home() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(professionalServiceSchema),
+        }}
       />
       <script
         type="application/ld+json"
@@ -148,53 +160,9 @@ export default function Home() {
       <WhySparkline />
 
       {/* AI Training */}
-      <section className="py-20 md:py-32 px-6 bg-secondary">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
-            <div className="md:col-span-7">
-              <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
-                AI Training
-              </p>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] mb-6 text-balance">
-                Free AI training for Zimbabwe.
-              </h2>
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
-                Learn to use ChatGPT and Gemini for research, writing and everyday work.
-                Verify what AI tells you. Understand the limits. Apply it properly.
-                Free, self-paced, built around how people actually work in Zimbabwe.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/ai-training"
-                  className="inline-flex items-center gap-2 text-base font-medium text-accent hover:underline"
-                >
-                  Explore AI Training
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="md:col-span-5">
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "Free course", detail: "Sparkline AI Foundations" },
-                  { label: "Self-paced", detail: "15 lessons" },
-                  { label: "Practical assessments", detail: "Earn each lesson" },
-                  { label: "Certificate available", detail: "US$5 optional" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="p-5 border border-border rounded-xl bg-background"
-                  >
-                    <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
-                    <p className="text-base font-medium">{item.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<AiTrainingHomeSkeleton />}>
+        <AiTrainingHome />
+      </Suspense>
 
       {/* Selected work */}
 

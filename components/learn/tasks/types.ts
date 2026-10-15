@@ -1,6 +1,6 @@
 import type { PortableTextValue } from "@/components/learn/blocks/types";
 
-/** A task as sent to the browser — never includes answers. */
+/** A task as sent to the browser - never includes answers. */
 export type PublicTask = {
   id?: string;
   title?: string;
@@ -32,4 +32,4 @@ export type PublicTask = {
   hints?: string[];
 };
 
-export type PublicTaskSlot = { required?: boolean; task?: PublicTask | null };
+export type PublicTaskSlot = { required?: boolean; scored?: boolean; task?: PublicTask | null };

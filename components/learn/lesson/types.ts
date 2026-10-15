@@ -1,6 +1,7 @@
 import type { ContentItem } from "@/components/learn/blocks/types";
 import type { PublicCheck } from "@/components/learn/assessments/knowledge-check";
 import type { PublicTaskSlot } from "@/components/learn/tasks/types";
+import type { PublicEndAssessment } from "@/components/learn/assessments/end-assessment";
 
 export type SectionContent = ContentItem[];
 
@@ -42,7 +43,8 @@ export type LessonViewData = {
   videoUrl?: string | null;
   image?: { url?: string | null; alt?: string | null; caption?: string | null } | null;
   sections: LessonSectionData[];
-  project?: PublicTaskSlot | null;
+  /** The scored assessment every lesson ends with. */
+  endAssessment?: PublicEndAssessment | null;
   resources?: LessonResource[] | null;
   sources?: LessonSource[] | null;
 };

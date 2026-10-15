@@ -53,7 +53,7 @@ export function Certificate() {
 
               <p className="text-base text-muted-foreground leading-relaxed">
                 The certificate confirms completion of the course requirements. It is
-                not a professional accreditation or certification — it is a record
+                not a professional accreditation or certification. It is a record
                 that you completed the work.
               </p>
             </div>

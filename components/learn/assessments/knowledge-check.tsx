@@ -23,6 +23,7 @@ export type PublicQuestion = {
 
 export type PublicCheck = {
   required?: boolean;
+  scored?: boolean;
   title?: string;
   passingScore?: number;
   feedbackOnPass?: string;
@@ -30,25 +31,26 @@ export type PublicCheck = {
   questions?: PublicQuestion[] | null;
 };
 
-type Value = string | string[] | MatchingState;
+export type QuestionValue = string | string[] | MatchingState;
+type Value = QuestionValue;
 
-function initialValue(q: PublicQuestion): Value {
+export function initialValue(q: PublicQuestion): Value {
   const type = q.question?.questionType;
   if (type === "multiple_choice") return [];
   if (type === "matching") return initialMatching(q.question?.matchKeys, q.question?.matchOptions);
   return "";
 }
 
-function isAnswered(q: PublicQuestion, v: Value): boolean {
+export function isAnswered(q: PublicQuestion, v: Value): boolean {
   if (q.question?.questionType === "matching") return (v as MatchingState).keys.length > 0;
   if (Array.isArray(v)) return v.length > 0;
   return typeof v === "string" && v.trim().length > 0;
 }
 
-const tone = (fb?: ItemFeedback) =>
+export const tone = (fb?: ItemFeedback) =>
   !fb ? "border-border" : fb.correct ? "border-emerald-500/60 bg-emerald-500/5" : "border-red-500/60 bg-red-500/5";
 
-function Verdict({ fb }: { fb?: ItemFeedback }) {
+export function Verdict({ fb }: { fb?: ItemFeedback }) {
   if (!fb) return null;
   return (
     <span
@@ -61,7 +63,7 @@ function Verdict({ fb }: { fb?: ItemFeedback }) {
   );
 }
 
-function QuestionInput({
+export function QuestionInput({
   q,
   value,
   onChange,
@@ -164,12 +166,15 @@ function QuestionInput({
 export function KnowledgeCheckView({
   check,
   required,
+  scored = false,
   initiallyPassed,
   signedIn,
   onSubmit,
 }: {
   check: PublicCheck;
   required: boolean;
+  /** Counts towards the certificate. Only ever true for required checks. */
+  scored?: boolean;
   initiallyPassed: boolean;
   signedIn: boolean;
   onSubmit: (answers: CheckAnswers) => Promise<GradeResult>;
@@ -223,6 +228,7 @@ export function KnowledgeCheckView({
           <span className={`rounded-full px-2.5 py-1 ${required ? "bg-violet-600 text-white" : "bg-secondary text-muted-foreground"}`}>
             {required ? "Required" : "Optional"}
           </span>
+          {scored && <span className="rounded-full border border-violet-500/40 px-2.5 py-1 text-violet-700 dark:text-violet-300">Scored</span>}
           <span className="text-muted-foreground">Pass mark {check.passingScore ?? 80}%</span>
           {initiallyPassed && !passed && (
             <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
@@ -285,7 +291,7 @@ export function KnowledgeCheckView({
             <p className="flex items-start gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm">
               <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
               <span>
-                <span className="font-semibold">{result.score}% — </span>
+                <span className="font-semibold">{result.score}%: </span>
                 {check.feedbackOnFail || result.message || "Review the questions marked wrong and try again."}
               </span>
             </p>

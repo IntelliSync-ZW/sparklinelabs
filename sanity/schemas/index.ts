@@ -24,6 +24,7 @@ import { lessonSection } from "./objects/lessonSection";
 import { inlineTask } from "./objects/inlineTask";
 import { taskSlot } from "./objects/taskSlot";
 import { knowledgeCheck } from "./objects/knowledgeCheck";
+import { assessmentTaskItem, lessonAssessment } from "./objects/lessonAssessment";
 import {
   comparisonBlock,
   stepsBlock,
@@ -50,6 +51,8 @@ export const schemaTypes = [
   inlineTask,
   taskSlot,
   knowledgeCheck,
+  assessmentTaskItem,
+  lessonAssessment,
   lessonSection,
   // Documents
   authorSchema,

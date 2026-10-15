@@ -98,7 +98,7 @@ export function CheckpointBlock({ value }: { value: CheckpointValue }) {
         {answered && (
           <>
             <span className={`text-sm font-semibold ${allCorrect ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
-              {allCorrect ? "Correct!" : "Not quite — have another look."}
+              {allCorrect ? "Correct!" : "Not quite. Have another look."}
             </span>
             {!allCorrect && (
               <button type="button" onClick={reset} className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground">

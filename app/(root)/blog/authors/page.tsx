@@ -4,7 +4,10 @@ import Link from "next/link";
 import { BookOpen } from "lucide-react";
 import { fetchAuthors } from "@/sanity/lib/fetch";
 import { allAuthorsQuery } from "@/sanity/lib/queries";
-import { PortableTextRenderer, type RichTextValue } from "@/components/portable-text";
+import {
+  PortableTextRenderer,
+  type RichTextValue,
+} from "@/components/portable-text";
 
 type Author = {
   _id: string;
@@ -31,7 +34,7 @@ type Author = {
 };
 
 export const metadata: Metadata = {
-  title: "Solutions Engineering Team Zimbabwe | Sparkline Labs",
+  title: "Solutions Engineering Team Zimbabwe",
   description:
     "Meet the engineers, founders, and technical writers sharing battle-tested playbooks on building software for Zimbabwe and African markets.",
   alternates: { canonical: "https://www.sparklinelabs.co.zw/blog/authors" },
@@ -69,15 +72,26 @@ export default async function AuthorsIndexPage() {
         "@id": `${baseUrl}/blog/authors#breadcrumb`,
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
-          { "@type": "ListItem", position: 2, name: "Blog", item: `${baseUrl}/blog` },
-          { "@type": "ListItem", position: 3, name: "Authors", item: `${baseUrl}/blog/authors` },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Blog",
+            item: `${baseUrl}/blog`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Authors",
+            item: `${baseUrl}/blog/authors`,
+          },
         ],
       },
       {
         "@type": "ItemList",
         "@id": `${baseUrl}/blog/authors#itemlist`,
         name: "Sparkline Labs Authors & Contributors",
-        description: "List of authors contributing technical playbooks and articles.",
+        description:
+          "List of authors contributing technical playbooks and articles.",
         itemListElement: authors.map((author, index) => ({
           "@type": "ListItem",
           position: index + 1,
@@ -86,7 +100,9 @@ export default async function AuthorsIndexPage() {
             "@id": `${baseUrl}/blog/authors/${author.slug.current}#person`,
             name: author.name,
             jobTitle: author.role,
-            worksFor: author.company ? { "@type": "Organization", name: author.company } : { "@id": `${baseUrl}/#organization` },
+            worksFor: author.company
+              ? { "@type": "Organization", name: author.company }
+              : { "@id": `${baseUrl}/#organization` },
             image: author.avatar?.url,
             url: `${baseUrl}/blog/authors/${author.slug.current}`,
             sameAs: [
@@ -118,7 +134,10 @@ export default async function AuthorsIndexPage() {
       <section className="pt-32 pb-12 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
-            <Link href="/blog" className="hover:text-foreground transition-colors">
+            <Link
+              href="/blog"
+              className="hover:text-foreground transition-colors"
+            >
               Blog
             </Link>
             <span>/</span>
@@ -132,7 +151,9 @@ export default async function AuthorsIndexPage() {
             The people behind the systems.
           </h1>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-            We work across business operations, product design and engineering. Our job is to understand the problem well enough to determine what should be built and then build it properly.
+            We work across business operations, product design and engineering.
+            Our job is to understand the problem well enough to determine what
+            should be built and then build it properly.
           </p>
         </div>
       </section>
@@ -142,7 +163,9 @@ export default async function AuthorsIndexPage() {
         <div className="container mx-auto max-w-5xl">
           {authors.length === 0 ? (
             <div className="py-20 text-center border border-dashed border-border rounded-2xl">
-              <p className="text-muted-foreground text-lg">Author directory updating soon.</p>
+              <p className="text-muted-foreground text-lg">
+                Author directory updating soon.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -189,7 +212,9 @@ export default async function AuthorsIndexPage() {
                       {/* Bio preview */}
                       {author.bio && author.bio.length > 0 && (
                         <div className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">
-                          <PortableTextRenderer value={author.bio as RichTextValue} />
+                          <PortableTextRenderer
+                            value={author.bio as RichTextValue}
+                          />
                         </div>
                       )}
                     </div>
@@ -198,11 +223,14 @@ export default async function AuthorsIndexPage() {
                     <div className="pt-4 border-t border-border flex items-center justify-between text-xs text-muted-foreground mt-2">
                       <span className="flex items-center gap-1.5 font-medium">
                         <BookOpen className="h-3.5 w-3.5" />
-                        {author.postCount ?? 0} {author.postCount === 1 ? "article" : "articles"}
+                        {author.postCount ?? 0}{" "}
+                        {author.postCount === 1 ? "article" : "articles"}
                       </span>
                       <span className="inline-flex items-center gap-1 font-semibold text-foreground group-hover:text-accent transition-colors">
                         <span>Read articles</span>
-                        <span className="transition-transform group-hover:translate-x-1">→</span>
+                        <span className="transition-transform group-hover:translate-x-1">
+                          →
+                        </span>
                       </span>
                     </div>
                   </Link>

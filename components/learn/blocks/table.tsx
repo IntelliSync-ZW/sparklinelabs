@@ -16,7 +16,7 @@ function parse(value: TableValue): { body?: unknown } | null {
 /**
  * A structured table. The table's own stylesheet (`.st-theme-border`) draws the
  * rounded border, the cell borders and padding, and scrolls sideways on narrow
- * screens — so this wrapper adds spacing only. Adding a border or overflow here
+ * screens - so this wrapper adds spacing only. Adding a border or overflow here
  * doubles the frame and clips the table's own.
  */
 export function TableBlock({ value }: { value: TableValue }) {

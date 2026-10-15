@@ -20,6 +20,29 @@ export const TASK_TYPES = [
 export const AUTO_GRADED_TASK_TYPES = ["classification", "multiple_choice", "matching", "ordering", "source_verification"];
 
 type TaskParent = { taskType?: string } | undefined;
+
+/**
+ * An inline task the author never touched. Studio fills in defaults (type,
+ * points, pass mark) as soon as a section is created, so "has a value" does not
+ * mean "the author added a task". A task counts once it has a title or any content.
+ */
+export function isBlankTask(task: unknown): boolean {
+  if (!task || typeof task !== "object") return true;
+  const t = task as Record<string, unknown>;
+  const filled = (key: string) => {
+    const v = t[key];
+    return Array.isArray(v) ? v.length > 0 : typeof v === "string" ? v.trim().length > 0 : Boolean(v);
+  };
+  return ![
+    "title", "objective", "deliverable", "question", "starterPrompt", "context", "steps",
+    "classificationOptions", "classificationRows", "choices", "matchPairs", "orderingItems",
+    "claims", "checklistItems", "rubric", "hints", "modelAnswer",
+  ].some(filled);
+}
+
+/** Inline tasks that are still blank are skipped; library task documents are always checked. */
+const skipBlankInline = (ctx: { document?: unknown; parent?: unknown }) =>
+  (ctx.document as { _type?: string } | undefined)?._type !== "courseTask" && isBlankTask(ctx.parent);
 const isType = (...types: string[]) => ({ parent }: { parent?: TaskParent }) =>
   !types.includes(parent?.taskType ?? "");
 
@@ -42,7 +65,8 @@ export const taskFields = [
     name: "title",
     title: "Task title",
     type: "string",
-    validation: (Rule) => Rule.required(),
+    validation: (Rule) =>
+      Rule.custom((value, ctx) => (value || skipBlankInline(ctx) ? true : "Give the task a title")),
   }),
   defineField({
     name: "taskType",
@@ -124,7 +148,9 @@ export const taskFields = [
     hidden: isType("classification"),
     validation: (Rule) =>
       Rule.custom((value, ctx) =>
-        (ctx.parent as TaskParent)?.taskType === "classification" && (!Array.isArray(value) || value.length < 2)
+        !skipBlankInline(ctx) &&
+        (ctx.parent as TaskParent)?.taskType === "classification" &&
+        (!Array.isArray(value) || value.length < 2)
           ? "Add at least two categories"
           : true
       ),

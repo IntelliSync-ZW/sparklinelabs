@@ -12,6 +12,14 @@ import { learningSeoProjection } from "./fragments";
 // which shuffles them on the server before anything reaches the browser.
 // ---------------------------------------------------------------------------
 
+// A section's practice / check / the lesson project only count when the author
+// added something: Studio pre-fills defaults (source, required, task type), so
+// `defined(practice.source)` is true even for an untouched section.
+const taskInUse = (slot: string) =>
+  `((${slot}.source == "library" && defined(${slot}.ref)) || (!(${slot}.source == "library") && defined(${slot}.inline.title)))`;
+const checkInUse = (slot: string) =>
+  `((${slot}.source == "library" && defined(${slot}.ref)) || (!(${slot}.source == "library") && coalesce(count(${slot}.questions), 0) > 0))`;
+
 /** Task fields safe to send to the browser. */
 const publicTaskFields = `
   title,
@@ -45,6 +53,7 @@ const publicTaskFields = `
 
 const publicTaskSlot = `{
   required,
+  scored,
   "task": select(
     source == "library" => ref-> { "id": _id, ${publicTaskFields} },
     inline { ${publicTaskFields} }
@@ -67,6 +76,7 @@ const publicQuestion = `
 
 const publicCheck = `{
   required,
+  scored,
   feedbackOnPass,
   feedbackOnFail,
   ...select(
@@ -140,11 +150,26 @@ export const lessonPageQuery = `
       "sectionId": sectionId.current,
       estimatedMinutes,
       ${contentProjection},
-      "practice": select(defined(practice.source) => practice ${publicTaskSlot}),
-      "check": select(defined(check.source) => check ${publicCheck})
+      "practice": select(${taskInUse("practice")} => practice ${publicTaskSlot}),
+      "check": select(${checkInUse("check")} => check ${publicCheck})
     },
-    "project": select(defined(project.source) => project ${publicTaskSlot}),
-    "assessment": assessment-> { _id, title, passingScore },
+    "endAssessment": endAssessment {
+      title,
+      instructions,
+      passingScore,
+      "items": items[] {
+        _key,
+        _type,
+        points,
+        _type == "assessmentQuestionRef" => { ${publicQuestion} },
+        _type == "assessmentTaskItem" => {
+          "task": select(
+            source == "library" => ref-> { "id": _id, ${publicTaskFields} },
+            inline { ${publicTaskFields} }
+          )
+        }
+      }
+    },
     "resources": resources[]-> { _id, title, resourceType, description, url, "fileUrl": file.asset->url },
     "sources": sources[]-> { _id, title, publisher, url, sourceType, publishedDate },
     "module": module-> { _id, number, title, "slug": slug.current },
@@ -204,10 +229,10 @@ export const lessonProgressContextQuery = `
     "sectionKeys": body[]._key,
     "sections": body[] {
       _key,
-      "needsTask": defined(practice.source) && practice.required == true,
-      "needsCheck": defined(check.source) && check.required == true
+      "needsTask": ${taskInUse("practice")} && practice.required == true,
+      "needsCheck": ${checkInUse("check")} && check.required == true
     },
-    "projectRequired": defined(project.source) && project.required == true,
+    "hasEndAssessment": coalesce(count(endAssessment.items), 0) > 0,
     "hasFinalAssessment": defined(module->course->finalAssessment),
     "course": module->course-> {
       _id,
@@ -228,7 +253,7 @@ export const courseCurriculumQuery = `
 `;
 
 // ---------------------------------------------------------------------------
-// SERVER ONLY — answer keys for grading. Never pass the result to a client component.
+// SERVER ONLY - answer keys for grading. Never pass the result to a client component.
 // ---------------------------------------------------------------------------
 
 const answerKeyTaskFields = `
@@ -267,8 +292,8 @@ export const lessonAnswerKeysQuery = `
     "courseId": module->course._ref,
     "sections": body[] {
       _key,
-      "practice": select(defined(practice.source) => practice ${answerKeyTaskSlot}),
-      "check": select(defined(check.source) => check {
+      "practice": select(${taskInUse("practice")} => practice ${answerKeyTaskSlot}),
+      "check": select(${checkInUse("check")} => check {
         required,
         "assessmentId": select(source == "library" => ref._ref),
         ...select(
@@ -277,11 +302,61 @@ export const lessonAnswerKeysQuery = `
         )
       })
     },
-    "project": select(defined(project.source) => project ${answerKeyTaskSlot})
+    "endAssessment": endAssessment {
+      passingScore,
+      "items": items[] {
+        _key,
+        _type,
+        points,
+        _type == "assessmentQuestionRef" => { ${answerKeyQuestion} },
+        _type == "assessmentTaskItem" => {
+          "taskId": select(source == "library" => ref._ref),
+          "task": select(
+            source == "library" => ref-> { ${answerKeyTaskFields} },
+            inline { ${answerKeyTaskFields} }
+          )
+        }
+      }
+    }
   }
 `;
 
-/** Published courses, modules and lessons — for the sitemap. */
+/**
+ * Every scored item in a course, with its points, for the certificate score:
+ * each lesson's end-of-lesson assessment, plus section tasks and checks that are
+ * both required and marked scored.
+ */
+export const courseScoringQuery = `
+  *[_type == "course" && _id == $courseId][0] {
+    "minimumScore": completionRules.minimumAssessmentScore,
+    "lessons": *[_type == "courseLesson" && module->course._ref == ^._id && status == "published"] {
+      _id,
+      "sections": body[] {
+        _key,
+        "task": select(${taskInUse("practice")} && practice.required == true && practice.scored == true => {
+          "points": select(practice.source == "library" => practice.ref->points, practice.inline.points),
+          "taskType": select(practice.source == "library" => practice.ref->taskType, practice.inline.taskType)
+        }),
+        "check": select(${checkInUse("check")} && check.required == true && check.scored == true => {
+          "points": select(check.source == "library" => check.ref->questions[].points, check.questions[].points)
+        })
+      },
+      "end": endAssessment {
+        "items": items[] {
+          _key,
+          _type,
+          points,
+          "taskType": select(
+            _type == "assessmentTaskItem" && source == "library" => ref->taskType,
+            _type == "assessmentTaskItem" => inline.taskType
+          )
+        }
+      }
+    }
+  }
+`;
+
+/** Published courses, modules and lessons - for the sitemap. */
 export const learningSitemapQuery = `
   *[_type == "course" && status == "published" && defined(slug.current)] {
     "slug": slug.current,
@@ -293,5 +368,18 @@ export const learningSitemapQuery = `
         _updatedAt
       }
     }
+  }
+`;
+
+/** What the server needs to decide on and issue a course certificate. */
+export const certificateCourseQuery = `
+  *[_type == "course" && _id == $courseId][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    status,
+    certificate { enabled, priceUsd, certificateTitle },
+    "minimumScore": completionRules.minimumAssessmentScore,
+    ${curriculumProjection}
   }
 `;

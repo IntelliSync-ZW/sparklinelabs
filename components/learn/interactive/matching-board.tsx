@@ -39,7 +39,7 @@ export function MatchingBoard({
   return (
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground">
-        Reorder <strong className="text-foreground">both</strong> columns — drag a card, or use its arrows — until each
+        Reorder <strong className="text-foreground">both</strong> columns (drag a card, or use its arrows) until each
         row pairs the right key with its option.
       </p>
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-x-2 gap-y-2 sm:gap-x-4">

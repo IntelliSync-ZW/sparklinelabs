@@ -22,7 +22,7 @@ const statusClass: Record<string, string> = {
 
 /**
  * One draggable cell in a reorderable column. Drag it onto another cell in the
- * same column to move it there, or use the arrow buttons — which also work with
+ * same column to move it there, or use the arrow buttons - which also work with
  * a keyboard or a touch screen, where HTML5 drag and drop does not.
  */
 export function ReorderCell({
@@ -69,7 +69,7 @@ export function ReorderCell({
           const from = JSON.parse(e.dataTransfer.getData("text/plain")) as { column: string; index: number };
           if (from.column === column) onMove(from.index, index);
         } catch {
-          // Not one of ours (e.g. a file dragged in) — ignore.
+          // Not one of ours (e.g. a file dragged in) - ignore.
         }
       }}
       className={`flex h-full min-w-0 items-stretch gap-1 rounded-lg border p-1.5 transition-colors ${
@@ -104,7 +104,7 @@ export function ReorderCell({
   );
 }
 
-/** A single reorderable list — used by the ordering task. */
+/** A single reorderable list - used by the ordering task. */
 export function ReorderList({
   items,
   onChange,

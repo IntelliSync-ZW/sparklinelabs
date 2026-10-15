@@ -3,10 +3,18 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { fetchLearning } from "@/sanity/lib/fetch";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { courseBySlugQuery } from "@/sanity/lib/queries";
-import { firstIncompleteLesson, flattenCurriculum, lessonHref, lessonStatus, type CurriculumModule } from "@/lib/learning/curriculum";
+import {
+  firstIncompleteLesson,
+  flattenCurriculum,
+  lessonHref,
+  lessonStatus,
+  type CurriculumModule,
+} from "@/lib/learning/curriculum";
 import { getCourseProgress } from "@/lib/learning/progress";
+import { getCertificateStatus } from "@/lib/learning/certificates";
+import { ClaimCertificate } from "@/components/learn/certificate/claim-certificate";
 import {
   BookOpen,
   Clock,
@@ -55,7 +63,11 @@ type Course = {
   durationMinutes?: number;
   outcomes?: string[];
   heroImage?: { url: string; alt?: string };
-  certificate?: { enabled: boolean; priceUsd?: number; certificateTitle?: string };
+  certificate?: {
+    enabled: boolean;
+    priceUsd?: number;
+    certificateTitle?: string;
+  };
   completionRules?: {
     minimumAssessmentScore?: number;
     allLessonsRequired?: boolean;
@@ -81,9 +93,8 @@ export async function generateMetadata({
   const course = await fetchLearning<Course>(courseBySlugQuery, { slug });
   if (!course) return {};
   return {
-    title: course.seo?.title ?? `${course.title} — AI Training | Sparkline Labs`,
-    description:
-      course.seo?.description ?? course.shortDescription,
+    title: course.seo?.title ?? `${course.title} | AI Training`,
+    description: course.seo?.description ?? course.shortDescription,
     alternates: {
       canonical: `https://www.sparklinelabs.co.zw/ai-training/${slug}`,
     },
@@ -125,7 +136,11 @@ export default async function CourseDetailPage({
   const { "course-slug": slug } = await params;
   const course = await fetchLearning<Course>(courseBySlugQuery, { slug });
   // Unpublished courses are only viewable while developing.
-  if (!course || (process.env.NODE_ENV !== "development" && course.status !== "published")) notFound();
+  if (
+    !course ||
+    (process.env.NODE_ENV !== "development" && course.status !== "published")
+  )
+    notFound();
 
   const firstModule = course.modules?.[0];
   const firstLesson = firstModule?.lessons?.[0];
@@ -149,9 +164,29 @@ export default async function CourseDetailPage({
   const nextLesson = firstIncompleteLesson(flat, completed);
   const hasStarted = Boolean(userId) && completedCount > 0;
   const allDone = flat.length > 0 && completedCount === flat.length;
-  const ctaHref = hasStarted && nextLesson ? lessonHref(slug, nextLesson) : startHref;
-  const ctaLabel = allDone ? "Review course" : hasStarted ? "Continue learning" : "Start Course";
-  const percent = flat.length ? Math.round((completedCount / flat.length) * 100) : 0;
+  const ctaHref =
+    hasStarted && nextLesson ? lessonHref(slug, nextLesson) : startHref;
+  const ctaLabel = allDone
+    ? "Review course"
+    : hasStarted
+      ? "Continue learning"
+      : "Start Course";
+  const percent = flat.length
+    ? Math.round((completedCount / flat.length) * 100)
+    : 0;
+
+  // Certificate: every lesson complete and the scored work at or above the course minimum.
+  const minimumScore = course.completionRules?.minimumAssessmentScore ?? 80;
+  const certificateScore = userId ? progress.finalScore : null;
+  const certificate = await getCertificateStatus(userId, course._id).catch(
+    () => null,
+  );
+  // Pre-fill the claim form with the name on the learner's account.
+  const user = certificate?.state === "eligible" ? await currentUser() : null;
+  const defaultName =
+    user?.fullName ??
+    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ??
+    "";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -172,7 +207,7 @@ export default async function CourseDetailPage({
       (mod.lessons ?? []).map((lesson) => ({
         "@type": "CourseInstance",
         name: lesson.title,
-      }))
+      })),
     ),
   };
 
@@ -190,7 +225,10 @@ export default async function CourseDetailPage({
             <div>
               {/* Breadcrumb */}
               <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-                <Link href="/ai-training" className="hover:text-foreground transition-colors">
+                <Link
+                  href="/ai-training"
+                  className="hover:text-foreground transition-colors"
+                >
                   AI Training
                 </Link>
                 <ChevronRight className="size-3.5" />
@@ -206,7 +244,11 @@ export default async function CourseDetailPage({
                       : "bg-muted text-muted-foreground"
                   }`}
                 >
-                  {isFree ? <BookOpen className="size-3" /> : <Lock className="size-3" />}
+                  {isFree ? (
+                    <BookOpen className="size-3" />
+                  ) : (
+                    <Lock className="size-3" />
+                  )}
                   {isFree ? "Free" : "Paid"}
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-secondary text-muted-foreground">
@@ -252,7 +294,9 @@ export default async function CourseDetailPage({
                     <span>
                       {completedCount} of {flat.length} lessons
                     </span>
-                    <span className="font-medium tabular-nums text-foreground">{percent}%</span>
+                    <span className="font-medium tabular-nums text-foreground">
+                      {percent}%
+                    </span>
                   </div>
                   <div
                     className="h-2 overflow-hidden rounded-full bg-secondary"
@@ -262,8 +306,26 @@ export default async function CourseDetailPage({
                     aria-valuemax={100}
                     aria-label="Course progress"
                   >
-                    <div className="h-full rounded-full bg-accent" style={{ width: `${percent}%` }} />
+                    <div
+                      className="h-full rounded-full bg-accent"
+                      style={{ width: `${percent}%` }}
+                    />
                   </div>
+                  {certificateScore !== null && (
+                    <p className="mt-3 text-sm text-muted-foreground">
+                      Certificate score{" "}
+                      <span
+                        className={`font-semibold tabular-nums ${
+                          certificateScore >= minimumScore
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-foreground"
+                        }`}
+                      >
+                        {certificateScore}%
+                      </span>{" "}
+                      · {minimumScore}% needed
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -293,12 +355,16 @@ export default async function CourseDetailPage({
       {course.outcomes && course.outcomes.length > 0 && (
         <section className="py-20 px-6 bg-secondary">
           <div className="container mx-auto">
-            <h2 className="text-3xl font-semibold tracking-tight mb-10">What you will learn</h2>
+            <h2 className="text-3xl font-semibold tracking-tight mb-10">
+              What you will learn
+            </h2>
             <ul className="grid sm:grid-cols-2 gap-4">
               {course.outcomes.map((outcome, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <CheckCircle className="size-5 text-accent shrink-0 mt-0.5" />
-                  <span className="text-base text-muted-foreground leading-relaxed">{outcome}</span>
+                  <span className="text-base text-muted-foreground leading-relaxed">
+                    {outcome}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -309,10 +375,13 @@ export default async function CourseDetailPage({
       {/* ── Course Modules & Lessons ──────────────────────────────────────── */}
       <section className="py-20 px-6">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-semibold tracking-tight mb-4">Course Modules</h2>
+          <h2 className="text-3xl font-semibold tracking-tight mb-4">
+            Course Modules
+          </h2>
           <p className="text-muted-foreground mb-12 text-lg">
-            {course.modules?.length ?? 0} module{(course.modules?.length ?? 0) !== 1 ? "s" : ""} ·{" "}
-            {lessonCount} lesson{lessonCount !== 1 ? "s" : ""}
+            {course.modules?.length ?? 0} module
+            {(course.modules?.length ?? 0) !== 1 ? "s" : ""} · {lessonCount}{" "}
+            lesson{lessonCount !== 1 ? "s" : ""}
           </p>
 
           <div className="space-y-4">
@@ -321,7 +390,7 @@ export default async function CourseDetailPage({
                 key={mod._id}
                 className="border border-border rounded-2xl overflow-hidden"
               >
-                {/* Module header — links to the module/lesson player */}
+                {/* Module header - links to the module/lesson player */}
                 <Link
                   href={`/ai-training/${slug}/${mod.slug}`}
                   className="flex items-center justify-between p-6 bg-secondary hover:bg-secondary/80 transition-colors group"
@@ -335,7 +404,8 @@ export default async function CourseDetailPage({
                         {mod.title}
                       </p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {mod.lessons?.length ?? 0} lesson{(mod.lessons?.length ?? 0) !== 1 ? "s" : ""}
+                        {mod.lessons?.length ?? 0} lesson
+                        {(mod.lessons?.length ?? 0) !== 1 ? "s" : ""}
                       </p>
                     </div>
                   </div>
@@ -346,16 +416,30 @@ export default async function CourseDetailPage({
                 {mod.lessons && mod.lessons.length > 0 && (
                   <ul className="divide-y divide-border">
                     {mod.lessons.map((lesson, li) => {
-                      const dur = formatDuration(lesson.duration?.value, lesson.duration?.unit);
+                      const dur = formatDuration(
+                        lesson.duration?.value,
+                        lesson.duration?.unit,
+                      );
                       const flatLesson = flat.find((f) => f._id === lesson._id);
-                      const status = flatLesson && userId ? lessonStatus(flat, flatLesson.index, completed) : "available";
-                      const isLocked = (lesson.accessLevel === "paid" && !isFree) || status === "locked";
+                      const status =
+                        flatLesson && userId
+                          ? lessonStatus(flat, flatLesson.index, completed)
+                          : "available";
+                      const isLocked =
+                        (lesson.accessLevel === "paid" && !isFree) ||
+                        status === "locked";
                       return (
                         <li key={lesson._id}>
                           <Link
-                            href={isLocked ? "#" : `/ai-training/${slug}/${mod.slug}/${lesson.slug}`}
+                            href={
+                              isLocked
+                                ? "#"
+                                : `/ai-training/${slug}/${mod.slug}/${lesson.slug}`
+                            }
                             className={`flex items-center gap-4 px-6 py-4 hover:bg-muted/50 transition-colors ${
-                              isLocked ? "opacity-60 cursor-not-allowed pointer-events-none" : ""
+                              isLocked
+                                ? "opacity-60 cursor-not-allowed pointer-events-none"
+                                : ""
                             }`}
                             tabIndex={isLocked ? -1 : undefined}
                             aria-disabled={isLocked}
@@ -367,11 +451,24 @@ export default async function CourseDetailPage({
                                   : "border-border text-muted-foreground"
                               }`}
                             >
-                              {status === "completed" ? <CheckCircle2 className="size-4" aria-label="Completed" /> : li + 1}
+                              {status === "completed" ? (
+                                <CheckCircle2
+                                  className="size-4"
+                                  aria-label="Completed"
+                                />
+                              ) : (
+                                li + 1
+                              )}
                             </span>
-                            <span className="flex-1 text-sm leading-snug">{lesson.title}</span>
+                            <span className="flex-1 text-sm leading-snug">
+                              {lesson.title}
+                            </span>
                             <span className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
-                              {dur && <><Clock className="size-3.5" /> {dur}</>}
+                              {dur && (
+                                <>
+                                  <Clock className="size-3.5" /> {dur}
+                                </>
+                              )}
                               {isLocked && <Lock className="size-3.5 ml-1" />}
                             </span>
                           </Link>
@@ -394,21 +491,73 @@ export default async function CourseDetailPage({
               <Award className="size-8 text-accent" />
             </div>
             <h2 className="text-3xl font-semibold tracking-tight mb-4">
-              {course.certificate.certificateTitle ?? "Certificate of Completion"}
+              {course.certificate.certificateTitle ??
+                "Certificate of Completion"}
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              Complete all modules and assessments to earn your verifiable certificate.
-              {course.certificate.priceUsd && course.certificate.priceUsd > 0
-                ? ` Certificate issuance costs $${course.certificate.priceUsd} USD.`
-                : " Free to download."}
-            </p>
-            {ctaHref && (
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                <Link href={ctaHref}>
-                  <Users className="mr-2 size-5" /> {hasStarted ? "Continue learning" : "Start learning"}
-                </Link>
-              </Button>
+            {certificate?.state === "issued" ? (
+              <>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+                  Your certificate was issued to{" "}
+                  {certificate.certificate.recipientName}. Share the link or
+                  save it as a PDF.
+                </p>
+                <Button
+                  size="lg"
+                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                  asChild
+                >
+                  <Link
+                    href={`/ai-training/certificates/${certificate.certificate.number}`}
+                  >
+                    <Award className="mr-2 size-5" /> View your certificate
+                  </Link>
+                </Button>
+              </>
+            ) : certificate?.state === "eligible" ? (
+              <>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+                  You&apos;ve completed every lesson
+                  {certificate.score !== null
+                    ? ` with a score of ${certificate.score}%`
+                    : ""}
+                  . Claim your verifiable certificate.
+                </p>
+                <ClaimCertificate
+                  courseId={course._id}
+                  defaultName={defaultName}
+                />
+              </>
+            ) : (
+              <>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+                  {certificate?.state === "score_too_low"
+                    ? `You've finished every lesson. Your certificate score is ${certificate.score}%; retake the scored assessments to reach ${certificate.minimum}%.`
+                    : `Complete every lesson and score at least ${minimumScore}% across the scored assessments to earn your verifiable certificate.`}
+                </p>
+                {ctaHref && (
+                  <Button
+                    size="lg"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90"
+                    asChild
+                  >
+                    <Link href={ctaHref}>
+                      <Users className="mr-2 size-5" />{" "}
+                      {hasStarted ? "Continue learning" : "Start learning"}
+                    </Link>
+                  </Button>
+                )}
+              </>
             )}
+            <p className="mt-6 text-sm text-muted-foreground">
+              Anyone can check a certificate at{" "}
+              <Link
+                href="/ai-training/certificates"
+                className="underline underline-offset-4 hover:text-foreground"
+              >
+                sparklinelabs.co.zw/ai-training/certificates
+              </Link>
+              .
+            </p>
           </div>
         </section>
       )}

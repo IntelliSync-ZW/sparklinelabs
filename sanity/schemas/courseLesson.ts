@@ -171,17 +171,15 @@ export const courseLesson = defineType({
     }),
 
     defineField({
-      name: "project",
-      title: "Lesson project (optional)",
-      type: "taskSlot",
-      description: "A capstone task shown after the last section.",
-    }),
-
-    defineField({
-      name: "assessment",
-      title: "End-of-lesson quiz (optional)",
-      type: "reference",
-      to: [{ type: "courseAssessment" }],
+      name: "endAssessment",
+      title: "End-of-lesson assessment",
+      type: "lessonAssessment",
+      description:
+        "Required. Scored, and counts towards the certificate. The lesson completes when its sections are done and this is passed.",
+      validation: (Rule) =>
+        Rule.custom((value: { items?: unknown[] } | undefined) =>
+          value?.items?.length ? true : "Every lesson needs an end-of-lesson assessment with at least one question or task"
+        ),
     }),
 
     defineField({

@@ -32,7 +32,7 @@ export function WhoIsThisFor() {
           <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
             Who It Is For
           </p>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance text-center max-w-2xl mx-auto">
             Built for anyone who works with information.
           </h2>
         </div>
@@ -46,7 +46,9 @@ export function WhoIsThisFor() {
               <div className="w-12 h-12 rounded-full bg-accent text-background flex items-center justify-center mb-5 transition-transform group-hover:scale-110">
                 <audience.icon className="size-5" />
               </div>
-              <h3 className="text-lg md:text-xl font-medium mb-2">{audience.title}</h3>
+              <h3 className="text-lg md:text-xl font-medium mb-2">
+                {audience.title}
+              </h3>
               <p className="text-base text-muted-foreground leading-relaxed">
                 {audience.description}
               </p>

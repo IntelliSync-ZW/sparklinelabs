@@ -9,7 +9,7 @@ export function AiTrainingHero({ courseHref }: { courseHref?: string }) {
       <div className="container mx-auto">
         <div className="text-center">
           <p className="text-base uppercase tracking-widest opacity-70 font-medium mb-6">
-            AI Training — Zimbabwe
+            AI Training · Zimbabwe
           </p>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl max-w-5xl mx-auto font-semibold tracking-tight leading-[1.05] text-balance text-center mb-8">
@@ -35,7 +35,7 @@ export function AiTrainingHero({ courseHref }: { courseHref?: string }) {
               </Button>
             ) : (
               <Button size="lg" className="text-base px-8 py-6" disabled>
-                Free AI Course — Coming Soon
+                Free AI Course: Coming Soon
               </Button>
             )}
             <Button

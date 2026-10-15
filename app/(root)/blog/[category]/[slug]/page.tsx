@@ -110,7 +110,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ];
 
   return {
-    title: post.seo?.title ?? `${post.title} | Sparkline Labs`,
+    title: post.seo?.title ?? `${post.title}`,
     description: post.seo?.description ?? post.excerpt,
     alternates: { canonical: canonicalUrl },
     openGraph: {

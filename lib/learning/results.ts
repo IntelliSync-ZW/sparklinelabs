@@ -20,6 +20,17 @@ export type MatchRows = { keyId: string; option: string }[];
 /** Answers to a knowledge check, keyed by the question's `_key`. */
 export type CheckAnswers = Record<string, string | string[] | MatchRows>;
 
+/** Answers to an end-of-lesson assessment, keyed by item `_key`: a question answer or a task submission. */
+export type EndAnswers = Record<string, CheckAnswers[string] | TaskSubmission>;
+
+/**
+ * Task types the server marks against an answer key. Only these can be scored;
+ * written, prompt-practice and checklist tasks are self-checked.
+ */
+export const AUTO_GRADED_TASK_TYPES = ["classification", "multiple_choice", "matching", "ordering", "source_verification"];
+
+export const isScoredTaskType = (taskType?: string | null) => AUTO_GRADED_TASK_TYPES.includes(taskType ?? "");
+
 /** Per-item verdict. `expected` and `explanation` are only sent once the learner has passed. */
 export type ItemFeedback = {
   id: string;
@@ -61,7 +72,9 @@ export type PassedGates = {
   tasks: string[];
   /** Section keys whose knowledge check is passed. */
   checks: string[];
-  projectPassed: boolean;
+  /** The end-of-lesson assessment has been passed. */
+  endPassed: boolean;
 };
 
-export const PROJECT_KEY = "__project";
+/** Stands in for a section key on attempts at the end-of-lesson assessment. */
+export const END_KEY = "__lesson_end";

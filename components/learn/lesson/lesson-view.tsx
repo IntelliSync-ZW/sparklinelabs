@@ -22,9 +22,16 @@ import {
 } from "lucide-react";
 import { renderBlocks } from "@/components/learn/blocks/registry";
 import { InlineSignIn } from "@/components/ai-training/inline-sign-in";
-import { completeSectionAction, reportLessonTimeAction, submitCheckAction, submitTaskAction } from "@/lib/learning/actions";
+import {
+  completeSectionAction,
+  reportLessonTimeAction,
+  submitCheckAction,
+  submitEndAssessmentAction,
+  submitTaskAction,
+} from "@/lib/learning/actions";
 import { track } from "@/lib/analytics";
-import { PROJECT_KEY, type CheckAnswers, type GradeResult, type PassedGates, type TaskSubmission } from "@/lib/learning/results";
+import { type CheckAnswers, type EndAnswers, type GradeResult, type PassedGates, type TaskSubmission } from "@/lib/learning/results";
+import { EndAssessmentView } from "@/components/learn/assessments/end-assessment";
 import { TaskView } from "@/components/learn/tasks/task-view";
 import { KnowledgeCheckView } from "@/components/learn/assessments/knowledge-check";
 import { formatLessonDuration } from "@/lib/learning/curriculum";
@@ -72,9 +79,9 @@ export function LessonView({
 
   const [passedTasks, setPassedTasks] = useState<Set<string>>(() => new Set(initialGates.tasks));
   const [passedChecks, setPassedChecks] = useState<Set<string>>(() => new Set(initialGates.checks));
-  const [projectPassed, setProjectPassed] = useState(initialGates.projectPassed);
+  const [endPassed, setEndPassed] = useState(initialGates.endPassed);
 
-  // Sections whose required task or check must be passed — reading to the end does not complete them.
+  // Sections whose required task or check must be passed - reading to the end does not complete them.
   const gatedKeys = useMemo(
     () =>
       new Set(
@@ -84,20 +91,21 @@ export function LessonView({
       ),
     [sections]
   );
-  const projectRequired = Boolean(lesson.project?.required && lesson.project.task);
+  // Every lesson ends with a scored assessment; it opens once all sections are done.
+  const hasEndAssessment = Boolean(lesson.endAssessment?.items?.length);
+  const sectionsDone = sections.length > 0 && sections.every((s) => completedKeys.has(s._key));
 
-  const lessonCompleted =
-    sections.length > 0 && sections.every((s) => completedKeys.has(s._key)) && (!projectRequired || projectPassed);
+  const lessonCompleted = sectionsDone && (!hasEndAssessment || endPassed);
 
   /** Fold the server's view of progress into local state after a graded attempt. */
-  const applyGrade = useCallback((result: GradeResult, gate: { kind: "task" | "check"; key: string }) => {
+  const applyGrade = useCallback((result: GradeResult, gate: { kind: "task" | "check" | "end"; key: string }) => {
     if (!result.ok) return;
     completedRef.current = new Set(result.completedSectionKeys);
     setCompletedKeys(completedRef.current);
     if (!result.passed) return;
-    track(gate.kind === "check" ? "check_passed" : "task_passed", { lesson_id: lesson._id, section: gate.key });
-    if (gate.kind === "check") setPassedChecks((p) => new Set(p).add(gate.key));
-    else if (gate.key === PROJECT_KEY) setProjectPassed(true);
+    track(`${gate.kind === "end" ? "assessment" : gate.kind}_passed`, { lesson_id: lesson._id, section: gate.key, score: result.score });
+    if (gate.kind === "end") setEndPassed(true);
+    else if (gate.kind === "check") setPassedChecks((p) => new Set(p).add(gate.key));
     else setPassedTasks((p) => new Set(p).add(gate.key));
   }, [lesson._id]);
 
@@ -114,6 +122,15 @@ export function LessonView({
     async (sectionKey: string, answers: CheckAnswers) => {
       const result = await submitCheckAction({ lessonId: lesson._id, sectionKey, answers });
       applyGrade(result, { kind: "check", key: sectionKey });
+      return result;
+    },
+    [lesson._id, applyGrade]
+  );
+
+  const handleEnd = useCallback(
+    async (answers: EndAnswers) => {
+      const result = await submitEndAssessmentAction({ lessonId: lesson._id, answers });
+      applyGrade(result, { kind: "end", key: "end" });
       return result;
     },
     [lesson._id, applyGrade]
@@ -185,7 +202,7 @@ export function LessonView({
     if (done === 0) return;
     const target = sections.find((s) => !initialCompletedKeys.includes(s._key));
     if (target) document.getElementById(target.sectionId ?? target._key)?.scrollIntoView({ block: "start" });
-    // Only on arrival — not every time progress changes.
+    // Only on arrival - not every time progress changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -256,8 +273,8 @@ export function LessonView({
   const nextBlockedReason = !isSignedIn
     ? "Sign in to continue"
     : !lessonCompleted
-      ? sections.every((s) => completedKeys.has(s._key))
-        ? "Complete the lesson project to continue"
+      ? sectionsDone
+        ? "Pass the end-of-lesson assessment to continue"
         : `Finish this lesson to continue (${completedCount}/${sections.length} sections)`
       : null;
 
@@ -349,6 +366,7 @@ export function LessonView({
                 <TaskView
                   task={section.practice.task}
                   required={Boolean(section.practice.required)}
+                  scored={Boolean(section.practice.required && section.practice.scored)}
                   initiallyPassed={passedTasks.has(section._key)}
                   signedIn={isSignedIn}
                   onSubmit={(submission) => handleTask(section._key, submission)}
@@ -358,6 +376,7 @@ export function LessonView({
                 <KnowledgeCheckView
                   check={section.check}
                   required={Boolean(section.check.required)}
+                  scored={Boolean(section.check.required && section.check.scored)}
                   initiallyPassed={passedChecks.has(section._key)}
                   signedIn={isSignedIn}
                   onSubmit={(answers) => handleCheck(section._key, answers)}
@@ -396,18 +415,15 @@ export function LessonView({
           )}
         </ol>
 
-        {/* ── Lesson project ──────────────────────────────────────────────── */}
-        {isSignedIn && lesson.project?.task && (
-          <section id="project" className="scroll-mt-24">
-            <TaskView
-              task={lesson.project.task}
-              required={projectRequired}
-              initiallyPassed={projectPassed}
-              signedIn={isSignedIn}
-              heading="Lesson project"
-              onSubmit={(submission) => handleTask(PROJECT_KEY, submission)}
-            />
-          </section>
+        {/* ── End-of-lesson assessment (scored) ───────────────────────────── */}
+        {isSignedIn && lesson.endAssessment && hasEndAssessment && (
+          <EndAssessmentView
+            assessment={lesson.endAssessment}
+            unlocked={sectionsDone}
+            initiallyPassed={endPassed}
+            signedIn={isSignedIn}
+            onSubmit={handleEnd}
+          />
         )}
 
         {/* ── Wrap-up ─────────────────────────────────────────────────────── */}
@@ -494,7 +510,7 @@ export function LessonView({
                   <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-foreground underline underline-offset-4 hover:text-accent">
                     {s.title} <ExternalLink className="size-3" />
                   </a>
-                  {s.publisher && <span> — {s.publisher}</span>}
+                  {s.publisher && <span>, {s.publisher}</span>}
                 </li>
               ))}
             </ol>
@@ -503,7 +519,7 @@ export function LessonView({
 
         {saveFailed && (
           <p role="status" className="mt-8 text-sm text-amber-600 dark:text-amber-400">
-            We couldn&apos;t save your progress just now. Keep reading — we&apos;ll try again as you scroll.
+            We couldn&apos;t save your progress just now. Keep reading and we&apos;ll try again as you scroll.
           </p>
         )}
       </article>

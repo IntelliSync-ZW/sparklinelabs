@@ -2,9 +2,9 @@ import "server-only";
 import { Temporal } from "temporal-polyfill/full";
 import { db } from "@/prisma/db";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { lessonProgressContextQuery } from "@/lib/learning-queries/player";
+import { courseScoringQuery, lessonProgressContextQuery } from "@/lib/learning-queries/player";
 import { flattenCurriculum, isLessonUnlocked, type CurriculumModule } from "./curriculum";
-import { PROJECT_KEY, type PassedGates, type ProgressUpdate } from "./results";
+import { END_KEY, isScoredTaskType, type PassedGates, type ProgressUpdate } from "./results";
 import type { CheckOutcome, TaskOutcome } from "./grading";
 
 // ---------------------------------------------------------------------------
@@ -16,18 +16,24 @@ import type { CheckOutcome, TaskOutcome } from "./grading";
 //    to its end (`recordSectionComplete`).
 //  - A section with a required task and/or check completes only when every
 //    required one has been passed (`recordTaskAttempt` / `recordCheckAttempt`).
-//  - A lesson completes when all sections do, plus its project if that is required.
+//  - A lesson completes when all sections do AND its end-of-lesson assessment is
+//    passed. The assessment opens only once every section is complete.
+//  - The certificate score uses the learner's best attempt at every scored item:
+//    end-of-lesson assessments, plus section tasks/checks that are required and
+//    marked scored (`updateCourseScore`).
 // ---------------------------------------------------------------------------
 
 export type CourseProgress = {
   /** Sanity IDs of lessons the learner has completed. */
   completedLessonIds: Set<string>;
   progressPercent: number;
-  /** True when the database could not be reached — callers should degrade, not crash. */
+  /** Certificate score (0-100) from scored work so far, or null before anything scored. */
+  finalScore: number | null;
+  /** True when the database could not be reached - callers should degrade, not crash. */
   offline: boolean;
 };
 
-const EMPTY_PROGRESS: CourseProgress = { completedLessonIds: new Set(), progressPercent: 0, offline: false };
+const EMPTY_PROGRESS: CourseProgress = { completedLessonIds: new Set(), progressPercent: 0, finalScore: null, offline: false };
 
 export async function getCourseProgress(userId: string | null, courseId: string): Promise<CourseProgress> {
   if (!userId) return EMPTY_PROGRESS;
@@ -42,6 +48,7 @@ export async function getCourseProgress(userId: string | null, courseId: string)
     return {
       completedLessonIds: new Set(rows.filter((r) => r.status === "COMPLETED").map((r) => r.sanityLessonId)),
       progressPercent: enrollment.progressPercent,
+      finalScore: enrollment.finalScore ?? null,
       offline: false,
     };
   } catch (error) {
@@ -56,7 +63,7 @@ export async function getLessonState(
   courseId: string,
   lessonId: string
 ): Promise<{ completedSectionKeys: string[]; gates: PassedGates }> {
-  const empty = { completedSectionKeys: [], gates: { tasks: [], checks: [], projectPassed: false } };
+  const empty = { completedSectionKeys: [], gates: { tasks: [], checks: [], endPassed: false } };
   if (!userId) return empty;
   try {
     const enrollment = await db.orm.public.Enrollment.where({
@@ -93,9 +100,9 @@ async function passedGates(lessonProgressId: string): Promise<PassedGates> {
   const taskKeys = new Set(tasks.filter((t) => t.passed && t.sanitySectionKey).map((t) => t.sanitySectionKey as string));
   const checkKeys = new Set(checks.filter((c) => c.passed && c.sanitySectionKey).map((c) => c.sanitySectionKey as string));
   return {
-    tasks: [...taskKeys].filter((k) => k !== PROJECT_KEY),
-    checks: [...checkKeys],
-    projectPassed: taskKeys.has(PROJECT_KEY),
+    tasks: [...taskKeys],
+    checks: [...checkKeys].filter((k) => k !== END_KEY),
+    endPassed: checkKeys.has(END_KEY),
   };
 }
 
@@ -104,7 +111,8 @@ async function passedGates(lessonProgressId: string): Promise<PassedGates> {
 type LessonContext = {
   sectionKeys: string[];
   sections: { _key: string; needsTask: boolean; needsCheck: boolean }[];
-  projectRequired: boolean;
+  /** The lesson has an end-of-lesson assessment that must be passed. */
+  hasEndAssessment: boolean;
   /** A course with a final assessment is not complete when its lessons are. */
   hasFinalAssessment: boolean;
   courseId: string;
@@ -116,7 +124,7 @@ async function loadContext(lessonId: string): Promise<LessonContext | null> {
   const context = await sanityFetch<{
     sectionKeys?: string[] | null;
     sections?: { _key: string; needsTask?: boolean | null; needsCheck?: boolean | null }[] | null;
-    projectRequired?: boolean | null;
+    hasEndAssessment?: boolean | null;
     hasFinalAssessment?: boolean | null;
     course?: { _id: string; modules?: CurriculumModule[] } | null;
   } | null>({ query: lessonProgressContextQuery, params: { lessonId }, revalidate: 0 });
@@ -129,7 +137,7 @@ async function loadContext(lessonId: string): Promise<LessonContext | null> {
       needsTask: Boolean(s.needsTask),
       needsCheck: Boolean(s.needsCheck),
     })),
-    projectRequired: Boolean(context.projectRequired),
+    hasEndAssessment: Boolean(context.hasEndAssessment),
     hasFinalAssessment: Boolean(context.hasFinalAssessment),
     courseId: context.course._id,
     modules: context.course.modules ?? [],
@@ -206,8 +214,8 @@ async function finalize(opened: Opened, context: LessonContext, lessonId: string
   const sectionRows = await db.orm.public.SectionProgress.where({ lessonProgressId: lessonProgress.id }).all();
   const completedSectionKeys = sectionRows.filter((s) => s.status === "COMPLETED").map((s) => s.sanitySectionKey);
   const sectionsDone = context.sectionKeys.every((key) => completedSectionKeys.includes(key));
-  const projectOk = !context.projectRequired || (await passedGates(lessonProgress.id)).projectPassed;
-  const lessonCompleted = sectionsDone && projectOk;
+  const endOk = !context.hasEndAssessment || (await passedGates(lessonProgress.id)).endPassed;
+  const lessonCompleted = sectionsDone && endOk;
 
   await db.orm.public.LessonProgress.where({ id: lessonProgress.id }).update(
     lessonCompleted
@@ -266,7 +274,7 @@ export type SectionCompletionResult = ({ ok: true } & ProgressUpdate) | Failure;
 
 /**
  * The learner reached the end of a section. Sections that require a task or
- * check are refused here — those complete only by passing them.
+ * check are refused here - those complete only by passing them.
  */
 export async function recordSectionComplete(args: {
   userId: string;
@@ -303,7 +311,7 @@ type AttemptResult = ({ ok: true; attempt: number } & ProgressUpdate) | Failure;
 export async function recordTaskAttempt(args: {
   userId: string;
   lessonId: string;
-  /** A section's `_key`, or PROJECT_KEY for the lesson project. */
+  /** The section the task belongs to. */
   sectionKey: string;
   taskId: string;
   points: number;
@@ -312,7 +320,7 @@ export async function recordTaskAttempt(args: {
   const { userId, lessonId, sectionKey, taskId, points, outcome } = args;
   const context = await loadContext(lessonId);
   if (!context) return { ok: false, reason: "unknown_lesson" };
-  if (sectionKey !== PROJECT_KEY && !context.sectionKeys.includes(sectionKey)) return { ok: false, reason: "unknown_section" };
+  if (!context.sectionKeys.includes(sectionKey)) return { ok: false, reason: "unknown_section" };
 
   try {
     const opened = await openLesson(userId, lessonId, context);
@@ -338,8 +346,9 @@ export async function recordTaskAttempt(args: {
       completedAt: Temporal.Now.instant(),
     });
 
-    if (outcome.passed && sectionKey !== PROJECT_KEY) await completeIfGatesPassed(opened, context, sectionKey);
+    if (outcome.passed) await completeIfGatesPassed(opened, context, sectionKey);
     const update = await finalize(opened, context, lessonId, sectionKey);
+    await updateCourseScore(enrollment.id, context.courseId);
     return { ok: true, attempt, ...update };
   } catch (error) {
     console.warn("recordTaskAttempt failed:", error);
@@ -358,12 +367,20 @@ export async function recordCheckAttempt(args: {
   const { userId, lessonId, sectionKey, assessmentId, outcome } = args;
   const context = await loadContext(lessonId);
   if (!context) return { ok: false, reason: "unknown_lesson" };
-  if (!context.sectionKeys.includes(sectionKey)) return { ok: false, reason: "unknown_section" };
+  const isEnd = sectionKey === END_KEY;
+  if (!isEnd && !context.sectionKeys.includes(sectionKey)) return { ok: false, reason: "unknown_section" };
 
   try {
     const opened = await openLesson(userId, lessonId, context);
     if (!opened.ok) return opened;
     const { enrollment, lessonProgress } = opened;
+
+    // The end-of-lesson assessment opens only once every section is complete.
+    if (isEnd) {
+      const rows = await db.orm.public.SectionProgress.where({ lessonProgressId: lessonProgress.id }).all();
+      const done = new Set(rows.filter((r) => r.status === "COMPLETED").map((r) => r.sanitySectionKey));
+      if (!context.sectionKeys.every((key) => done.has(key))) return { ok: false, reason: "gated" };
+    }
 
     const previous = await db.orm.public.AssessmentAttempt.where({ lessonProgressId: lessonProgress.id }).all();
     const attempt = previous.filter((p) => p.sanitySectionKey === sectionKey && p.sanityAssessmentId === assessmentId).length + 1;
@@ -399,8 +416,9 @@ export async function recordCheckAttempt(args: {
       });
     }
 
-    if (outcome.passed) await completeIfGatesPassed(opened, context, sectionKey);
+    if (outcome.passed && !isEnd) await completeIfGatesPassed(opened, context, sectionKey);
     const update = await finalize(opened, context, lessonId, sectionKey);
+    await updateCourseScore(enrollment.id, context.courseId);
     return { ok: true, attempt, ...update };
   } catch (error) {
     console.warn("recordCheckAttempt failed:", error);
@@ -457,5 +475,100 @@ export async function recordLessonTime(args: {
   } catch (error) {
     console.warn("recordLessonTime failed:", error);
     return { ok: false };
+  }
+}
+
+// ── Certificate score ─────────────────────────────────────────────────────────
+
+type ScoringStructure = {
+  minimumScore?: number | null;
+  lessons?: {
+    _id: string;
+    sections?: {
+      _key: string;
+      task?: { points?: number | null; taskType?: string | null } | null;
+      check?: { points?: (number | null)[] | null } | null;
+    }[] | null;
+    end?: { items?: { _key: string; _type: string; points?: number | null; taskType?: string | null }[] | null } | null;
+  }[] | null;
+} | null;
+
+/**
+ * Points earned over points available across every scored item in the course,
+ * using the learner's best attempt at each. Items not yet attempted count as 0,
+ * so the score only reaches the pass mark through real work. Returns null when
+ * the course has nothing scored.
+ */
+export function computeCourseScore(
+  structure: ScoringStructure,
+  attempts: {
+    lessonIdByProgressId: Map<string, string>;
+    tasks: { lessonProgressId: string; sanitySectionKey: string | null; score: number | null }[];
+    checks: { lessonProgressId: string; sanitySectionKey: string | null; score: number | null }[];
+  }
+): number | null {
+  // Best percentage per (lesson, section key) for tasks and for checks.
+  const best = (rows: typeof attempts.tasks) => {
+    const map = new Map<string, number>();
+    for (const row of rows) {
+      const lessonId = attempts.lessonIdByProgressId.get(row.lessonProgressId);
+      if (!lessonId || !row.sanitySectionKey) continue;
+      const key = `${lessonId}:${row.sanitySectionKey}`;
+      map.set(key, Math.max(map.get(key) ?? 0, row.score ?? 0));
+    }
+    return map;
+  };
+  const bestTask = best(attempts.tasks);
+  const bestCheck = best(attempts.checks);
+
+  let earned = 0;
+  let total = 0;
+  const add = (points: number, percent: number) => {
+    total += points;
+    earned += (points * percent) / 100;
+  };
+
+  for (const lesson of structure?.lessons ?? []) {
+    for (const section of lesson.sections ?? []) {
+      if (section.task && isScoredTaskType(section.task.taskType)) {
+        add(section.task.points ?? 10, bestTask.get(`${lesson._id}:${section._key}`) ?? 0);
+      }
+      if (section.check) {
+        const points = (section.check.points ?? []).reduce<number>((sum, p) => sum + (p ?? 1), 0);
+        if (points > 0) add(points, bestCheck.get(`${lesson._id}:${section._key}`) ?? 0);
+      }
+    }
+    const endItems = lesson.end?.items ?? [];
+    const endPoints = endItems.reduce<number>((sum, item) => {
+      if (item._type === "assessmentQuestionRef") return sum + (item.points ?? 1);
+      return isScoredTaskType(item.taskType) ? sum + (item.points ?? 10) : sum;
+    }, 0);
+    if (endPoints > 0) add(endPoints, bestCheck.get(`${lesson._id}:${END_KEY}`) ?? 0);
+  }
+
+  return total > 0 ? Math.round((earned / total) * 100) : null;
+}
+
+/** Recalculate and store the learner's certificate score after a graded attempt. */
+async function updateCourseScore(enrollmentId: string, courseId: string) {
+  try {
+    const [structure, progressRows, tasks, checks] = await Promise.all([
+      sanityFetch<ScoringStructure>({ query: courseScoringQuery, params: { courseId }, revalidate: 60 }),
+      db.orm.public.LessonProgress.where({ enrollmentId }).all(),
+      db.orm.public.TaskAttempt.where({ enrollmentId }).all(),
+      db.orm.public.AssessmentAttempt.where({ enrollmentId }).all(),
+    ]);
+    const finalScore = computeCourseScore(structure, {
+      lessonIdByProgressId: new Map(progressRows.map((p) => [p.id, p.sanityLessonId])),
+      tasks,
+      checks: checks.map((c) => ({ ...c, lessonProgressId: c.lessonProgressId ?? "" })),
+    });
+    await db.orm.public.Enrollment.where({ id: enrollmentId }).update({
+      finalScore,
+      updatedAt: Temporal.Now.instant(),
+    });
+  } catch (error) {
+    // The score is recomputed on the next attempt; don't fail the learner's submission over it.
+    console.warn("updateCourseScore failed:", error);
   }
 }

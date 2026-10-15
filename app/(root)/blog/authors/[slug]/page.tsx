@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonicalUrl = `${baseUrl}/blog/authors/${slug}`;
 
   return {
-    title: `${author.name} — ${author.role || "Author & Engineer"} | Sparkline Labs`,
+    title: `${author.name} — ${author.role || "Author & Engineer"}`,
     description: author.role
       ? `${author.name} (${author.role}${author.company ? ` at ${author.company}` : ""}). Read technical playbooks and articles on Sparkline Labs.`
       : `Read articles and technical playbooks authored by ${author.name} on Sparkline Labs.`,

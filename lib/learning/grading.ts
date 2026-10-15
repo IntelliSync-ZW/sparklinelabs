@@ -1,6 +1,6 @@
 import "server-only";
 import { gradeMatching } from "./prepare";
-import type { CheckAnswers, ItemFeedback, MatchRows, TaskSubmission } from "./results";
+import { isScoredTaskType, type CheckAnswers, type ItemFeedback, type MatchRows, type TaskSubmission } from "./results";
 
 // ---------------------------------------------------------------------------
 // Server-side grading against answer keys loaded from the CMS. Nothing here
@@ -61,7 +61,7 @@ function autoOutcome(
     score,
     passed,
     feedback: passed ? revealOnPass(true) : feedback,
-    message: passed ? undefined : "Not quite — the rows marked wrong need another look.",
+    message: passed ? undefined : "Not quite. The rows marked wrong need another look.",
     stored,
     gradedBy: "AUTO",
   };
@@ -221,7 +221,7 @@ export type CheckOutcome =
     }
   | { kind: "invalid"; message: string };
 
-function gradeQuestion(q: QuestionKey, answer: unknown): { fraction: number; rows?: ItemFeedback[]; expected?: string; explanation?: string } {
+export function gradeQuestion(q: QuestionKey, answer: unknown): { fraction: number; rows?: ItemFeedback[]; expected?: string; explanation?: string } {
   const question = q.question;
   if (!question) return { fraction: 0 };
   const options = question.options ?? [];
@@ -304,12 +304,107 @@ export function gradeCheck(key: CheckKey, answers: unknown): CheckOutcome {
     score,
     passed,
     feedback,
-    message: passed ? undefined : "Not quite — review the questions marked wrong and try again.",
+    message: passed ? undefined : "Not quite. Review the questions marked wrong and try again.",
     responses: detail.map(({ q, pointsAwarded, graded }) => ({
       questionId: q.question?._id ?? q._key,
       response: given[q._key],
       isCorrect: graded.fraction === 1,
       pointsAwarded,
+    })),
+  };
+}
+
+// ── End-of-lesson assessment ─────────────────────────────────────────────────
+
+export type EndItemKey = {
+  _key: string;
+  _type: string;
+  points?: number | null;
+  question?: QuestionKey["question"];
+  taskId?: string | null;
+  task?: TaskKey | null;
+};
+
+export type EndKey = { passingScore?: number | null; items?: EndItemKey[] | null };
+
+/**
+ * Grade a whole end-of-lesson assessment in one go. Questions and server-marked
+ * tasks earn points; self-checked tasks must be completed but earn none. The
+ * score is points earned over points available, and answers are revealed only
+ * once the assessment as a whole is passed.
+ */
+export function gradeEndAssessment(key: EndKey, answers: unknown): CheckOutcome {
+  const items = key.items ?? [];
+  if (items.length === 0) return { kind: "invalid", message: "This assessment has no questions or tasks." };
+  if (!isRecord(answers)) return { kind: "invalid", message: "Answer every item first." };
+
+  let earned = 0;
+  let total = 0;
+  const graded: { item: EndItemKey; fraction: number; counted: boolean; fb: ItemFeedback; response: unknown; stored: unknown }[] = [];
+
+  for (const [index, item] of items.entries()) {
+    const answer = answers[item._key];
+
+    if (item._type === "assessmentQuestionRef") {
+      if (!isAnswered(answer)) return { kind: "invalid", message: `Answer question ${index + 1} first.` };
+      const result = gradeQuestion({ _key: item._key, points: item.points, question: item.question }, answer);
+      const points = item.points ?? 1;
+      earned += points * result.fraction;
+      total += points;
+      graded.push({
+        item,
+        fraction: result.fraction,
+        counted: true,
+        response: answer,
+        stored: answer,
+        fb: { id: item._key, correct: result.fraction === 1, expected: result.expected, explanation: result.explanation, rows: result.rows },
+      });
+      continue;
+    }
+
+    // A task item.
+    if (!item.task) return { kind: "invalid", message: `Item ${index + 1} is missing its task.` };
+    const outcome = gradeTask(item.task, answer);
+    if (outcome.kind === "invalid") return { kind: "invalid", message: `Item ${index + 1}: ${outcome.message}` };
+    const counted = isScoredTaskType(item.task.taskType);
+    const fraction = outcome.score / 100;
+    if (counted) {
+      const points = item.points ?? 10;
+      earned += points * fraction;
+      total += points;
+    }
+    graded.push({
+      item,
+      fraction,
+      counted,
+      response: answer,
+      stored: outcome.stored,
+      fb: { id: item._key, correct: counted ? fraction === 1 : true, rows: outcome.feedback },
+    });
+  }
+
+  // Only self-checked tasks: completing them is the pass.
+  const score = total > 0 ? Math.round((earned / total) * 100) : 100;
+  const passed = score >= (key.passingScore ?? DEFAULT_PASSING_SCORE);
+
+  // On a miss, keep only right/wrong marks: no expected answers or explanations
+  // (a task can reveal its own answers when it passes on its own; not here).
+  const strip = (fb: ItemFeedback): ItemFeedback => ({ id: fb.id, correct: fb.correct, rows: fb.rows?.map(strip) });
+
+  return {
+    kind: "graded",
+    score,
+    passed,
+    feedback: graded.map((g) => (passed ? g.fb : strip(g.fb))),
+    message: passed ? undefined : "Not quite. Review the items marked wrong and try again.",
+    responses: graded.map((g) => ({
+      questionId:
+        g.item._type === "assessmentQuestionRef"
+          ? (g.item.question?._id ?? g.item._key)
+          : (g.item.taskId ?? `task:${g.item._key}`),
+      response: g.stored,
+      isCorrect: g.counted ? g.fraction === 1 : true,
+      pointsAwarded: g.counted ? Math.round((g.item.points ?? (g.item._type === "assessmentQuestionRef" ? 1 : 10)) * g.fraction) : 0,
     })),
   };
 }

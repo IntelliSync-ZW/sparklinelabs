@@ -5,7 +5,7 @@ import { FaqSection } from "@/components/faq";
 import { blogFaqs } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Engineering for Zimbabwe | Sparkline Labs",
+  title: "Engineering for Zimbabwe",
   description:
     "Hard-earned playbooks from building software in Zimbabwe. Paynow and EcoCash integration guides, WhatsApp Business API patterns, USD/ZWL billing architecture, and distribution strategies for African SMEs. Written by the team behind Propertyzone.",
   keywords: [
@@ -50,8 +50,18 @@ const blogSchema = {
   breadcrumb: {
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sparklinelabs.co.zw" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.sparklinelabs.co.zw/blog" },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.sparklinelabs.co.zw",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: "https://www.sparklinelabs.co.zw/blog",
+      },
     ],
   },
 };
@@ -98,7 +108,10 @@ export default async function BlogPage({ searchParams }: Props) {
             Engineering for the Zimbabwean Reality.
           </h1>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-            Hard-won lessons from engineering systems in Zimbabwe. We document what happens when software meets local payment rails, unreliable connectivity, WhatsApp-first customers, fragmented data and the operational realities of African businesses.
+            Hard-won lessons from engineering systems in Zimbabwe. We document
+            what happens when software meets local payment rails, unreliable
+            connectivity, WhatsApp-first customers, fragmented data and the
+            operational realities of African businesses.
           </p>
         </div>
       </section>
@@ -112,7 +125,10 @@ export default async function BlogPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <FaqSection faqs={blogFaqs} heading="Questions about the Sparkline Labs blog" />
+      <FaqSection
+        faqs={blogFaqs}
+        heading="Questions about the Sparkline Labs blog"
+      />
     </>
   );
 }

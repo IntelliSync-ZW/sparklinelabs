@@ -175,7 +175,7 @@ const ordering: TaskKind<OrderItems> = {
   toSubmission: (_t, v) => ({ type: "ordering", order: v.map((i) => i.text) }),
   Body: ({ value, onChange, feedback, disabled }) => (
     <div className="space-y-2">
-      <p className="text-sm text-muted-foreground">Put the steps in the right order — drag, or use the arrows.</p>
+      <p className="text-sm text-muted-foreground">Put the steps in the right order. Drag them, or use the arrows.</p>
       <ReorderList
         items={value}
         onChange={onChange}

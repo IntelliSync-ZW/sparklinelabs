@@ -10,18 +10,21 @@ const steps = [
 
 export function LearningFlow() {
   return (
-    <section className="py-16 md:py-20 px-6 bg-secondary" id="how-learning-works">
+    <section
+      className="py-16 md:py-20 px-6 bg-secondary"
+      id="how-learning-works"
+    >
       <div className="container mx-auto">
         <div className="text-center mb-10">
           <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
             How Learning Works
           </p>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-balance max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-semibold text-center tracking-tight text-balance max-w-2xl mx-auto">
             You earn each lesson. You don&apos;t click past it.
           </h2>
           <p className="text-lg text-muted-foreground mt-4 max-w-xl mx-auto leading-relaxed">
-            Progressive unlocking means the certificate means something — because
-            completion required actual work.
+            Progressive unlocking means the certificate means something,
+            because completion required actual work.
           </p>
         </div>
 
@@ -47,7 +50,9 @@ export function LearningFlow() {
               </span>
               <span
                 className={`text-sm leading-snug text-balance ${
-                  step.highlight ? "font-semibold text-foreground" : "font-medium text-muted-foreground"
+                  step.highlight
+                    ? "font-semibold text-foreground"
+                    : "font-medium text-muted-foreground"
                 }`}
               >
                 {step.label}

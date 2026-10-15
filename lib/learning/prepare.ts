@@ -19,7 +19,7 @@ type Check = { questions?: { question?: Matchable | null }[] | null } | null | u
 
 type LessonLike = {
   sections?: { practice?: TaskSlot; check?: Check }[] | null;
-  project?: TaskSlot;
+  endAssessment?: { items?: { task?: Matchable | null; question?: Matchable | null }[] | null } | null;
 };
 
 function shuffle<T>(items: T[]): T[] {
@@ -88,7 +88,16 @@ function prepareSlot<T extends TaskSlot>(slot: T): T {
 export function prepareLessonForClient<T extends LessonLike>(lesson: T): T {
   return {
     ...lesson,
-    project: prepareSlot(lesson.project),
+    endAssessment: lesson.endAssessment
+      ? {
+          ...lesson.endAssessment,
+          items: lesson.endAssessment.items?.map((item) => ({
+            ...item,
+            task: prepareItem(item.task),
+            question: prepareItem(item.question),
+          })),
+        }
+      : lesson.endAssessment,
     sections: lesson.sections?.map((section) => ({
       ...section,
       practice: prepareSlot(section.practice),

@@ -40,7 +40,7 @@ function Panel({ side, tone, format }: { side?: Side; tone: "weak" | "strong"; f
   );
 }
 
-/** Weak vs strong, side by side — red and green panels with a different icon each. */
+/** Weak vs strong, side by side - red and green panels with a different icon each. */
 export function ComparisonBlock({ value }: { value: ComparisonValue }) {
   const format = value.format ?? "prompt";
   return (

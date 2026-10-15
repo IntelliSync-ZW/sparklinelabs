@@ -15,12 +15,19 @@ import { prepareLessonForClient } from "@/lib/learning/prepare";
 import { LearnShell } from "@/components/learn/shell/learn-shell";
 import { LessonView } from "@/components/learn/lesson/lesson-view";
 import { LockedLesson } from "@/components/learn/lesson/locked-lesson";
-import type { LessonLink, LessonViewData } from "@/components/learn/lesson/types";
+import type {
+  LessonLink,
+  LessonViewData,
+} from "@/components/learn/lesson/types";
 
 // Depends on the signed-in learner (progress and unlocking), so it cannot be statically cached.
 export const dynamic = "force-dynamic";
 
-type Params = { "course-slug": string; "module-slug": string; "lesson-slug": string };
+type Params = {
+  "course-slug": string;
+  "module-slug": string;
+  "lesson-slug": string;
+};
 
 type LessonPageData = LessonViewData & {
   slug: string;
@@ -46,22 +53,37 @@ async function loadLesson(params: Params) {
 
   // Drafts are only viewable while developing.
   const isDev = process.env.NODE_ENV === "development";
-  if (!isDev && (lesson.status !== "published" || lesson.course.status !== "published")) return null;
+  if (
+    !isDev &&
+    (lesson.status !== "published" || lesson.course.status !== "published")
+  )
+    return null;
   return lesson;
 }
 
-export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
   const resolved = await params;
   const lesson = await loadLesson(resolved);
   if (!lesson) return {};
 
   const url = `https://www.sparklinelabs.co.zw/ai-training/${resolved["course-slug"]}/${resolved["module-slug"]}/${resolved["lesson-slug"]}`;
-  const description = lesson.seo?.description ?? lesson.summary ?? `${lesson.title} — ${lesson.course.title}`;
+  const description =
+    lesson.seo?.description ??
+    lesson.summary ??
+    `${lesson.title}, part of ${lesson.course.title}`;
   return {
-    title: lesson.seo?.title ?? `${lesson.title} — ${lesson.course.title} | Sparkline Labs`,
+    title: lesson.seo?.title ?? `${lesson.title} | ${lesson.course.title}`,
     description,
     alternates: { canonical: url },
-    openGraph: { title: `${lesson.title} — ${lesson.course.title}`, description, url },
+    openGraph: {
+      title: `${lesson.title} | ${lesson.course.title}`,
+      description,
+      url,
+    },
   };
 }
 
@@ -73,9 +95,18 @@ function isoDuration(duration?: { value?: number; unit?: string } | null) {
   return `PT${duration.value}M`;
 }
 
-const resourceTypes: Record<string, string> = { reading: "Reading", video: "Video", practice: "Exercise", quiz: "Quiz" };
+const resourceTypes: Record<string, string> = {
+  reading: "Reading",
+  video: "Video",
+  practice: "Exercise",
+  quiz: "Quiz",
+};
 
-export default async function LessonPage({ params }: { params: Promise<Params> }) {
+export default async function LessonPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
   const resolved = await params;
   const lesson = await loadLesson(resolved);
   if (!lesson) notFound();
@@ -94,7 +125,9 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
   // A lesson missing from the outline (an unpublished draft in dev) is never locked.
   const unlocked =
     index === -1 ||
-    (userId ? progress.offline || isLessonUnlocked(flat, index, completed) : index === 0);
+    (userId
+      ? progress.offline || isLessonUnlocked(flat, index, completed)
+      : index === 0);
 
   const resumeLesson = firstIncompleteLesson(flat, completed);
   const resume: LessonLink | null = resumeLesson
@@ -110,15 +143,22 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
     url: lessonUrl,
     inLanguage: "en",
     isAccessibleForFree: true,
-    learningResourceType: resourceTypes[lesson.lessonType ?? "reading"] ?? "Reading",
+    learningResourceType:
+      resourceTypes[lesson.lessonType ?? "reading"] ?? "Reading",
     timeRequired: isoDuration(lesson.duration),
     position: index >= 0 ? index + 1 : undefined,
-    teaches: lesson.learningOutcomes?.length ? lesson.learningOutcomes : undefined,
+    teaches: lesson.learningOutcomes?.length
+      ? lesson.learningOutcomes
+      : undefined,
     isPartOf: {
       "@type": "Course",
       name: lesson.course.title,
       url: `https://www.sparklinelabs.co.zw/ai-training/${courseSlug}`,
-      provider: { "@type": "Organization", name: "Sparkline Labs", url: "https://www.sparklinelabs.co.zw" },
+      provider: {
+        "@type": "Organization",
+        name: "Sparkline Labs",
+        url: "https://www.sparklinelabs.co.zw",
+      },
     },
   };
 
@@ -127,17 +167,19 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
       {/* `<` is escaped so lesson text can never close the script tag. */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <LearnShell
-      course={{ title: lesson.course.title, slug: courseSlug }}
-      modules={modules}
-      flat={flat}
-      completed={completed}
-      currentLessonId={lesson._id}
-      progressPercent={progress.progressPercent}
-    >
-      {children}
+        course={{ title: lesson.course.title, slug: courseSlug }}
+        modules={modules}
+        flat={flat}
+        completed={completed}
+        currentLessonId={lesson._id}
+        progressPercent={progress.progressPercent}
+      >
+        {children}
       </LearnShell>
     </>
   );
@@ -150,7 +192,7 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
         outcomes={lesson.learningOutcomes}
         signedIn={Boolean(userId)}
         resume={resume}
-      />
+      />,
     );
   }
 
@@ -160,7 +202,8 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
   const prepared = prepareLessonForClient(lesson);
 
   const prevLesson = index > 0 ? flat[index - 1] : null;
-  const nextLesson = index >= 0 && index < flat.length - 1 ? flat[index + 1] : null;
+  const nextLesson =
+    index >= 0 && index < flat.length - 1 ? flat[index + 1] : null;
 
   // Pass only what the page renders. Task and quiz data here has no answers in it.
   const view: LessonViewData = {
@@ -175,7 +218,7 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
     image: lesson.image,
     resources: lesson.resources,
     sources: lesson.sources,
-    project: prepared.project,
+    endAssessment: prepared.endAssessment,
     sections: (prepared.sections ?? []).map((s) => ({
       _key: s._key,
       title: s.title,
@@ -196,9 +239,23 @@ export default async function LessonPage({ params }: { params: Promise<Params> }
       isSignedIn={Boolean(userId)}
       initialCompletedKeys={state.completedSectionKeys}
       initialGates={state.gates}
-      previous={prevLesson ? { href: lessonHref(courseSlug, prevLesson), title: prevLesson.title } : null}
-      next={nextLesson ? { href: lessonHref(courseSlug, nextLesson), title: nextLesson.title } : null}
+      previous={
+        prevLesson
+          ? {
+              href: lessonHref(courseSlug, prevLesson),
+              title: prevLesson.title,
+            }
+          : null
+      }
+      next={
+        nextLesson
+          ? {
+              href: lessonHref(courseSlug, nextLesson),
+              title: nextLesson.title,
+            }
+          : null
+      }
       courseHref={`/ai-training/${courseSlug}`}
-    />
+    />,
   );
 }

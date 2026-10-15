@@ -91,7 +91,7 @@ export function FeaturedCourse({ course }: { course: FreeCourseOverview | null }
                 </Button>
               ) : (
                 <p className="text-base text-muted-foreground">
-                  We&apos;re finishing the lessons and practice tasks. Check back soon — it will be free when it launches.
+                  We&apos;re finishing the lessons and practice tasks. Check back soon. It will be free when it launches.
                 </p>
               )}
             </div>

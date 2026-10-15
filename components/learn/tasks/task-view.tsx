@@ -41,6 +41,7 @@ const typeMeta: Record<string, { label: string; Icon: React.ElementType }> = {
 export function TaskView({
   task,
   required,
+  scored = false,
   initiallyPassed,
   signedIn,
   onSubmit,
@@ -48,6 +49,8 @@ export function TaskView({
 }: {
   task: PublicTask;
   required: boolean;
+  /** Counts towards the certificate. Only ever true for required, server-marked tasks. */
+  scored?: boolean;
   initiallyPassed: boolean;
   signedIn: boolean;
   onSubmit: (submission: TaskSubmission) => Promise<GradeResult>;
@@ -109,6 +112,7 @@ export function TaskView({
           >
             {required ? "Required" : "Optional"}
           </span>
+          {scored && <span className="rounded-full border border-accent/40 px-2.5 py-1 text-accent">Scored</span>}
           {task.estimatedMinutes ? (
             <span className="inline-flex items-center gap-1 text-muted-foreground">
               <Clock className="size-3.5" /> {task.estimatedMinutes} min
@@ -201,7 +205,7 @@ export function TaskView({
             <p className="flex items-start gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm">
               <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
               <span>
-                <span className="font-semibold">{result.score}% — </span>
+                <span className="font-semibold">{result.score}%: </span>
                 {result.message ?? "Not quite. Adjust your answers and try again."}
               </span>
             </p>
@@ -212,7 +216,7 @@ export function TaskView({
                 <CheckCircle2 className="size-5" />
                 {task.taskType === "written" || task.taskType === "prompt_practice" || task.taskType === "checklist"
                   ? "Task complete"
-                  : `Task passed — ${result.score}%`}
+                  : `Task passed: ${result.score}%`}
                 {result.attempt > 1 && <span className="font-normal text-muted-foreground">· attempt {result.attempt}</span>}
               </p>
               {result.modelAnswer && (
