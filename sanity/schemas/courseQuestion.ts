@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { matchingFields } from "./objects/taskFields";
 
 export const courseQuestion = defineType({
   name: "courseQuestion",
@@ -16,6 +17,7 @@ export const courseQuestion = defineType({
           { title: "Multiple choice", value: "multiple_choice" },
           { title: "True/false", value: "true_false" },
           { title: "Short answer", value: "short_answer" },
+          { title: "Matching (align keys with options)", value: "matching" },
         ],
       },
       validation: (Rule) => Rule.required(),
@@ -62,6 +64,8 @@ export const courseQuestion = defineType({
         },
       ],
     }),
+
+    ...matchingFields(({ parent }) => (parent as { questionType?: string })?.questionType !== "matching"),
 
     defineField({
       name: "correctAnswer",

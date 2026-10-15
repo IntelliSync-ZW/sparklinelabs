@@ -18,7 +18,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <Link
               href="/"
-              className="text-xl font-semibold tracking-tight flex gap-2 items-center mb-3"
+              className="text-2xl font-semibold tracking-tight flex gap-2 items-center mb-3"
             >
               <Image
                 src="/icon.svg"
@@ -27,7 +27,7 @@ export function Footer() {
                 height={32}
                 className="aspect-square"
               />
-              <span>sparkline labs</span>
+              <span>Sparkline Labs</span>
             </Link>
             <p className="text-base text-muted-foreground">
               Solutions engineering for African businesses.

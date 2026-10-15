@@ -1,0 +1,1303 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.AssessmentAttempt",
+    "label": "Create table \"AssessmentAttempt\"",
+    "summary": "Creates table \"AssessmentAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "AssessmentAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"AssessmentAttempt\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"AssessmentAttempt\"",
+        "sql": "CREATE TABLE \"public\".\"AssessmentAttempt\" (\n  \"attemptNumber\" int4 DEFAULT 1 NOT NULL,\n  \"completedAt\" timestamptz,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"enrollmentId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"lessonProgressId\" text,\n  \"passed\" bool DEFAULT false NOT NULL,\n  \"sanityAssessmentId\" text NOT NULL,\n  \"score\" int4,\n  \"startedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"status\" text DEFAULT 'IN_PROGRESS' NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"AssessmentAttempt_status_check_b97b07df\" CHECK (\"status\" IN ('IN_PROGRESS', 'PASSED', 'FAILED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"AssessmentAttempt\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.AssessmentResponse",
+    "label": "Create table \"AssessmentResponse\"",
+    "summary": "Creates table \"AssessmentResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "AssessmentResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"AssessmentResponse\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentResponse\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"AssessmentResponse\"",
+        "sql": "CREATE TABLE \"public\".\"AssessmentResponse\" (\n  \"assessmentAttemptId\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"isCorrect\" bool,\n  \"pointsAwarded\" int4 DEFAULT 0 NOT NULL,\n  \"response\" json,\n  \"sanityQuestionId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"AssessmentResponse\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentResponse\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Certificate",
+    "label": "Create table \"Certificate\"",
+    "summary": "Creates table \"Certificate\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Certificate"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Certificate\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Certificate\"",
+        "sql": "CREATE TABLE \"public\".\"Certificate\" (\n  \"certificateNumber\" text NOT NULL,\n  \"certificatePrice\" int4 DEFAULT 500 NOT NULL,\n  \"clerkUserId\" text NOT NULL,\n  \"completionDate\" timestamptz NOT NULL,\n  \"courseTitle\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"currency\" text DEFAULT 'USD' NOT NULL,\n  \"enrollmentId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"issuedAt\" timestamptz,\n  \"paymentReference\" text,\n  \"paymentStatus\" text DEFAULT 'PENDING' NOT NULL,\n  \"recipientName\" text NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"Certificate_paymentStatus_check_60515b20\" CHECK (\"paymentStatus\" IN ('PENDING', 'PAID', 'FAILED', 'REFUNDED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Certificate\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Enrollment",
+    "label": "Create table \"Enrollment\"",
+    "summary": "Creates table \"Enrollment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Enrollment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Enrollment\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Enrollment\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Enrollment\"",
+        "sql": "CREATE TABLE \"public\".\"Enrollment\" (\n  \"clerkUserId\" text NOT NULL,\n  \"completedAt\" timestamptz,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"finalScore\" int4,\n  \"id\" text NOT NULL,\n  \"progressPercent\" int4 DEFAULT 0 NOT NULL,\n  \"sanityCourseId\" text NOT NULL,\n  \"startedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"status\" text DEFAULT 'ACTIVE' NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"Enrollment_status_check_897bfa6f\" CHECK (\"status\" IN ('ACTIVE', 'COMPLETED', 'SUSPENDED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Enrollment\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Enrollment\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.LessonProgress",
+    "label": "Create table \"LessonProgress\"",
+    "summary": "Creates table \"LessonProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"LessonProgress\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LessonProgress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"LessonProgress\"",
+        "sql": "CREATE TABLE \"public\".\"LessonProgress\" (\n  \"assessmentPassed\" bool DEFAULT false NOT NULL,\n  \"bestAssessmentScore\" int4,\n  \"completedAt\" timestamptz,\n  \"contentCompletedAt\" timestamptz,\n  \"contentStartedAt\" timestamptz,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"enrollmentId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"requiredTasksPassed\" bool DEFAULT false NOT NULL,\n  \"sanityLessonId\" text NOT NULL,\n  \"status\" text DEFAULT 'LOCKED' NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"LessonProgress_status_check_07facb5f\" CHECK (\"status\" IN ('LOCKED', 'AVAILABLE', 'IN_PROGRESS', 'COMPLETED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"LessonProgress\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LessonProgress\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.TaskAttempt",
+    "label": "Create table \"TaskAttempt\"",
+    "summary": "Creates table \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"TaskAttempt\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"TaskAttempt\"",
+        "sql": "CREATE TABLE \"public\".\"TaskAttempt\" (\n  \"attemptNumber\" int4 DEFAULT 1 NOT NULL,\n  \"completedAt\" timestamptz,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"enrollmentId\" text NOT NULL,\n  \"feedback\" text,\n  \"id\" text NOT NULL,\n  \"lessonProgressId\" text NOT NULL,\n  \"passed\" bool DEFAULT false NOT NULL,\n  \"sanityTaskId\" text NOT NULL,\n  \"score\" int4,\n  \"startedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"status\" text DEFAULT 'IN_PROGRESS' NOT NULL,\n  \"submission\" json,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"TaskAttempt_status_check_b97b07df\" CHECK (\"status\" IN ('IN_PROGRESS', 'PASSED', 'FAILED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"TaskAttempt\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.AssessmentResponse.AssessmentResponse_assessmentAttemptId_sanityQuestionId_key",
+    "label": "Add unique constraint on \"AssessmentResponse\" (assessmentAttemptId, sanityQuestionId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "AssessmentResponse_assessmentAttemptId_sanityQuestionId_key",
+        "table": "AssessmentResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"AssessmentResponse_assessmentAttemptId_sanityQuestionId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentResponse_assessmentAttemptId_sanityQuestionId_key",
+          "public",
+          "\"public\".\"AssessmentResponse\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"AssessmentResponse_assessmentAttemptId_sanityQuestionId_key\"",
+        "sql": "ALTER TABLE \"public\".\"AssessmentResponse\" ADD CONSTRAINT \"AssessmentResponse_assessmentAttemptId_sanityQuestionId_key\" UNIQUE (\"assessmentAttemptId\", \"sanityQuestionId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"AssessmentResponse_assessmentAttemptId_sanityQuestionId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentResponse_assessmentAttemptId_sanityQuestionId_key",
+          "public",
+          "\"public\".\"AssessmentResponse\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Certificate.Certificate_enrollmentId_key",
+    "label": "Add unique constraint on \"Certificate\" (enrollmentId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Certificate_enrollmentId_key",
+        "table": "Certificate"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Certificate_enrollmentId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Certificate_enrollmentId_key",
+          "public",
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Certificate_enrollmentId_key\"",
+        "sql": "ALTER TABLE \"public\".\"Certificate\" ADD CONSTRAINT \"Certificate_enrollmentId_key\" UNIQUE (\"enrollmentId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Certificate_enrollmentId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Certificate_enrollmentId_key",
+          "public",
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Certificate.Certificate_certificateNumber_key",
+    "label": "Add unique constraint on \"Certificate\" (certificateNumber)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Certificate_certificateNumber_key",
+        "table": "Certificate"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Certificate_certificateNumber_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Certificate_certificateNumber_key",
+          "public",
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Certificate_certificateNumber_key\"",
+        "sql": "ALTER TABLE \"public\".\"Certificate\" ADD CONSTRAINT \"Certificate_certificateNumber_key\" UNIQUE (\"certificateNumber\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Certificate_certificateNumber_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Certificate_certificateNumber_key",
+          "public",
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Enrollment.Enrollment_clerkUserId_sanityCourseId_key",
+    "label": "Add unique constraint on \"Enrollment\" (clerkUserId, sanityCourseId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Enrollment_clerkUserId_sanityCourseId_key",
+        "table": "Enrollment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Enrollment_clerkUserId_sanityCourseId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Enrollment_clerkUserId_sanityCourseId_key",
+          "public",
+          "\"public\".\"Enrollment\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Enrollment_clerkUserId_sanityCourseId_key\"",
+        "sql": "ALTER TABLE \"public\".\"Enrollment\" ADD CONSTRAINT \"Enrollment_clerkUserId_sanityCourseId_key\" UNIQUE (\"clerkUserId\", \"sanityCourseId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Enrollment_clerkUserId_sanityCourseId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Enrollment_clerkUserId_sanityCourseId_key",
+          "public",
+          "\"public\".\"Enrollment\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.LessonProgress.LessonProgress_enrollmentId_sanityLessonId_key",
+    "label": "Add unique constraint on \"LessonProgress\" (enrollmentId, sanityLessonId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "LessonProgress_enrollmentId_sanityLessonId_key",
+        "table": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"LessonProgress_enrollmentId_sanityLessonId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "LessonProgress_enrollmentId_sanityLessonId_key",
+          "public",
+          "\"public\".\"LessonProgress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"LessonProgress_enrollmentId_sanityLessonId_key\"",
+        "sql": "ALTER TABLE \"public\".\"LessonProgress\" ADD CONSTRAINT \"LessonProgress_enrollmentId_sanityLessonId_key\" UNIQUE (\"enrollmentId\", \"sanityLessonId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"LessonProgress_enrollmentId_sanityLessonId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "LessonProgress_enrollmentId_sanityLessonId_key",
+          "public",
+          "\"public\".\"LessonProgress\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AssessmentAttempt.AssessmentAttempt_enrollmentId_idx_ee5e79c5",
+    "label": "Create index \"AssessmentAttempt_enrollmentId_idx_ee5e79c5\" on \"AssessmentAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AssessmentAttempt_enrollmentId_idx_ee5e79c5",
+        "table": "AssessmentAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AssessmentAttempt_enrollmentId_idx_ee5e79c5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt_enrollmentId_idx_ee5e79c5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AssessmentAttempt_enrollmentId_idx_ee5e79c5\"",
+        "sql": "CREATE INDEX \"AssessmentAttempt_enrollmentId_idx_ee5e79c5\" ON \"public\".\"AssessmentAttempt\" (\"enrollmentId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AssessmentAttempt_enrollmentId_idx_ee5e79c5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt_enrollmentId_idx_ee5e79c5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AssessmentAttempt.AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885",
+    "label": "Create index \"AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885\" on \"AssessmentAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885",
+        "table": "AssessmentAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885\"",
+        "sql": "CREATE INDEX \"AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885\" ON \"public\".\"AssessmentAttempt\" (\"enrollmentId\", \"sanityAssessmentId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt_enrollmentId_sanityAssessmentId_idx_0b780885\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AssessmentAttempt.AssessmentAttempt_lessonProgressId_idx_555ff96a",
+    "label": "Create index \"AssessmentAttempt_lessonProgressId_idx_555ff96a\" on \"AssessmentAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AssessmentAttempt_lessonProgressId_idx_555ff96a",
+        "table": "AssessmentAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AssessmentAttempt_lessonProgressId_idx_555ff96a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt_lessonProgressId_idx_555ff96a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AssessmentAttempt_lessonProgressId_idx_555ff96a\"",
+        "sql": "CREATE INDEX \"AssessmentAttempt_lessonProgressId_idx_555ff96a\" ON \"public\".\"AssessmentAttempt\" (\"lessonProgressId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AssessmentAttempt_lessonProgressId_idx_555ff96a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentAttempt_lessonProgressId_idx_555ff96a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AssessmentResponse.AssessmentResponse_assessmentAttemptId_idx_71b37739",
+    "label": "Create index \"AssessmentResponse_assessmentAttemptId_idx_71b37739\" on \"AssessmentResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AssessmentResponse_assessmentAttemptId_idx_71b37739",
+        "table": "AssessmentResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AssessmentResponse_assessmentAttemptId_idx_71b37739\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentResponse_assessmentAttemptId_idx_71b37739\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AssessmentResponse_assessmentAttemptId_idx_71b37739\"",
+        "sql": "CREATE INDEX \"AssessmentResponse_assessmentAttemptId_idx_71b37739\" ON \"public\".\"AssessmentResponse\" (\"assessmentAttemptId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AssessmentResponse_assessmentAttemptId_idx_71b37739\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentResponse_assessmentAttemptId_idx_71b37739\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AssessmentResponse.AssessmentResponse_sanityQuestionId_idx_deeb9508",
+    "label": "Create index \"AssessmentResponse_sanityQuestionId_idx_deeb9508\" on \"AssessmentResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AssessmentResponse_sanityQuestionId_idx_deeb9508",
+        "table": "AssessmentResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AssessmentResponse_sanityQuestionId_idx_deeb9508\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentResponse_sanityQuestionId_idx_deeb9508\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AssessmentResponse_sanityQuestionId_idx_deeb9508\"",
+        "sql": "CREATE INDEX \"AssessmentResponse_sanityQuestionId_idx_deeb9508\" ON \"public\".\"AssessmentResponse\" (\"sanityQuestionId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AssessmentResponse_sanityQuestionId_idx_deeb9508\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AssessmentResponse_sanityQuestionId_idx_deeb9508\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Certificate.Certificate_certificateNumber_idx_57e448cc",
+    "label": "Create index \"Certificate_certificateNumber_idx_57e448cc\" on \"Certificate\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Certificate_certificateNumber_idx_57e448cc",
+        "table": "Certificate"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Certificate_certificateNumber_idx_57e448cc\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Certificate_certificateNumber_idx_57e448cc\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Certificate_certificateNumber_idx_57e448cc\"",
+        "sql": "CREATE INDEX \"Certificate_certificateNumber_idx_57e448cc\" ON \"public\".\"Certificate\" (\"certificateNumber\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Certificate_certificateNumber_idx_57e448cc\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Certificate_certificateNumber_idx_57e448cc\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Certificate.Certificate_clerkUserId_idx_17dc593a",
+    "label": "Create index \"Certificate_clerkUserId_idx_17dc593a\" on \"Certificate\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Certificate_clerkUserId_idx_17dc593a",
+        "table": "Certificate"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Certificate_clerkUserId_idx_17dc593a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Certificate_clerkUserId_idx_17dc593a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Certificate_clerkUserId_idx_17dc593a\"",
+        "sql": "CREATE INDEX \"Certificate_clerkUserId_idx_17dc593a\" ON \"public\".\"Certificate\" (\"clerkUserId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Certificate_clerkUserId_idx_17dc593a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Certificate_clerkUserId_idx_17dc593a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Enrollment.Enrollment_clerkUserId_idx_17dc593a",
+    "label": "Create index \"Enrollment_clerkUserId_idx_17dc593a\" on \"Enrollment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Enrollment_clerkUserId_idx_17dc593a",
+        "table": "Enrollment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Enrollment_clerkUserId_idx_17dc593a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Enrollment_clerkUserId_idx_17dc593a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Enrollment_clerkUserId_idx_17dc593a\"",
+        "sql": "CREATE INDEX \"Enrollment_clerkUserId_idx_17dc593a\" ON \"public\".\"Enrollment\" (\"clerkUserId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Enrollment_clerkUserId_idx_17dc593a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Enrollment_clerkUserId_idx_17dc593a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Enrollment.Enrollment_sanityCourseId_idx_39b3b4ef",
+    "label": "Create index \"Enrollment_sanityCourseId_idx_39b3b4ef\" on \"Enrollment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Enrollment_sanityCourseId_idx_39b3b4ef",
+        "table": "Enrollment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Enrollment_sanityCourseId_idx_39b3b4ef\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Enrollment_sanityCourseId_idx_39b3b4ef\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Enrollment_sanityCourseId_idx_39b3b4ef\"",
+        "sql": "CREATE INDEX \"Enrollment_sanityCourseId_idx_39b3b4ef\" ON \"public\".\"Enrollment\" (\"sanityCourseId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Enrollment_sanityCourseId_idx_39b3b4ef\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Enrollment_sanityCourseId_idx_39b3b4ef\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.LessonProgress.LessonProgress_enrollmentId_idx_ee5e79c5",
+    "label": "Create index \"LessonProgress_enrollmentId_idx_ee5e79c5\" on \"LessonProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "LessonProgress_enrollmentId_idx_ee5e79c5",
+        "table": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"LessonProgress_enrollmentId_idx_ee5e79c5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LessonProgress_enrollmentId_idx_ee5e79c5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"LessonProgress_enrollmentId_idx_ee5e79c5\"",
+        "sql": "CREATE INDEX \"LessonProgress_enrollmentId_idx_ee5e79c5\" ON \"public\".\"LessonProgress\" (\"enrollmentId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"LessonProgress_enrollmentId_idx_ee5e79c5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LessonProgress_enrollmentId_idx_ee5e79c5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.LessonProgress.LessonProgress_sanityLessonId_idx_b22fa489",
+    "label": "Create index \"LessonProgress_sanityLessonId_idx_b22fa489\" on \"LessonProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "LessonProgress_sanityLessonId_idx_b22fa489",
+        "table": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"LessonProgress_sanityLessonId_idx_b22fa489\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LessonProgress_sanityLessonId_idx_b22fa489\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"LessonProgress_sanityLessonId_idx_b22fa489\"",
+        "sql": "CREATE INDEX \"LessonProgress_sanityLessonId_idx_b22fa489\" ON \"public\".\"LessonProgress\" (\"sanityLessonId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"LessonProgress_sanityLessonId_idx_b22fa489\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LessonProgress_sanityLessonId_idx_b22fa489\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.TaskAttempt.TaskAttempt_enrollmentId_idx_ee5e79c5",
+    "label": "Create index \"TaskAttempt_enrollmentId_idx_ee5e79c5\" on \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TaskAttempt_enrollmentId_idx_ee5e79c5",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TaskAttempt_enrollmentId_idx_ee5e79c5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt_enrollmentId_idx_ee5e79c5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TaskAttempt_enrollmentId_idx_ee5e79c5\"",
+        "sql": "CREATE INDEX \"TaskAttempt_enrollmentId_idx_ee5e79c5\" ON \"public\".\"TaskAttempt\" (\"enrollmentId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TaskAttempt_enrollmentId_idx_ee5e79c5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt_enrollmentId_idx_ee5e79c5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.TaskAttempt.TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053",
+    "label": "Create index \"TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053\" on \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053\"",
+        "sql": "CREATE INDEX \"TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053\" ON \"public\".\"TaskAttempt\" (\"enrollmentId\", \"sanityTaskId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt_enrollmentId_sanityTaskId_idx_7409a053\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.TaskAttempt.TaskAttempt_lessonProgressId_idx_555ff96a",
+    "label": "Create index \"TaskAttempt_lessonProgressId_idx_555ff96a\" on \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TaskAttempt_lessonProgressId_idx_555ff96a",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TaskAttempt_lessonProgressId_idx_555ff96a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt_lessonProgressId_idx_555ff96a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TaskAttempt_lessonProgressId_idx_555ff96a\"",
+        "sql": "CREATE INDEX \"TaskAttempt_lessonProgressId_idx_555ff96a\" ON \"public\".\"TaskAttempt\" (\"lessonProgressId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TaskAttempt_lessonProgressId_idx_555ff96a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TaskAttempt_lessonProgressId_idx_555ff96a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.AssessmentAttempt.AssessmentAttempt_enrollmentId_fkey",
+    "label": "Add foreign key \"AssessmentAttempt_enrollmentId_fkey\" on \"AssessmentAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "AssessmentAttempt_enrollmentId_fkey",
+        "table": "AssessmentAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"AssessmentAttempt_enrollmentId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentAttempt_enrollmentId_fkey",
+          "public",
+          "\"public\".\"AssessmentAttempt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"AssessmentAttempt_enrollmentId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"AssessmentAttempt\"\nADD CONSTRAINT \"AssessmentAttempt_enrollmentId_fkey\"\nFOREIGN KEY (\"enrollmentId\")\nREFERENCES \"public\".\"Enrollment\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"AssessmentAttempt_enrollmentId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentAttempt_enrollmentId_fkey",
+          "public",
+          "\"public\".\"AssessmentAttempt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.AssessmentAttempt.AssessmentAttempt_lessonProgressId_fkey",
+    "label": "Add foreign key \"AssessmentAttempt_lessonProgressId_fkey\" on \"AssessmentAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "AssessmentAttempt_lessonProgressId_fkey",
+        "table": "AssessmentAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"AssessmentAttempt_lessonProgressId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentAttempt_lessonProgressId_fkey",
+          "public",
+          "\"public\".\"AssessmentAttempt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"AssessmentAttempt_lessonProgressId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"AssessmentAttempt\"\nADD CONSTRAINT \"AssessmentAttempt_lessonProgressId_fkey\"\nFOREIGN KEY (\"lessonProgressId\")\nREFERENCES \"public\".\"LessonProgress\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"AssessmentAttempt_lessonProgressId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentAttempt_lessonProgressId_fkey",
+          "public",
+          "\"public\".\"AssessmentAttempt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.AssessmentResponse.AssessmentResponse_assessmentAttemptId_fkey",
+    "label": "Add foreign key \"AssessmentResponse_assessmentAttemptId_fkey\" on \"AssessmentResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "AssessmentResponse_assessmentAttemptId_fkey",
+        "table": "AssessmentResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"AssessmentResponse_assessmentAttemptId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentResponse_assessmentAttemptId_fkey",
+          "public",
+          "\"public\".\"AssessmentResponse\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"AssessmentResponse_assessmentAttemptId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"AssessmentResponse\"\nADD CONSTRAINT \"AssessmentResponse_assessmentAttemptId_fkey\"\nFOREIGN KEY (\"assessmentAttemptId\")\nREFERENCES \"public\".\"AssessmentAttempt\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"AssessmentResponse_assessmentAttemptId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AssessmentResponse_assessmentAttemptId_fkey",
+          "public",
+          "\"public\".\"AssessmentResponse\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Certificate.Certificate_enrollmentId_fkey",
+    "label": "Add foreign key \"Certificate_enrollmentId_fkey\" on \"Certificate\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Certificate_enrollmentId_fkey",
+        "table": "Certificate"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Certificate_enrollmentId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Certificate_enrollmentId_fkey",
+          "public",
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Certificate_enrollmentId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Certificate\"\nADD CONSTRAINT \"Certificate_enrollmentId_fkey\"\nFOREIGN KEY (\"enrollmentId\")\nREFERENCES \"public\".\"Enrollment\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Certificate_enrollmentId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Certificate_enrollmentId_fkey",
+          "public",
+          "\"public\".\"Certificate\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.LessonProgress.LessonProgress_enrollmentId_fkey",
+    "label": "Add foreign key \"LessonProgress_enrollmentId_fkey\" on \"LessonProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "LessonProgress_enrollmentId_fkey",
+        "table": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"LessonProgress_enrollmentId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "LessonProgress_enrollmentId_fkey",
+          "public",
+          "\"public\".\"LessonProgress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"LessonProgress_enrollmentId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"LessonProgress\"\nADD CONSTRAINT \"LessonProgress_enrollmentId_fkey\"\nFOREIGN KEY (\"enrollmentId\")\nREFERENCES \"public\".\"Enrollment\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"LessonProgress_enrollmentId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "LessonProgress_enrollmentId_fkey",
+          "public",
+          "\"public\".\"LessonProgress\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.TaskAttempt.TaskAttempt_enrollmentId_fkey",
+    "label": "Add foreign key \"TaskAttempt_enrollmentId_fkey\" on \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "TaskAttempt_enrollmentId_fkey",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"TaskAttempt_enrollmentId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TaskAttempt_enrollmentId_fkey",
+          "public",
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"TaskAttempt_enrollmentId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"TaskAttempt\"\nADD CONSTRAINT \"TaskAttempt_enrollmentId_fkey\"\nFOREIGN KEY (\"enrollmentId\")\nREFERENCES \"public\".\"Enrollment\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"TaskAttempt_enrollmentId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TaskAttempt_enrollmentId_fkey",
+          "public",
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.TaskAttempt.TaskAttempt_lessonProgressId_fkey",
+    "label": "Add foreign key \"TaskAttempt_lessonProgressId_fkey\" on \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "TaskAttempt_lessonProgressId_fkey",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"TaskAttempt_lessonProgressId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TaskAttempt_lessonProgressId_fkey",
+          "public",
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"TaskAttempt_lessonProgressId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"TaskAttempt\"\nADD CONSTRAINT \"TaskAttempt_lessonProgressId_fkey\"\nFOREIGN KEY (\"lessonProgressId\")\nREFERENCES \"public\".\"LessonProgress\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"TaskAttempt_lessonProgressId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TaskAttempt_lessonProgressId_fkey",
+          "public",
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ]
+  }
+]

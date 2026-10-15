@@ -1,31 +1,43 @@
+// use prisma-8
+
 enum EnrollmentStatus {
-  ACTIVE
-  COMPLETED
-  SUSPENDED
+  @@type("pg/text@1")
+  ACTIVE = "ACTIVE"
+  COMPLETED = "COMPLETED"
+  SUSPENDED = "SUSPENDED"
 }
 
 enum ProgressStatus {
-  LOCKED
-  AVAILABLE
-  IN_PROGRESS
-  COMPLETED
+  @@type("pg/text@1")
+  LOCKED = "LOCKED"
+  AVAILABLE = "AVAILABLE"
+  IN_PROGRESS = "IN_PROGRESS"
+  COMPLETED = "COMPLETED"
 }
 
 enum AttemptStatus {
-  IN_PROGRESS
-  PASSED
-  FAILED
+  @@type("pg/text@1")
+  IN_PROGRESS = "IN_PROGRESS"
+  PASSED = "PASSED"
+  FAILED = "FAILED"
+}
+
+enum GradedBy {
+  @@type("pg/text@1")
+  AUTO = "AUTO"
+  SELF = "SELF"
 }
 
 enum PaymentStatus {
-  PENDING
-  PAID
-  FAILED
-  REFUNDED
+  @@type("pg/text@1")
+  PENDING = "PENDING"
+  PAID = "PAID"
+  FAILED = "FAILED"
+  REFUNDED = "REFUNDED"
 }
 
 model Enrollment {
-  id             String           @id @default(cuid())
+  id             String           @id @default(cuid(2))
   clerkUserId    String
   sanityCourseId String
   status         EnrollmentStatus @default(ACTIVE)
@@ -36,8 +48,11 @@ model Enrollment {
   progressPercent Int  @default(0)
   finalScore      Int?
 
+  lastLessonId   String?
+  lastAccessedAt DateTime?
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   lessonProgress     LessonProgress[]
   taskAttempts       TaskAttempt[]
@@ -50,7 +65,7 @@ model Enrollment {
 }
 
 model LessonProgress {
-  id             String @id @default(cuid())
+  id             String @id @default(cuid(2))
   enrollmentId   String
   sanityLessonId String
 
@@ -64,13 +79,18 @@ model LessonProgress {
   bestAssessmentScore Int?
   assessmentPassed    Boolean @default(false)
 
+  lastSectionKey   String?
+  lastViewedAt     DateTime?
+  timeSpentSeconds Int       @default(0)
+
   completedAt DateTime?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
 
+  sectionProgress    SectionProgress[]
   taskAttempts       TaskAttempt[]
   assessmentAttempts AssessmentAttempt[]
 
@@ -80,18 +100,22 @@ model LessonProgress {
 }
 
 model TaskAttempt {
-  id               String @id @default(cuid())
+  id               String @id @default(cuid(2))
   enrollmentId     String
   lessonProgressId String
   sanityTaskId     String
+  sanitySectionKey String?
 
   attemptNumber Int           @default(1)
   status        AttemptStatus @default(IN_PROGRESS)
+  gradedBy      GradedBy      @default(AUTO)
 
-  submission Json?
-  score      Int?
-  passed     Boolean @default(false)
-  feedback   String?
+  submission   Json?
+  rubricScores Json?
+  score        Int?
+  maxScore     Int?
+  passed       Boolean @default(false)
+  feedback     String?
 
   startedAt   DateTime  @default(now())
   completedAt DateTime?
@@ -107,11 +131,12 @@ model TaskAttempt {
 }
 
 model AssessmentAttempt {
-  id               String  @id @default(cuid())
+  id               String  @id @default(cuid(2))
   enrollmentId     String
   lessonProgressId String?
 
   sanityAssessmentId String
+  sanitySectionKey   String?
 
   attemptNumber Int           @default(1)
   status        AttemptStatus @default(IN_PROGRESS)
@@ -134,8 +159,25 @@ model AssessmentAttempt {
   @@index([lessonProgressId])
 }
 
+model SectionProgress {
+  id               String @id @default(cuid(2))
+  lessonProgressId String
+  sanitySectionKey String
+
+  status      ProgressStatus @default(IN_PROGRESS)
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  lessonProgress LessonProgress @relation(fields: [lessonProgressId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonProgressId, sanitySectionKey])
+  @@index([lessonProgressId])
+}
+
 model AssessmentResponse {
-  id                  String @id @default(cuid())
+  id                  String @id @default(cuid(2))
   assessmentAttemptId String
   sanityQuestionId    String
 
@@ -152,7 +194,7 @@ model AssessmentResponse {
 }
 
 model Certificate {
-  id String @id @default(cuid())
+  id String @id @default(cuid(2))
 
   enrollmentId String @unique
   clerkUserId  String
@@ -172,7 +214,7 @@ model Certificate {
   issuedAt DateTime?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
 

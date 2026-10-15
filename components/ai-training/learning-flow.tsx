@@ -1,5 +1,3 @@
-import { ChevronDown } from "lucide-react";
-
 const steps = [
   { label: "Learn", highlight: false },
   { label: "Practise", highlight: false },
@@ -12,9 +10,9 @@ const steps = [
 
 export function LearningFlow() {
   return (
-    <section className="py-20 md:py-32 px-6 bg-secondary" id="how-learning-works">
+    <section className="py-16 md:py-20 px-6 bg-secondary" id="how-learning-works">
       <div className="container mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <p className="text-base uppercase tracking-widest text-muted-foreground mb-4">
             How Learning Works
           </p>
@@ -27,28 +25,36 @@ export function LearningFlow() {
           </p>
         </div>
 
-        <div className="max-w-xs mx-auto">
-          <div className="flex flex-col items-center gap-0">
-            {steps.map((step, index) => (
-              <div key={index} className="flex flex-col items-center w-full">
-                <div
-                  className={`w-full rounded-xl px-6 py-4 text-center font-medium transition-all ${
-                    step.highlight
-                      ? "bg-accent text-accent-foreground shadow-md"
-                      : "bg-background border border-border"
-                  }`}
-                >
-                  {step.label}
-                </div>
-                {index < steps.length - 1 && (
-                  <div className="flex flex-col items-center py-1">
-                    <ChevronDown className="size-5 text-muted-foreground" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        <ol className="relative grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 max-w-5xl mx-auto">
+          {/* Connecting line behind the step numbers (large screens only) */}
+          <div
+            aria-hidden="true"
+            className="hidden lg:block absolute left-[7%] right-[7%] top-5.5 h-px bg-border"
+          />
+          {steps.map((step, index) => (
+            <li
+              key={step.label}
+              className="relative flex flex-col items-center text-center gap-2"
+            >
+              <span
+                className={`relative z-10 flex size-11 items-center justify-center rounded-full text-sm font-semibold border ${
+                  step.highlight
+                    ? "bg-accent text-accent-foreground border-accent shadow-md"
+                    : "bg-background text-muted-foreground border-border"
+                }`}
+              >
+                {index + 1}
+              </span>
+              <span
+                className={`text-sm leading-snug text-balance ${
+                  step.highlight ? "font-semibold text-foreground" : "font-medium text-muted-foreground"
+                }`}
+              >
+                {step.label}
+              </span>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

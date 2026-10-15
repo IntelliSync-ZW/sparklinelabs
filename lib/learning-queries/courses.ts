@@ -28,7 +28,7 @@ export const allCoursesQuery = `
       number,
       title,
       "slug": slug.current,
-      "lessons": *[_type == "courseLesson" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
+      "lessons": *[_type == "courseLesson" && status == "published" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
         _id,
         order,
         title,
@@ -72,7 +72,7 @@ export const courseBySlugQuery = `
       title,
       "slug": slug.current,
       description,
-      "lessons": *[_type == "courseLesson" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
+      "lessons": *[_type == "courseLesson" && status == "published" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
         _id,
         order,
         title,
@@ -136,6 +136,32 @@ export const featuredCoursesQuery = `
     heroImage {
       "url": asset->url,
       alt
+    }
+  }
+`;
+
+/**
+ * The free course shown on the /ai-training landing page. Drafts are returned
+ * too (published first) so the page can show the course as "coming soon".
+ */
+export const freeCourseOverviewQuery = `
+  *[_type == "course" && accessLevel == "free" && status != "archived"]
+    | order(select(status == "published" => 0, 1) asc, _createdAt asc)[0] {
+    _id,
+    title,
+    "slug": slug.current,
+    status,
+    shortDescription,
+    level,
+    durationMinutes,
+    "certificateEnabled": certificate.enabled,
+    "modules": *[_type == "courseModule" && (course._ref == ^._id || _id in ^.modules[]._ref)] | order(number asc) {
+      _id,
+      number,
+      title,
+      "slug": slug.current,
+      "description": pt::text(description),
+      "lessonCount": count(*[_type == "courseLesson" && module._ref == ^._id])
     }
   }
 `;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { SignInButton, Show, UserButton } from "@clerk/nextjs";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
@@ -18,7 +19,7 @@ export function Header() {
         <nav className="flex items-center justify-between">
           <Link
             href="/"
-            className="text-xl font-semibold tracking-tight flex gap-2 items-center"
+            className="text-2xl font-semibold tracking-tight flex gap-2 items-center"
           >
             <Image
               src="/icon.svg"
@@ -27,7 +28,7 @@ export function Header() {
               height={44}
               className="aspect-square"
             />
-            <span>sparkline labs</span>
+            <span>Sparkline Labs</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -62,8 +63,25 @@ export function Header() {
             >
               AI Training
             </Link>
+
+            {/* Clerk Auth Controls — login action only */}
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-base text-foreground/80 hover:text-foreground cursor-pointer px-3"
+                >
+                  Sign In
+                </Button>
+              </SignInButton>
+            </Show>
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+
             <Button
-              className="ml-4 bg-accent text-accent-foreground hover:bg-accent/90"
+              className="ml-2 bg-accent text-accent-foreground hover:bg-accent/90"
               asChild
             >
               <a href="#whatsapp" data-whatsapp-href={waLink}>
@@ -121,6 +139,24 @@ export function Header() {
               >
                 AI Training
               </Link>
+
+              {/* Mobile Auth Controls — login only */}
+              <div className="pt-2 border-t border-border flex items-center gap-3">
+                <Show when="signed-out">
+                  <SignInButton mode="modal">
+                    <Button variant="outline" size="sm" className="w-full">
+                      Sign In
+                    </Button>
+                  </SignInButton>
+                </Show>
+                <Show when="signed-in">
+                  <div className="flex items-center gap-2">
+                    <UserButton />
+                    <span className="text-sm text-foreground/80">Account</span>
+                  </div>
+                </Show>
+              </div>
+
               <Button
                 className="w-fit bg-accent text-accent-foreground"
                 asChild

@@ -64,6 +64,24 @@ export const courseLesson = defineType({
     }),
 
     defineField({
+      name: "lessonType",
+      title: "Lesson type",
+      type: "string",
+      description: "Sets the icon in the curriculum sidebar.",
+      options: {
+        list: [
+          { title: "Reading", value: "reading" },
+          { title: "Video", value: "video" },
+          { title: "Practice", value: "practice" },
+          { title: "Quiz", value: "quiz" },
+        ],
+        layout: "radio",
+        direction: "horizontal",
+      },
+      initialValue: "reading",
+    }),
+
+    defineField({
       name: "duration",
       title: "Estimated duration",
       type: "object",
@@ -145,25 +163,39 @@ export const courseLesson = defineType({
     }),
 
     defineField({
-      name: "tasks",
-      title: "Tasks",
+      name: "keyTakeaways",
+      title: "Key takeaways",
       type: "array",
-      of: [{ type: "lessonTaskRef" }],
+      of: [{ type: "string" }],
+      description: "Shown as a recap at the end of the lesson.",
+    }),
+
+    defineField({
+      name: "project",
+      title: "Lesson project (optional)",
+      type: "taskSlot",
+      description: "A capstone task shown after the last section.",
     }),
 
     defineField({
       name: "assessment",
-      title: "End-of-lesson assessment",
+      title: "End-of-lesson quiz (optional)",
       type: "reference",
       to: [{ type: "courseAssessment" }],
     }),
 
     defineField({
-      name: "passingScore",
-      title: "Lesson assessment passing score",
-      type: "number",
-      initialValue: 80,
-      validation: (Rule) => Rule.min(0).max(100),
+      name: "resources",
+      title: "Resources",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "courseResource" }] }],
+    }),
+
+    defineField({
+      name: "sources",
+      title: "Sources / references",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "courseSource" }] }],
     }),
 
     defineField({

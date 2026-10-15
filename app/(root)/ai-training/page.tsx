@@ -9,7 +9,10 @@ import { LearningFlow } from "@/components/ai-training/learning-flow";
 import { Certificate } from "@/components/ai-training/certificate";
 import { WhoIsThisFor } from "@/components/ai-training/who-is-this-for";
 import { AiTrainingCta } from "@/components/ai-training/final-cta";
+import { isCoursePublished, type FreeCourseOverview } from "@/components/ai-training/featured-course";
 import { aiTrainingFaqs } from "@/lib/constants";
+import { fetchLearning } from "@/sanity/lib/fetch";
+import { freeCourseOverviewQuery } from "@/sanity/lib/queries";
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
@@ -45,23 +48,29 @@ export const metadata: Metadata = {
 
 // ─── Structured Data ──────────────────────────────────────────────────────────
 
-const courseSchema = {
-  "@context": "https://schema.org",
-  "@type": "Course",
-  name: "Sparkline AI Foundations",
-  description:
-    "Practical AI training for Zimbabweans covering ChatGPT, Gemini, research, writing, fact-checking, and responsible AI use.",
-  url: "https://www.sparklinelabs.co.zw/ai-training",
-  provider: {
-    "@type": "Organization",
-    name: "Sparkline Labs",
-    url: "https://www.sparklinelabs.co.zw",
-  },
-  educationalLevel: "Beginner",
-  isAccessibleForFree: true,
-  courseMode: ["self-paced", "online"],
-  inLanguage: "en",
-};
+function buildCourseSchema(course: FreeCourseOverview) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.shortDescription,
+    url: `https://www.sparklinelabs.co.zw/ai-training/${course.slug}`,
+    provider: {
+      "@type": "Organization",
+      name: "Sparkline Labs",
+      url: "https://www.sparklinelabs.co.zw",
+    },
+    educationalLevel: course.level === "advanced" ? "Advanced" : course.level === "intermediate" ? "Intermediate" : "Beginner",
+    isAccessibleForFree: true,
+    courseMode: ["self-paced", "online"],
+    inLanguage: "en",
+    syllabusSections: (course.modules ?? []).map((m) => ({
+      "@type": "Syllabus",
+      name: m.title,
+      description: m.description,
+    })),
+  };
+}
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -78,23 +87,30 @@ const faqSchema = {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function AiTrainingPage() {
+export default async function AiTrainingPage() {
+  const course = await fetchLearning<FreeCourseOverview | null>(freeCourseOverviewQuery);
+  const published = isCoursePublished(course);
+  const courseHref = published ? `/ai-training/${course.slug}` : undefined;
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
-      />
+      {/* Only advertise the Course to search engines once it is actually available */}
+      {published && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildCourseSchema(course)) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <AiTrainingHero />
+      <AiTrainingHero courseHref={courseHref} />
       <WhatYouWillLearn />
-      <FeaturedCourse />
+      <FeaturedCourse course={course} />
       <WhyDifferent />
-      <CourseStructure />
+      <CourseStructure course={course} />
       <LearningFlow />
       <Certificate />
       <WhoIsThisFor />
@@ -105,7 +121,7 @@ export default function AiTrainingPage() {
         subheading="Straightforward answers — no marketing copy."
       />
 
-      <AiTrainingCta />
+      <AiTrainingCta courseHref={courseHref} />
     </>
   );
 }

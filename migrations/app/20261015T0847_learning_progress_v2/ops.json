@@ -1,0 +1,626 @@
+[
+  {
+    "id": "table.SectionProgress",
+    "label": "Create table \"SectionProgress\"",
+    "summary": "Creates table \"SectionProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "SectionProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"SectionProgress\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SectionProgress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"SectionProgress\"",
+        "sql": "CREATE TABLE \"public\".\"SectionProgress\" (\n  \"completedAt\" timestamptz,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"lessonProgressId\" text NOT NULL,\n  \"sanitySectionKey\" text NOT NULL,\n  \"status\" text DEFAULT 'IN_PROGRESS' NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"SectionProgress_status_check_07facb5f\" CHECK (\"status\" IN ('LOCKED', 'AVAILABLE', 'IN_PROGRESS', 'COMPLETED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"SectionProgress\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SectionProgress\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.AssessmentAttempt.sanitySectionKey",
+    "label": "Add column \"sanitySectionKey\" to \"AssessmentAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "sanitySectionKey",
+        "table": "AssessmentAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"sanitySectionKey\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "AssessmentAttempt",
+          "sanitySectionKey"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"sanitySectionKey\"",
+        "sql": "ALTER TABLE \"public\".\"AssessmentAttempt\" ADD COLUMN \"sanitySectionKey\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"sanitySectionKey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "AssessmentAttempt",
+          "sanitySectionKey"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Enrollment.lastAccessedAt",
+    "label": "Add column \"lastAccessedAt\" to \"Enrollment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "lastAccessedAt",
+        "table": "Enrollment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"lastAccessedAt\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Enrollment",
+          "lastAccessedAt"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"lastAccessedAt\"",
+        "sql": "ALTER TABLE \"public\".\"Enrollment\" ADD COLUMN \"lastAccessedAt\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"lastAccessedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Enrollment",
+          "lastAccessedAt"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Enrollment.lastLessonId",
+    "label": "Add column \"lastLessonId\" to \"Enrollment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "lastLessonId",
+        "table": "Enrollment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"lastLessonId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Enrollment",
+          "lastLessonId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"lastLessonId\"",
+        "sql": "ALTER TABLE \"public\".\"Enrollment\" ADD COLUMN \"lastLessonId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"lastLessonId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Enrollment",
+          "lastLessonId"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.LessonProgress.lastSectionKey",
+    "label": "Add column \"lastSectionKey\" to \"LessonProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "lastSectionKey",
+        "table": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"lastSectionKey\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "LessonProgress",
+          "lastSectionKey"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"lastSectionKey\"",
+        "sql": "ALTER TABLE \"public\".\"LessonProgress\" ADD COLUMN \"lastSectionKey\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"lastSectionKey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "LessonProgress",
+          "lastSectionKey"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.LessonProgress.lastViewedAt",
+    "label": "Add column \"lastViewedAt\" to \"LessonProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "lastViewedAt",
+        "table": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"lastViewedAt\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "LessonProgress",
+          "lastViewedAt"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"lastViewedAt\"",
+        "sql": "ALTER TABLE \"public\".\"LessonProgress\" ADD COLUMN \"lastViewedAt\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"lastViewedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "LessonProgress",
+          "lastViewedAt"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.LessonProgress.timeSpentSeconds",
+    "label": "Add column \"timeSpentSeconds\" to \"LessonProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "timeSpentSeconds",
+        "table": "LessonProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"timeSpentSeconds\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "LessonProgress",
+          "timeSpentSeconds"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"timeSpentSeconds\"",
+        "sql": "ALTER TABLE \"public\".\"LessonProgress\" ADD COLUMN \"timeSpentSeconds\" int4 DEFAULT 0 NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"timeSpentSeconds\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "LessonProgress",
+          "timeSpentSeconds"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.TaskAttempt.gradedBy",
+    "label": "Add column \"gradedBy\" to \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "gradedBy",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"gradedBy\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "gradedBy"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"gradedBy\"",
+        "sql": "ALTER TABLE \"public\".\"TaskAttempt\" ADD COLUMN \"gradedBy\" text DEFAULT 'AUTO' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"gradedBy\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "gradedBy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.TaskAttempt.maxScore",
+    "label": "Add column \"maxScore\" to \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "maxScore",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"maxScore\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "maxScore"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"maxScore\"",
+        "sql": "ALTER TABLE \"public\".\"TaskAttempt\" ADD COLUMN \"maxScore\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"maxScore\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "maxScore"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.TaskAttempt.rubricScores",
+    "label": "Add column \"rubricScores\" to \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "rubricScores",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"rubricScores\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "rubricScores"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"rubricScores\"",
+        "sql": "ALTER TABLE \"public\".\"TaskAttempt\" ADD COLUMN \"rubricScores\" json"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"rubricScores\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "rubricScores"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.TaskAttempt.sanitySectionKey",
+    "label": "Add column \"sanitySectionKey\" to \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "sanitySectionKey",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"sanitySectionKey\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "sanitySectionKey"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"sanitySectionKey\"",
+        "sql": "ALTER TABLE \"public\".\"TaskAttempt\" ADD COLUMN \"sanitySectionKey\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"sanitySectionKey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TaskAttempt",
+          "sanitySectionKey"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.SectionProgress.SectionProgress_lessonProgressId_sanitySectionKey_key",
+    "label": "Add unique constraint on \"SectionProgress\" (lessonProgressId, sanitySectionKey)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "SectionProgress_lessonProgressId_sanitySectionKey_key",
+        "table": "SectionProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"SectionProgress_lessonProgressId_sanitySectionKey_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SectionProgress_lessonProgressId_sanitySectionKey_key",
+          "public",
+          "\"public\".\"SectionProgress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"SectionProgress_lessonProgressId_sanitySectionKey_key\"",
+        "sql": "ALTER TABLE \"public\".\"SectionProgress\" ADD CONSTRAINT \"SectionProgress_lessonProgressId_sanitySectionKey_key\" UNIQUE (\"lessonProgressId\", \"sanitySectionKey\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"SectionProgress_lessonProgressId_sanitySectionKey_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SectionProgress_lessonProgressId_sanitySectionKey_key",
+          "public",
+          "\"public\".\"SectionProgress\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.TaskAttempt.TaskAttempt_gradedBy_check_529e0787",
+    "label": "Add check constraint \"TaskAttempt_gradedBy_check_529e0787\" on \"TaskAttempt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "TaskAttempt_gradedBy_check_529e0787",
+        "table": "TaskAttempt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"TaskAttempt_gradedBy_check_529e0787\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TaskAttempt_gradedBy_check_529e0787",
+          "public",
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"TaskAttempt_gradedBy_check_529e0787\"",
+        "sql": "ALTER TABLE \"public\".\"TaskAttempt\" ADD CONSTRAINT \"TaskAttempt_gradedBy_check_529e0787\" CHECK (\"gradedBy\" IN ('AUTO', 'SELF'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"TaskAttempt_gradedBy_check_529e0787\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TaskAttempt_gradedBy_check_529e0787",
+          "public",
+          "\"public\".\"TaskAttempt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.SectionProgress.SectionProgress_lessonProgressId_idx_555ff96a",
+    "label": "Create index \"SectionProgress_lessonProgressId_idx_555ff96a\" on \"SectionProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "SectionProgress_lessonProgressId_idx_555ff96a",
+        "table": "SectionProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"SectionProgress_lessonProgressId_idx_555ff96a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SectionProgress_lessonProgressId_idx_555ff96a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"SectionProgress_lessonProgressId_idx_555ff96a\"",
+        "sql": "CREATE INDEX \"SectionProgress_lessonProgressId_idx_555ff96a\" ON \"public\".\"SectionProgress\" (\"lessonProgressId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"SectionProgress_lessonProgressId_idx_555ff96a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SectionProgress_lessonProgressId_idx_555ff96a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.SectionProgress.SectionProgress_lessonProgressId_fkey",
+    "label": "Add foreign key \"SectionProgress_lessonProgressId_fkey\" on \"SectionProgress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "SectionProgress_lessonProgressId_fkey",
+        "table": "SectionProgress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"SectionProgress_lessonProgressId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SectionProgress_lessonProgressId_fkey",
+          "public",
+          "\"public\".\"SectionProgress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"SectionProgress_lessonProgressId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"SectionProgress\"\nADD CONSTRAINT \"SectionProgress_lessonProgressId_fkey\"\nFOREIGN KEY (\"lessonProgressId\")\nREFERENCES \"public\".\"LessonProgress\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"SectionProgress_lessonProgressId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SectionProgress_lessonProgressId_fkey",
+          "public",
+          "\"public\".\"SectionProgress\""
+        ]
+      }
+    ]
+  }
+]

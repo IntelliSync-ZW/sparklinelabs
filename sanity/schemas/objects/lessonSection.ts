@@ -1,25 +1,37 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 
+// A lesson is an ordered list of sections. Each section has three parts:
+//   content  — reading material and ungraded blocks
+//   practice — one optional task
+//   check    — one optional graded knowledge check
+// There is no manual "mark as complete". A section completes when the learner
+// passes its required check and/or task; a section with neither completes once read.
 export const lessonSection = defineType({
   name: "lessonSection",
   title: "Lesson Section",
   type: "object",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "practice", title: "Practice & check" },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
     defineField({
       name: "title",
-      title: "Section Title (H2)",
+      title: "Section title (H2)",
       type: "string",
-      description:
-        "Renders as the primary section heading (<h2>). Headings inside this section's content must strictly start at <h3>.",
+      group: "content",
+      description: "Renders as the section heading. Headings inside the content start at H3.",
       validation: (Rule) => Rule.required(),
     }),
 
     defineField({
       name: "sectionId",
-      title: "Section Anchor / ID",
+      title: "Anchor",
       type: "slug",
+      group: "settings",
       options: {
-        source: "title",
+        source: (_doc, ctx) => (ctx.parent as { title?: string })?.title ?? "",
         maxLength: 30,
         slugify: (input: string) =>
           input
@@ -29,106 +41,23 @@ export const lessonSection = defineType({
             .replace(/[^\w-]+/g, "")
             .slice(0, 30),
       },
-      description:
-        "Anchor slug automatically generated from the section title (max 30 characters). Used for URL hash links and progress tracking.",
-      validation: (Rule) =>
-        Rule.required().custom((slug) => {
-          if (!slug?.current) return true;
-          if (slug.current.length > 30) {
-            return "Section anchor must be 30 characters or fewer";
-          }
-          return true;
-        }),
+      description: "Used for #links and progress tracking. Don't change it after learners have started.",
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
-      name: "order",
-      title: "Section Number",
+      name: "estimatedMinutes",
+      title: "Estimated minutes",
       type: "number",
-      description: "Sequential order of this section within the lesson.",
+      group: "settings",
       validation: (Rule) => Rule.integer().positive(),
     }),
 
     defineField({
-      name: "defaultOpen",
-      title: "Default Open",
-      description:
-        "When toggled on, this section is expanded/open by default on page load. When off, it starts collapsed.",
-      type: "boolean",
-      initialValue: false,
-    }),
-
-    defineField({
-      name: "duration",
-      title: "Estimated Duration",
-      type: "object",
-      description: "Estimated time to complete this section.",
-      fields: [
-        defineField({
-          name: "value",
-          title: "Value",
-          type: "number",
-          validation: (Rule) => Rule.positive(),
-        }),
-        defineField({
-          name: "unit",
-          title: "Unit",
-          type: "string",
-          options: {
-            list: [
-              { title: "Seconds", value: "seconds" },
-              { title: "Minutes", value: "minutes" },
-              { title: "Hours", value: "hours" },
-            ],
-            layout: "radio",
-            direction: "horizontal",
-          },
-          initialValue: "minutes",
-        }),
-      ],
-      options: {
-        columns: 2,
-      },
-    }),
-
-    defineField({
-      name: "progression",
-      title: "Progression & Section Gating",
-      type: "object",
-      description: "Controls how students unlock and advance past this section.",
-      fields: [
-        defineField({
-          name: "required",
-          title: "Required to Advance",
-          type: "boolean",
-          initialValue: true,
-          description: "Student must complete this section before unlocking the next section.",
-        }),
-        defineField({
-          name: "completionType",
-          title: "Completion Gate",
-          type: "string",
-          options: {
-            list: [
-              { title: "Read / Scroll (Auto-complete when section is viewed)", value: "read" },
-              { title: "Manual Checkbox ('Mark as Understood')", value: "manual" },
-              { title: "Prompt Interaction (Run & test prompt)", value: "prompt" },
-              { title: "Pass Section Assessment", value: "assessment" },
-              { title: "Complete Section Task", value: "task" },
-            ],
-          },
-          initialValue: "read",
-        }),
-      ],
-    }),
-
-    // ── Section Content (Strictly H3 and below) ───────────────────────────────
-    defineField({
       name: "content",
-      title: "Section Content",
-      description:
-        "Body content for this section. All headings strictly start from H3 down to H6 (H1 and H2 are forbidden to maintain semantic hierarchy).",
+      title: "Content",
       type: "array",
+      group: "content",
       of: [
         defineArrayMember({
           type: "block",
@@ -162,10 +91,7 @@ export const lessonSection = defineType({
                     name: "href",
                     type: "url",
                     title: "URL",
-                    validation: (Rule) =>
-                      Rule.uri({
-                        scheme: ["http", "https", "mailto", "tel"],
-                      }),
+                    validation: (Rule) => Rule.uri({ scheme: ["http", "https", "mailto", "tel"] }),
                   },
                 ],
               },
@@ -175,9 +101,12 @@ export const lessonSection = defineType({
         defineArrayMember({ type: "callout" }),
         defineArrayMember({ type: "promptBlock" }),
         defineArrayMember({ type: "scenarioBlock" }),
-        defineArrayMember({ type: "sectionTask" }),
-        defineArrayMember({ type: "lessonTaskRef" }),
-        defineArrayMember({ type: "sectionAssessment" }),
+        defineArrayMember({ type: "comparisonBlock" }),
+        defineArrayMember({ type: "stepsBlock" }),
+        defineArrayMember({ type: "keyTermBlock" }),
+        defineArrayMember({ type: "checkpointBlock" }),
+        defineArrayMember({ type: "videoBlock" }),
+        defineArrayMember({ type: "resourceBlock" }),
         defineArrayMember({
           type: "image",
           options: { hotspot: true },
@@ -191,83 +120,41 @@ export const lessonSection = defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    // ── Dedicated Section Task (Optional) ─────────────────────────────────────
     defineField({
-      name: "task",
-      title: "Section Task (Optional)",
-      description: "Attach an interactive practice task or challenge to this section.",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "sectionTask",
-          title: "Inline Task",
-        }),
-        defineArrayMember({
-          type: "reference",
-          title: "Course Task Reference",
-          to: [{ type: "courseTask" }],
-        }),
-      ],
-      validation: (Rule) => Rule.max(1),
+      name: "practice",
+      title: "Practice task (optional)",
+      type: "taskSlot",
+      group: "practice",
     }),
 
-    // ── Dedicated Section Assessment (Optional) ───────────────────────────────
     defineField({
-      name: "assessment",
-      title: "Section Assessment (Optional)",
-      description: "Attach a knowledge check or quiz to this section.",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "sectionAssessment",
-          title: "Inline Assessment",
-        }),
-        defineArrayMember({
-          type: "reference",
-          title: "Course Assessment Reference",
-          to: [{ type: "courseAssessment" }],
-        }),
-      ],
-      validation: (Rule) => Rule.max(1),
+      name: "check",
+      title: "Knowledge check (optional)",
+      type: "knowledgeCheck",
+      group: "practice",
     }),
   ],
 
   preview: {
     select: {
       title: "title",
-      order: "order",
-      defaultOpen: "defaultOpen",
-      durationValue: "duration.value",
-      durationUnit: "duration.unit",
-      required: "progression.required",
-      completionType: "progression.completionType",
+      minutes: "estimatedMinutes",
       content: "content",
-      task: "task",
-      assessment: "assessment",
+      practiceRequired: "practice.required",
+      practiceSource: "practice.source",
+      checkRequired: "check.required",
+      checkSource: "check.source",
     },
-    prepare({
-      title,
-      order,
-      defaultOpen,
-      durationValue,
-      durationUnit,
-      required,
-      completionType,
-      content,
-      task,
-      assessment,
-    }) {
-      const blockCount = Array.isArray(content) ? content.length : 0;
-      const orderText = order ? `§${order}. ` : "";
-      const lockText = required ? "🔒 Gated" : "🔓 Open";
-      const openBadge = defaultOpen ? "📂 Open" : "📁 Collapsed";
-      const durText = durationValue ? ` · ⏱️ ${durationValue} ${durationUnit || "min"}` : "";
-      const taskBadge = Array.isArray(task) && task.length > 0 ? " · 📝 Task" : "";
-      const quizBadge = Array.isArray(assessment) && assessment.length > 0 ? " · 🎯 Quiz" : "";
-      return {
-        title: `${orderText}${title || "Untitled Section (H2)"}`,
-        subtitle: `${openBadge} · ${lockText} · Gate: ${completionType || "read"}${durText}${taskBadge}${quizBadge} · ${blockCount} block(s)`,
-      };
+    prepare({ title, minutes, content, practiceRequired, practiceSource, checkRequired, checkSource }) {
+      const blocks = Array.isArray(content) ? content.length : 0;
+      const parts = [
+        `${blocks} block${blocks === 1 ? "" : "s"}`,
+        minutes ? `⏱ ${minutes} min` : null,
+        practiceSource ? `📝 Task${practiceRequired ? " (req)" : ""}` : null,
+        checkSource ? `🎯 Check${checkRequired ? " (req)" : ""}` : null,
+        !practiceSource && !checkSource ? "Completes when read" : null,
+      ].filter(Boolean);
+      return { title: title || "Untitled section", subtitle: parts.join(" · ") };
     },
   },
 });

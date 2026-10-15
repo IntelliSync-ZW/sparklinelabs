@@ -3,13 +3,17 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { fetchLearning } from "@/sanity/lib/fetch";
-import { courseBySlugQuery, allCourseSlugsQuery } from "@/sanity/lib/queries";
+import { auth } from "@clerk/nextjs/server";
+import { courseBySlugQuery } from "@/sanity/lib/queries";
+import { firstIncompleteLesson, flattenCurriculum, lessonHref, lessonStatus, type CurriculumModule } from "@/lib/learning/curriculum";
+import { getCourseProgress } from "@/lib/learning/progress";
 import {
   BookOpen,
   Clock,
   Award,
   Lock,
   CheckCircle,
+  CheckCircle2,
   ChevronRight,
   Users,
   BarChart3,
@@ -61,12 +65,10 @@ type Course = {
   seo?: { title?: string; description?: string; ogImage?: string };
 };
 
-// ─── Static Params ────────────────────────────────────────────────────────────
+// ─── Rendering ───────────────────────────────────────────────────────────────
 
-export async function generateStaticParams() {
-  const slugs = await fetchLearning<{ slug: string }[]>(allCourseSlugsQuery);
-  return (slugs ?? []).map(({ slug }) => ({ "course-slug": slug }));
-}
+// Shows the signed-in learner's progress, so the page renders per request.
+export const dynamic = "force-dynamic";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
@@ -122,10 +124,34 @@ export default async function CourseDetailPage({
 }) {
   const { "course-slug": slug } = await params;
   const course = await fetchLearning<Course>(courseBySlugQuery, { slug });
-  if (!course) notFound();
+  // Unpublished courses are only viewable while developing.
+  if (!course || (process.env.NODE_ENV !== "development" && course.status !== "published")) notFound();
+
+  const firstModule = course.modules?.[0];
+  const firstLesson = firstModule?.lessons?.[0];
+  const startHref =
+    firstModule && firstLesson
+      ? `/ai-training/${slug}/${firstModule.slug}/${firstLesson.slug}`
+      : firstModule
+        ? `/ai-training/${slug}/${firstModule.slug}`
+        : null;
 
   const lessonCount = totalLessons(course.modules);
   const isFree = course.accessLevel === "free";
+
+  // The learner's place in the course. Lessons unlock strictly in order.
+  const { userId } = await auth();
+  const progress = await getCourseProgress(userId, course._id);
+  const modules = (course.modules ?? []) as unknown as CurriculumModule[];
+  const flat = flattenCurriculum(modules);
+  const completed = progress.completedLessonIds;
+  const completedCount = flat.filter((l) => completed.has(l._id)).length;
+  const nextLesson = firstIncompleteLesson(flat, completed);
+  const hasStarted = Boolean(userId) && completedCount > 0;
+  const allDone = flat.length > 0 && completedCount === flat.length;
+  const ctaHref = hasStarted && nextLesson ? lessonHref(slug, nextLesson) : startHref;
+  const ctaLabel = allDone ? "Review course" : hasStarted ? "Continue learning" : "Start Course";
+  const percent = flat.length ? Math.round((completedCount / flat.length) * 100) : 0;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -207,17 +233,38 @@ export default async function CourseDetailPage({
               </p>
 
               {/* Primary CTA */}
-              {course.modules?.[0]?.slug && (
+              {ctaHref && (
                 <Button
                   size="lg"
                   className="text-base px-8 py-6 group bg-accent text-accent-foreground hover:bg-accent/90"
                   asChild
                 >
-                  <Link href={`/ai-training/${slug}/${course.modules[0].slug}`} id="course-start-cta">
-                    Start Course
+                  <Link href={ctaHref}>
+                    {ctaLabel}
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
+              )}
+
+              {hasStarted && (
+                <div className="mt-6 max-w-sm">
+                  <div className="mb-1.5 flex items-center justify-between text-sm text-muted-foreground">
+                    <span>
+                      {completedCount} of {flat.length} lessons
+                    </span>
+                    <span className="font-medium tabular-nums text-foreground">{percent}%</span>
+                  </div>
+                  <div
+                    className="h-2 overflow-hidden rounded-full bg-secondary"
+                    role="progressbar"
+                    aria-valuenow={percent}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label="Course progress"
+                  >
+                    <div className="h-full rounded-full bg-accent" style={{ width: `${percent}%` }} />
+                  </div>
+                </div>
               )}
             </div>
 
@@ -300,19 +347,27 @@ export default async function CourseDetailPage({
                   <ul className="divide-y divide-border">
                     {mod.lessons.map((lesson, li) => {
                       const dur = formatDuration(lesson.duration?.value, lesson.duration?.unit);
-                      const isLocked = lesson.accessLevel === "paid" && !isFree;
+                      const flatLesson = flat.find((f) => f._id === lesson._id);
+                      const status = flatLesson && userId ? lessonStatus(flat, flatLesson.index, completed) : "available";
+                      const isLocked = (lesson.accessLevel === "paid" && !isFree) || status === "locked";
                       return (
                         <li key={lesson._id}>
                           <Link
-                            href={isLocked ? "#" : `/ai-training/${slug}/${mod.slug}#${lesson.slug}`}
+                            href={isLocked ? "#" : `/ai-training/${slug}/${mod.slug}/${lesson.slug}`}
                             className={`flex items-center gap-4 px-6 py-4 hover:bg-muted/50 transition-colors ${
                               isLocked ? "opacity-60 cursor-not-allowed pointer-events-none" : ""
                             }`}
                             tabIndex={isLocked ? -1 : undefined}
                             aria-disabled={isLocked}
                           >
-                            <span className="size-7 flex items-center justify-center rounded-full border border-border text-xs font-medium text-muted-foreground shrink-0">
-                              {li + 1}
+                            <span
+                              className={`size-7 flex items-center justify-center rounded-full border text-xs font-medium shrink-0 ${
+                                status === "completed"
+                                  ? "border-emerald-500 bg-emerald-500 text-white"
+                                  : "border-border text-muted-foreground"
+                              }`}
+                            >
+                              {status === "completed" ? <CheckCircle2 className="size-4" aria-label="Completed" /> : li + 1}
                             </span>
                             <span className="flex-1 text-sm leading-snug">{lesson.title}</span>
                             <span className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
@@ -347,10 +402,10 @@ export default async function CourseDetailPage({
                 ? ` Certificate issuance costs $${course.certificate.priceUsd} USD.`
                 : " Free to download."}
             </p>
-            {course.modules?.[0]?.slug && (
+            {ctaHref && (
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                <Link href={`/ai-training/${slug}/${course.modules[0].slug}`}>
-                  <Users className="mr-2 size-5" /> Start learning
+                <Link href={ctaHref}>
+                  <Users className="mr-2 size-5" /> {hasStarted ? "Continue learning" : "Start learning"}
                 </Link>
               </Button>
             )}

@@ -12,6 +12,9 @@
     "contract:emit": "prisma contract emit"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.9.10",
+    "@clerk/ui": "^1.38.1",
+    "@neondatabase/serverless": "^1.2.0",
     "@portabletext/react": "^6.2.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
@@ -33,10 +36,12 @@
     "react-dom": "19.2.3",
     "sanity": "^5.25.1",
     "sanity-plugin-stl-table": "^0.3.0",
+    "server-only": "^0.0.1",
     "structured-table": "^0.3.0",
     "structured-table-cli": "^0.2.0",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "temporal-polyfill": "^1.0.6"
   },
   "devDependencies": {
     "@prisma/cli-engine": "0.6.1",

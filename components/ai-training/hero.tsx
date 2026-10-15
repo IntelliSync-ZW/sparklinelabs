@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
-export function AiTrainingHero() {
+/** `courseHref` is the published free course URL; omit it while the course is unpublished. */
+export function AiTrainingHero({ courseHref }: { courseHref?: string }) {
   return (
     <section className="pt-32 pb-16 md:pt-40 md:pb-24 px-6">
       <div className="container mx-auto">
@@ -21,23 +22,29 @@ export function AiTrainingHero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              size="lg"
-              className="text-base px-8 py-6 group bg-accent text-accent-foreground hover:bg-accent/90"
-              asChild
-            >
-              <Link href="#free-course" id="hero-cta-start">
-                Start the Free AI Course
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
+            {courseHref ? (
+              <Button
+                size="lg"
+                className="text-base px-8 py-6 group bg-accent text-accent-foreground hover:bg-accent/90"
+                asChild
+              >
+                <Link href={courseHref}>
+                  Start the Free AI Course
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            ) : (
+              <Button size="lg" className="text-base px-8 py-6" disabled>
+                Free AI Course — Coming Soon
+              </Button>
+            )}
             <Button
               variant="outline"
               size="lg"
               className="text-base px-8 py-6 bg-transparent"
               asChild
             >
-              <Link href="#course-structure" id="hero-cta-explore">
+              <Link href="#course-structure">
                 Explore AI Training
               </Link>
             </Button>

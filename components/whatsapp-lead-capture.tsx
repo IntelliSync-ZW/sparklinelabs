@@ -239,8 +239,7 @@ export function WhatsAppLeadCapture() {
           How can we address you?
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Share your details and we&apos;ll log this enquiry with the page it
-          came from before opening your chosen contact method.
+          Share your details and we&apos;ll be able to assist you better.
         </p>
 
         <form onSubmit={saveAndContinue} className="mt-6 space-y-4">

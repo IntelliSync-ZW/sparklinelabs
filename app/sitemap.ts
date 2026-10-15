@@ -6,6 +6,7 @@ import {
   allCategoriesQuery,
   allAuthorSlugsQuery,
 } from "@/sanity/lib/queries";
+import { learningSitemapQuery } from "@/lib/learning-queries/player";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.sparklinelabs.co.zw";
@@ -15,6 +16,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let caseStudies: { slug: string; _updatedAt: string }[] = [];
   let categories: { slug: { current: string } }[] = [];
   let authors: { slug: string; _updatedAt: string }[] = [];
+  let courses: {
+    slug: string;
+    _updatedAt: string;
+    modules?: { slug: string; lessons?: { slug: string; _updatedAt: string }[] }[];
+  }[] = [];
 
   try {
     [posts, caseStudies, categories, authors] = await Promise.all([
@@ -42,6 +48,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch {
     /* Sanity not configured; return static routes only */
   }
+
+  try {
+    courses = await sanityFetch<typeof courses>({ query: learningSitemapQuery, tags: ["course"], revalidate: 3600 });
+  } catch {
+    /* Courses are optional in the sitemap */
+  }
+
+  // AI training: the landing page, then every published course, module and lesson.
+  const learningRoutes: MetadataRoute.Sitemap = [
+    { url: `${baseUrl}/ai-training`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    ...(courses ?? []).flatMap((course) => [
+      {
+        url: `${baseUrl}/ai-training/${course.slug}`,
+        lastModified: new Date(course._updatedAt),
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      },
+      ...(course.modules ?? []).flatMap((mod) => [
+        {
+          url: `${baseUrl}/ai-training/${course.slug}/${mod.slug}`,
+          lastModified: new Date(course._updatedAt),
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        },
+        ...(mod.lessons ?? []).map((lesson) => ({
+          url: `${baseUrl}/ai-training/${course.slug}/${mod.slug}/${lesson.slug}`,
+          lastModified: new Date(lesson._updatedAt),
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        })),
+      ]),
+    ]),
+  ];
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -162,6 +201,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes,
+    ...learningRoutes,
     ...categoryRoutes,
     ...authorRoutes,
     ...caseStudyRoutes,

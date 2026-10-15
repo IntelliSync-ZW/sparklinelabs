@@ -27,6 +27,7 @@
 .claude
 .cursor
 .devin
+.qodo
 
 # debug
 npm-debug.log*

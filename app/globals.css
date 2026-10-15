@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@clerk/ui/themes/shadcn.css";
 @import "./typeset.css";
 @import "tw-animate-css";
 
@@ -130,4 +131,16 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Lesson pages: respect the reader's "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  .learn-root *,
+  .learn-root *::before,
+  .learn-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

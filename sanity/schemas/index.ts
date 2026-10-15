@@ -19,11 +19,19 @@ import { courseSession } from "./courseSession";
 
 import { callout } from "./objects/callout";
 import { promptBlock } from "./objects/promptBlock";
-import { lessonTaskRef } from "./objects/lessonTaskRef";
 import { assessmentQuestionRef } from "./objects/assessmentQuestionRef";
 import { lessonSection } from "./objects/lessonSection";
-import { sectionAssessment } from "./objects/sectionAssessment";
-import { sectionTask } from "./objects/sectionTask";
+import { inlineTask } from "./objects/inlineTask";
+import { taskSlot } from "./objects/taskSlot";
+import { knowledgeCheck } from "./objects/knowledgeCheck";
+import {
+  comparisonBlock,
+  stepsBlock,
+  keyTermBlock,
+  checkpointBlock,
+  videoBlock,
+  resourceBlock,
+} from "./objects/lessonBlocks";
 import { scenarioBlock } from "./objects/scenarioBlock";
 
 export const schemaTypes = [
@@ -31,11 +39,17 @@ export const schemaTypes = [
   seoObject,
   callout,
   promptBlock,
-  lessonTaskRef,
   assessmentQuestionRef,
-  sectionTask,
-  sectionAssessment,
   scenarioBlock,
+  comparisonBlock,
+  stepsBlock,
+  keyTermBlock,
+  checkpointBlock,
+  videoBlock,
+  resourceBlock,
+  inlineTask,
+  taskSlot,
+  knowledgeCheck,
   lessonSection,
   // Documents
   authorSchema,
