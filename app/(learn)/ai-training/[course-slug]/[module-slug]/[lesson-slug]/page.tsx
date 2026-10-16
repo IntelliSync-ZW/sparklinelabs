@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { fetchLearning } from "@/sanity/lib/fetch";
 import { lessonPageQuery } from "@/lib/learning-queries/player";
 import {
@@ -12,10 +12,14 @@ import {
 } from "@/lib/learning/curriculum";
 import { getCourseProgress, getLessonState } from "@/lib/learning/progress";
 import { prepareLessonForClient } from "@/lib/learning/prepare";
+import { getCertificateStatus } from "@/lib/learning/certificates";
+import { hasLearnerProfile } from "@/lib/learning/profile";
+import { LearnerOnboarding } from "@/components/learn/onboarding/learner-onboarding";
 import { LearnShell } from "@/components/learn/shell/learn-shell";
 import { LessonView } from "@/components/learn/lesson/lesson-view";
 import { LockedLesson } from "@/components/learn/lesson/locked-lesson";
 import type {
+  LessonCertificate,
   LessonLink,
   LessonViewData,
 } from "@/components/learn/lesson/types";
@@ -112,6 +116,18 @@ export default async function LessonPage({
   if (!lesson) notFound();
 
   const { userId } = await auth();
+
+  // Brand-new learners tell us who they are before their first lesson.
+  if (userId && !(await hasLearnerProfile(userId))) {
+    const user = await currentUser();
+    return (
+      <LearnerOnboarding
+        firstName={user?.firstName ?? null}
+        courseTitle={lesson.course.title}
+      />
+    );
+  }
+
   const courseSlug = lesson.course.slug;
   const modules = lesson.course.modules;
   const flat = flattenCurriculum(modules);
@@ -205,6 +221,37 @@ export default async function LessonPage({
   const nextLesson =
     index >= 0 && index < flat.length - 1 ? flat[index + 1] : null;
 
+  // The last lesson offers the certificate right where the learner finishes.
+  let certificate: LessonCertificate | null = null;
+  if (userId && !nextLesson) {
+    const status = await getCertificateStatus(userId, lesson.course._id).catch(
+      () => null,
+    );
+    if (status?.state === "issued") {
+      certificate = {
+        state: "issued",
+        number: status.certificate.number,
+        recipientName: status.certificate.recipientName,
+      };
+    } else if (status?.state === "eligible") {
+      const user = await currentUser();
+      certificate = {
+        state: "eligible",
+        courseId: lesson.course._id,
+        defaultName:
+          user?.fullName ??
+          [user?.firstName, user?.lastName].filter(Boolean).join(" "),
+        score: status.score,
+      };
+    } else if (status?.state === "score_too_low") {
+      certificate = {
+        state: "score_too_low",
+        score: status.score,
+        minimum: status.minimum,
+      };
+    }
+  }
+
   // Pass only what the page renders. Task and quiz data here has no answers in it.
   const view: LessonViewData = {
     _id: lesson._id,
@@ -256,6 +303,7 @@ export default async function LessonPage({
           : null
       }
       courseHref={`/ai-training/${courseSlug}`}
+      certificate={certificate}
     />,
   );
 }

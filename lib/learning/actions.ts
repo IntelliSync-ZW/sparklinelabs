@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { lessonAnswerKeysQuery } from "@/lib/learning-queries/player";
 import { gradeCheck, gradeEndAssessment, gradeTask, type CheckKey, type EndKey, type TaskKey } from "./grading";
@@ -13,6 +13,8 @@ import {
 } from "./progress";
 import { END_KEY, type GradeResult } from "./results";
 import { issueCertificate } from "./certificates";
+import { saveLearnerProfile } from "./profile";
+import { recordWhatsappClick, registerInterest } from "./interest";
 import type { PortableTextValue } from "@/components/learn/blocks/types";
 
 /**
@@ -196,4 +198,31 @@ export async function claimCertificateAction(input: {
   if (!input?.courseId || typeof input.recipientName !== "string") return { ok: false, message: "Something went wrong." };
   const result = await issueCertificate({ userId, courseId: input.courseId, recipientName: input.recipientName });
   return result.ok ? { ok: true, number: result.certificate.number } : { ok: false, message: result.message };
+}
+
+/** Saves the onboarding answers. Every value is re-validated against the allowed lists on the server. */
+export async function saveLearnerProfileAction(input: unknown): Promise<{ ok: boolean }> {
+  const { userId } = await auth();
+  if (!userId) return { ok: false };
+  return { ok: await saveLearnerProfile(userId, input) };
+}
+
+/** Register interest in a course that is not live yet. Returns the WhatsApp group link from the CMS, if there is one. */
+export async function registerInterestAction(input: {
+  courseId: string;
+}): Promise<{ ok: true; whatsappUrl: string | null } | { ok: false; reason: "unauthenticated" | "unavailable" }> {
+  const { userId } = await auth();
+  if (!userId) return { ok: false, reason: "unauthenticated" };
+  if (typeof input?.courseId !== "string" || !input.courseId) return { ok: false, reason: "unavailable" };
+  const user = await currentUser();
+  const email = user?.primaryEmailAddress?.emailAddress ?? null;
+  const result = await registerInterest(userId, input.courseId, email);
+  return result.ok ? result : { ok: false, reason: "unavailable" };
+}
+
+/** Remembers that the learner tapped "Join the WhatsApp group". */
+export async function whatsappClickAction(input: { courseId: string }): Promise<void> {
+  const { userId } = await auth();
+  if (!userId || typeof input?.courseId !== "string") return;
+  await recordWhatsappClick(userId, input.courseId);
 }

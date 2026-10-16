@@ -17,7 +17,7 @@ export const courseModuleBySlugQuery = `
       title,
       "slug": slug.current
     },
-    "lessons": *[_type == "courseLesson" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
+    "lessons": *[_type == "courseLesson" && status in $statuses && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
       _id,
       order,
       title,
@@ -87,7 +87,7 @@ export const moduleWithLessonsBySlugQuery = `
         number,
         title,
         "slug": slug.current,
-        "lessons": *[_type == "courseLesson" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
+        "lessons": *[_type == "courseLesson" && status in $statuses && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
           _id,
           order,
           title,
@@ -100,7 +100,7 @@ export const moduleWithLessonsBySlugQuery = `
         }
       }
     },
-    "lessons": *[_type == "courseLesson" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
+    "lessons": *[_type == "courseLesson" && status in $statuses && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
       _id,
       order,
       title,

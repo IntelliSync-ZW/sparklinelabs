@@ -161,6 +161,26 @@ export const course = defineType({
     }),
 
     defineField({
+      name: "whatsappGroupUrl",
+      title: "WhatsApp group link",
+      description:
+        "Shown to learners who register their interest while the course is not live yet, so they can join the group and hear the day it launches. Paste the group invite link (https://chat.whatsapp.com/...).",
+      type: "url",
+      validation: (Rule) =>
+        Rule.uri({ scheme: ["https"] }).custom((value) => {
+          if (!value) return true;
+          try {
+            const host = new URL(value).hostname;
+            return host === "wa.me" || host === "whatsapp.com" || host.endsWith(".whatsapp.com")
+              ? true
+              : "This should be a WhatsApp link (chat.whatsapp.com or wa.me)";
+          } catch {
+            return "Enter a valid link";
+          }
+        }),
+    }),
+
+    defineField({
       name: "seo",
       title: "SEO",
       type: "seo",

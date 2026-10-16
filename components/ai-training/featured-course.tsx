@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { FALLBACK_COURSE_DESCRIPTION, FALLBACK_COURSE_TITLE } from "@/lib/learning/fallbacks";
+import { CourseInterestPanel } from "./course-interest-panel";
 import { BookOpen, CheckCircle, ArrowRight, Clock } from "lucide-react";
 
 export type FreeCourseOverview = {
@@ -11,6 +13,7 @@ export type FreeCourseOverview = {
   level?: string;
   durationMinutes?: number;
   certificateEnabled?: boolean;
+  whatsappGroupUrl?: string;
   modules?: {
     _id: string;
     number: number;
@@ -31,9 +34,11 @@ export function isCoursePublished(course: FreeCourseOverview | null): course is 
   return course?.status === "published";
 }
 
-export function FeaturedCourse({ course }: { course: FreeCourseOverview | null }) {
+export async function FeaturedCourse({ course }: { course: FreeCourseOverview | null }) {
   const published = isCoursePublished(course);
-  const lessonCount = (course?.modules ?? []).reduce((n, m) => n + m.lessonCount, 0);
+  const courseId = course?._id;
+  // Lessons are only counted once the course is live.
+  const lessonCount = !published ? 0 : (course?.modules ?? []).reduce((n, m) => n + m.lessonCount, 0);
 
   const features = [
     "Free",
@@ -71,11 +76,10 @@ export function FeaturedCourse({ course }: { course: FreeCourseOverview | null }
                 </div>
               )}
               <h3 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-                {course?.title ?? "Sparkline AI Foundations"}
+                {course?.title || FALLBACK_COURSE_TITLE}
               </h3>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                {course?.shortDescription ??
-                  "A structured, self-paced introduction to practical AI use. Built around how people actually work in Zimbabwe."}
+                {course?.shortDescription || FALLBACK_COURSE_DESCRIPTION}
               </p>
 
               {published ? (
@@ -90,9 +94,12 @@ export function FeaturedCourse({ course }: { course: FreeCourseOverview | null }
                   </Link>
                 </Button>
               ) : (
-                <p className="text-base text-muted-foreground">
-                  We&apos;re finishing the lessons and practice tasks. Check back soon. It will be free when it launches.
-                </p>
+                <div className="space-y-5">
+                  <p className="text-base text-muted-foreground">
+                    We&apos;re finishing the lessons and practice tasks. It will be free when it launches.
+                  </p>
+                  {courseId && <CourseInterestPanel courseId={courseId} />}
+                </div>
               )}
             </div>
 

@@ -1,0 +1,161 @@
+[
+  {
+    "id": "table.LearnerProfile",
+    "label": "Create table \"LearnerProfile\"",
+    "summary": "Creates table \"LearnerProfile\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "LearnerProfile"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"LearnerProfile\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LearnerProfile\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"LearnerProfile\"",
+        "sql": "CREATE TABLE \"public\".\"LearnerProfile\" (\n  \"aiExperience\" text NOT NULL,\n  \"clerkUserId\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"field\" text,\n  \"fieldOther\" text,\n  \"id\" text NOT NULL,\n  \"level\" text,\n  \"stage\" text NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"LearnerProfile\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LearnerProfile\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.LearnerProfile.LearnerProfile_clerkUserId_key",
+    "label": "Add unique constraint on \"LearnerProfile\" (clerkUserId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "LearnerProfile_clerkUserId_key",
+        "table": "LearnerProfile"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"LearnerProfile_clerkUserId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "LearnerProfile_clerkUserId_key",
+          "public",
+          "\"public\".\"LearnerProfile\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"LearnerProfile_clerkUserId_key\"",
+        "sql": "ALTER TABLE \"public\".\"LearnerProfile\" ADD CONSTRAINT \"LearnerProfile_clerkUserId_key\" UNIQUE (\"clerkUserId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"LearnerProfile_clerkUserId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "LearnerProfile_clerkUserId_key",
+          "public",
+          "\"public\".\"LearnerProfile\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.LearnerProfile.LearnerProfile_stage_field_idx_f44ffec5",
+    "label": "Create index \"LearnerProfile_stage_field_idx_f44ffec5\" on \"LearnerProfile\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "LearnerProfile_stage_field_idx_f44ffec5",
+        "table": "LearnerProfile"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"LearnerProfile_stage_field_idx_f44ffec5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LearnerProfile_stage_field_idx_f44ffec5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"LearnerProfile_stage_field_idx_f44ffec5\"",
+        "sql": "CREATE INDEX \"LearnerProfile_stage_field_idx_f44ffec5\" ON \"public\".\"LearnerProfile\" (\"stage\", \"field\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"LearnerProfile_stage_field_idx_f44ffec5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LearnerProfile_stage_field_idx_f44ffec5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.LearnerProfile.LearnerProfile_stage_idx_51755035",
+    "label": "Create index \"LearnerProfile_stage_idx_51755035\" on \"LearnerProfile\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "LearnerProfile_stage_idx_51755035",
+        "table": "LearnerProfile"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"LearnerProfile_stage_idx_51755035\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LearnerProfile_stage_idx_51755035\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"LearnerProfile_stage_idx_51755035\"",
+        "sql": "CREATE INDEX \"LearnerProfile_stage_idx_51755035\" ON \"public\".\"LearnerProfile\" (\"stage\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"LearnerProfile_stage_idx_51755035\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"LearnerProfile_stage_idx_51755035\""
+        ]
+      }
+    ]
+  }
+]

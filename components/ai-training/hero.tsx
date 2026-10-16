@@ -34,8 +34,8 @@ export function AiTrainingHero({ courseHref }: { courseHref?: string }) {
                 </Link>
               </Button>
             ) : (
-              <Button size="lg" className="text-base px-8 py-6" disabled>
-                Free AI Course: Coming Soon
+              <Button size="lg" className="text-base px-8 py-6 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                <Link href="#free-course">Get notified when the free course launches</Link>
               </Button>
             )}
             <Button

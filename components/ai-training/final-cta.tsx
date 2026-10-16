@@ -25,8 +25,8 @@ export function AiTrainingCta({ courseHref }: { courseHref?: string }) {
             </Link>
           </Button>
         ) : (
-          <Button size="lg" className="text-base px-8 py-6" disabled>
-            Coming Soon
+          <Button size="lg" className="text-base px-8 py-6 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+            <Link href="#free-course">Register your interest</Link>
           </Button>
         )}
       </div>

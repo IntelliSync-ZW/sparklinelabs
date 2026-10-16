@@ -5,10 +5,12 @@ import type { FreeCourseOverview } from "./featured-course";
 const numberWords = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
 
 export function CourseStructure({ course }: { course: FreeCourseOverview | null }) {
-  const modules = course?.modules ?? [];
+  // Modules and lessons are only shown once the course is live.
+  if (course?.status !== "published") return null;
+  const modules = course.modules ?? [];
   if (modules.length === 0) return null;
 
-  const published = course?.status === "published";
+  const published = true;
   const count = numberWords[modules.length] ?? String(modules.length);
 
   return (

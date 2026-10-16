@@ -221,3 +221,47 @@ model Certificate {
   @@index([clerkUserId])
   @@index([certificateNumber])
 }
+
+/// One row per learner, filled in by the onboarding questions. Plain columns (not JSON)
+/// so distribution queries are simple GROUP BYs, e.g.
+///   SELECT stage, COUNT(*) FROM "LearnerProfile" GROUP BY stage;
+model LearnerProfile {
+  id          String @id @default(cuid(2))
+  clerkUserId String @unique
+
+  /// school | college | professional | business | exploring
+  stage String
+  /// School form, study year, or years of experience (depends on stage)
+  level String?
+  /// Field of study or industry
+  field String?
+  /// Free text when field = "other"
+  fieldOther String?
+  /// new | tried | regular | advanced
+  aiExperience String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([stage])
+  @@index([stage, field])
+}
+
+/// A learner who registered interest in a course that is not live yet.
+///   SELECT COUNT(*) FROM "CourseInterest" WHERE "sanityCourseId" = '...';
+/// Join to "LearnerProfile" on clerkUserId to see who is waiting.
+model CourseInterest {
+  id             String @id @default(cuid(2))
+  clerkUserId    String
+  sanityCourseId String
+  /// Email on the Clerk account when they registered
+  email          String?
+
+  /// Set when they tap the "Join WhatsApp group" button
+  whatsappClickedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@unique([clerkUserId, sanityCourseId])
+  @@index([sanityCourseId])
+}

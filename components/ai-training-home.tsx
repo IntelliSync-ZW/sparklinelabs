@@ -12,13 +12,13 @@ export async function AiTrainingHome() {
   const course = await fetchLearning<FreeCourseOverview | null>(freeCourseOverviewQuery).catch(() => null);
   const published = isCoursePublished(course);
   const modules = course?.modules ?? [];
-  const lessons = modules.reduce((n, m) => n + m.lessonCount, 0);
+  const lessons = !published ? 0 : modules.reduce((n, m) => n + m.lessonCount, 0);
 
   const facts = [
     {
       Icon: BookOpen,
       label: published ? "Free course" : "Free course, coming soon",
-      detail: course?.title ?? "Sparkline AI Foundations",
+      detail: course?.title || "Sparkline AI Foundations",
     },
     {
       Icon: Clock,
@@ -60,9 +60,12 @@ export async function AiTrainingHome() {
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               ) : (
-                <span className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-base font-medium text-muted-foreground">
-                  <Clock className="size-4" /> Launching soon
-                </span>
+                <Link
+                  href="/ai-training#free-course"
+                  className="group inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+                >
+                  <Clock className="size-4" /> Get notified at launch
+                </Link>
               )}
               <Link
                 href="/ai-training"

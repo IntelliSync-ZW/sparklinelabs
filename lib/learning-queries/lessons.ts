@@ -87,7 +87,7 @@ export const allLessonSlugsQuery = `
 `;
 
 export const lessonsByModuleQuery = `
-  *[_type == "courseLesson" && module._ref == $moduleId && status == "published"] | order(order asc) {
+  *[_type == "courseLesson" && module._ref == $moduleId && status in $statuses] | order(order asc) {
     _id,
     title,
     "slug": slug.current,

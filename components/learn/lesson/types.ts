@@ -50,3 +50,10 @@ export type LessonViewData = {
 };
 
 export type LessonLink = { href: string; title: string };
+
+/** What the last lesson shows about the course certificate (null on every other lesson). */
+export type LessonCertificate =
+  | { state: "issued"; number: string; recipientName: string }
+  | { state: "eligible"; courseId: string; defaultName: string; score: number | null }
+  | { state: "score_too_low"; score: number; minimum: number }
+  | { state: "unavailable" };

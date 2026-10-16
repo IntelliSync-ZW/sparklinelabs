@@ -28,6 +28,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CourseComingSoon } from "@/components/ai-training/course-coming-soon";
+import { FALLBACK_COURSE_DESCRIPTION, FALLBACK_COURSE_TITLE } from "@/lib/learning/fallbacks";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -92,15 +94,18 @@ export async function generateMetadata({
   const { "course-slug": slug } = await params;
   const course = await fetchLearning<Course>(courseBySlugQuery, { slug });
   if (!course) return {};
+  const description = course.seo?.description ?? (course.shortDescription || FALLBACK_COURSE_DESCRIPTION);
   return {
-    title: course.seo?.title ?? `${course.title} | AI Training`,
-    description: course.seo?.description ?? course.shortDescription,
+    title: course.seo?.title ?? `${course.title || FALLBACK_COURSE_TITLE} | AI Training`,
+    description,
+    // A course that isn't live yet shouldn't be indexed.
+    ...(course.status !== "published" && { robots: { index: false, follow: true } }),
     alternates: {
       canonical: `https://www.sparklinelabs.co.zw/ai-training/${slug}`,
     },
     openGraph: {
       title: course.title,
-      description: course.shortDescription,
+      description,
       url: `https://www.sparklinelabs.co.zw/ai-training/${slug}`,
       images: course.seo?.ogImage ? [{ url: course.seo.ogImage }] : [],
     },
@@ -135,12 +140,11 @@ export default async function CourseDetailPage({
 }) {
   const { "course-slug": slug } = await params;
   const course = await fetchLearning<Course>(courseBySlugQuery, { slug });
-  // Unpublished courses are only viewable while developing.
-  if (
-    !course ||
-    (process.env.NODE_ENV !== "development" && course.status !== "published")
-  )
-    notFound();
+  if (!course) notFound();
+
+  // Until it is published the course shows only itself and the "notify me" sign-up:
+  // no modules, no lessons.
+  if (course.status !== "published") return <CourseComingSoon course={course} />;
 
   const firstModule = course.modules?.[0];
   const firstLesson = firstModule?.lessons?.[0];
@@ -490,7 +494,7 @@ export default async function CourseDetailPage({
             <div className="inline-flex items-center justify-center size-16 rounded-2xl bg-accent/10 mb-6">
               <Award className="size-8 text-accent" />
             </div>
-            <h2 className="text-3xl font-semibold tracking-tight mb-4">
+            <h2 className="text-3xl font-semibold text-center tracking-tight mb-4">
               {course.certificate.certificateTitle ??
                 "Certificate of Completion"}
             </h2>

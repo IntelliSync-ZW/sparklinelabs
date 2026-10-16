@@ -28,7 +28,7 @@ export const allCoursesQuery = `
       number,
       title,
       "slug": slug.current,
-      "lessons": *[_type == "courseLesson" && status == "published" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
+      "lessons": *[_type == "courseLesson" && status in $statuses && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
         _id,
         order,
         title,
@@ -72,7 +72,7 @@ export const courseBySlugQuery = `
       title,
       "slug": slug.current,
       description,
-      "lessons": *[_type == "courseLesson" && status == "published" && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
+      "lessons": *[_type == "courseLesson" && status in $statuses && (module._ref == ^._id || _id in ^.lessons[]._ref)] | order(order asc) {
         _id,
         order,
         title,
@@ -155,13 +155,14 @@ export const freeCourseOverviewQuery = `
     level,
     durationMinutes,
     "certificateEnabled": certificate.enabled,
+    whatsappGroupUrl,
     "modules": *[_type == "courseModule" && (course._ref == ^._id || _id in ^.modules[]._ref)] | order(number asc) {
       _id,
       number,
       title,
       "slug": slug.current,
       "description": pt::text(description),
-      "lessonCount": count(*[_type == "courseLesson" && module._ref == ^._id])
+      "lessonCount": count(*[_type == "courseLesson" && module._ref == ^._id && status in $statuses])
     }
   }
 `;

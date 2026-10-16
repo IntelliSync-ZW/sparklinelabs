@@ -35,7 +35,8 @@ import { EndAssessmentView } from "@/components/learn/assessments/end-assessment
 import { TaskView } from "@/components/learn/tasks/task-view";
 import { KnowledgeCheckView } from "@/components/learn/assessments/knowledge-check";
 import { formatLessonDuration } from "@/lib/learning/curriculum";
-import type { LessonLink, LessonViewData } from "./types";
+import { ClaimCertificate } from "@/components/learn/certificate/claim-certificate";
+import type { LessonCertificate, LessonLink, LessonViewData } from "./types";
 
 const typeMeta = {
   reading: { label: "Reading", Icon: BookOpen },
@@ -55,6 +56,7 @@ export function LessonView({
   previous,
   next,
   courseHref,
+  certificate,
 }: {
   lesson: LessonViewData;
   moduleLabel: string;
@@ -67,6 +69,8 @@ export function LessonView({
   /** The next lesson in the course, or null when this is the last one. */
   next: LessonLink | null;
   courseHref: string;
+  /** Only passed on the last lesson of a course that offers a certificate. */
+  certificate?: LessonCertificate | null;
 }) {
   const sections = lesson.sections;
   const [completedKeys, setCompletedKeys] = useState<Set<string>>(() => new Set(initialCompletedKeys));
@@ -428,20 +432,55 @@ export function LessonView({
 
         {/* ── Wrap-up ─────────────────────────────────────────────────────── */}
         {isSignedIn && lessonCompleted && !next && (
-          <div className="mt-12 rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/15 to-emerald-500/5 p-6 text-center">
+          <div id="certificate" className="mt-12 scroll-mt-24 rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/15 to-emerald-500/5 p-6 text-center">
             <span className="mx-auto mb-3 grid size-14 place-items-center rounded-full bg-emerald-500 text-white">
               <Award className="size-7" />
             </span>
             <p className="text-xl font-semibold">You&apos;ve finished the course</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-              Every lesson is complete. Head back to the course page to see your progress and your certificate.
-            </p>
-            <Link
-              href={courseHref}
-              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:bg-accent/90 transition-colors"
-            >
-              Back to the course <ArrowRight className="size-4" />
-            </Link>
+            {certificate?.state === "issued" ? (
+              <>
+                <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
+                  Your certificate was issued to {certificate.recipientName}. View it, share the link or save it as a PDF.
+                </p>
+                <Link
+                  href={`/ai-training/certificates/${certificate.number}`}
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:bg-accent/90 transition-colors"
+                >
+                  <Award className="size-4" /> View your certificate
+                </Link>
+              </>
+            ) : certificate?.state === "eligible" ? (
+              <>
+                <p className="mx-auto mt-1 mb-5 max-w-md text-sm text-muted-foreground">
+                  Every lesson is complete{certificate.score !== null ? ` with a score of ${certificate.score}%` : ""}. Claim your verifiable certificate.
+                </p>
+                <ClaimCertificate courseId={certificate.courseId} defaultName={certificate.defaultName} />
+              </>
+            ) : certificate?.state === "score_too_low" ? (
+              <>
+                <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
+                  Your certificate score is {certificate.score}%. Retake the scored assessments in earlier lessons to reach {certificate.minimum}%.
+                </p>
+                <Link
+                  href={courseHref}
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:bg-accent/90 transition-colors"
+                >
+                  Back to the course <ArrowRight className="size-4" />
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
+                  Every lesson is complete. Head back to the course page to see your progress.
+                </p>
+                <Link
+                  href={courseHref}
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:bg-accent/90 transition-colors"
+                >
+                  Back to the course <ArrowRight className="size-4" />
+                </Link>
+              </>
+            )}
           </div>
         )}
         {isSignedIn && lessonCompleted && next && (
@@ -595,10 +634,22 @@ export function LessonView({
               )
             ) : lessonCompleted ? (
               <Link
-                href={courseHref}
+                href={
+                  certificate?.state === "issued"
+                    ? `/ai-training/certificates/${certificate.number}`
+                    : certificate?.state === "eligible"
+                      ? "#certificate"
+                      : courseHref
+                }
                 className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:bg-accent/90 transition-colors"
               >
-                Back to course <ArrowRight className="size-4" />
+                {certificate?.state === "issued" ? (
+                  <>View certificate <Award className="size-4" /></>
+                ) : certificate?.state === "eligible" ? (
+                  <>Claim certificate <Award className="size-4" /></>
+                ) : (
+                  <>Back to course <ArrowRight className="size-4" /></>
+                )}
               </Link>
             ) : null}
           </div>

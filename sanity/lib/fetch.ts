@@ -1,18 +1,25 @@
 import type { QueryParams } from "next-sanity";
 import { client } from "./client";
 
+/**
+ * Lesson statuses a visitor can see. Drafts appear only while developing, so a
+ * lesson you've just added shows up in the outline before it is published.
+ * Queries use it as `status in $statuses`.
+ */
+const visibleStatuses = () => (process.env.NODE_ENV === "development" ? ["published", "draft"] : ["published"]);
+
 export async function sanityFetch<T>({
   query,
   params = {},
   tags = [],
-  revalidate = 60,
+  revalidate = process.env.NODE_ENV === "development" ? 0 : 60,
 }: {
   query: string;
   params?: QueryParams;
   tags?: string[];
   revalidate?: number | false;
 }): Promise<T> {
-  return client.fetch<T>(query, params, {
+  return client.fetch<T>(query, { statuses: visibleStatuses(), ...params }, {
     next: {
       ...(revalidate !== false && { revalidate }),
       ...(tags.length > 0 && { tags }),
@@ -43,5 +50,5 @@ export const fetchLegalPage = <T>(query: string, params?: QueryParams) =>
   sanityFetch<T>({ query, params, tags: ["legalPage"], revalidate: 300 });
 
 export const fetchLearning = <T>(query: string, params?: QueryParams) =>
-  sanityFetch<T>({ query, params, tags: ["course", "courseLesson", "courseModule"], revalidate: 120 });
+  sanityFetch<T>({ query, params, tags: ["course", "courseLesson", "courseModule"], revalidate: process.env.NODE_ENV === "development" ? 0 : 120 });
 

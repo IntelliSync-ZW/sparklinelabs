@@ -16,8 +16,16 @@
       "model": "Certificate",
       "namespace": "public"
     },
+    "CourseInterest": {
+      "model": "CourseInterest",
+      "namespace": "public"
+    },
     "Enrollment": {
       "model": "Enrollment",
+      "namespace": "public"
+    },
+    "LearnerProfile": {
+      "model": "LearnerProfile",
       "namespace": "public"
     },
     "LessonProgress": {
@@ -585,6 +593,77 @@
               "table": "Certificate"
             }
           },
+          "CourseInterest": {
+            "fields": {
+              "clerkUserId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "email": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "sanityCourseId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "whatsappClickedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {},
+            "storage": {
+              "fields": {
+                "clerkUserId": {
+                  "column": "clerkUserId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "email": {
+                  "column": "email"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "sanityCourseId": {
+                  "column": "sanityCourseId"
+                },
+                "whatsappClickedAt": {
+                  "column": "whatsappClickedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "CourseInterest"
+            }
+          },
           "Enrollment": {
             "fields": {
               "clerkUserId": {
@@ -782,6 +861,107 @@
               },
               "namespaceId": "public",
               "table": "Enrollment"
+            }
+          },
+          "LearnerProfile": {
+            "fields": {
+              "aiExperience": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "clerkUserId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "field": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "fieldOther": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "level": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "stage": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {},
+            "storage": {
+              "fields": {
+                "aiExperience": {
+                  "column": "aiExperience"
+                },
+                "clerkUserId": {
+                  "column": "clerkUserId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "field": {
+                  "column": "field"
+                },
+                "fieldOther": {
+                  "column": "fieldOther"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "level": {
+                  "column": "level"
+                },
+                "stage": {
+                  "column": "stage"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "LearnerProfile"
             }
           },
           "LessonProgress": {
@@ -1776,6 +1956,68 @@
                 }
               ]
             },
+            "CourseInterest": {
+              "columns": {
+                "clerkUserId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "email": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "sanityCourseId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "whatsappClickedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "sanityCourseId"
+                  ],
+                  "name": "CourseInterest_sanityCourseId_idx_39b3b4ef",
+                  "prefix": "CourseInterest_sanityCourseId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "clerkUserId",
+                    "sanityCourseId"
+                  ]
+                }
+              ]
+            },
             "Enrollment": {
               "checks": [
                 {
@@ -1901,6 +2143,95 @@
                   "columns": [
                     "clerkUserId",
                     "sanityCourseId"
+                  ]
+                }
+              ]
+            },
+            "LearnerProfile": {
+              "columns": {
+                "aiExperience": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "clerkUserId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "field": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "fieldOther": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "level": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "stage": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "stage",
+                    "field"
+                  ],
+                  "name": "LearnerProfile_stage_field_idx_f44ffec5",
+                  "prefix": "LearnerProfile_stage_field_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "stage"
+                  ],
+                  "name": "LearnerProfile_stage_idx_51755035",
+                  "prefix": "LearnerProfile_stage_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "clerkUserId"
                   ]
                 }
               ]
@@ -2432,10 +2763,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "18e7a314add02f19f4dde39c34b8f53f638ce0e13dfe570d72d2b486ae8cc6ba"
+    "storageHash": "cbb2431d6473691f05fcdde80894a9d2382efd6449033c9e8a1ccc82419391f2"
   },
   "execution": {
-    "executionHash": "e49a0b380e4d0d9a04ba14a37ae1e9d7b95ea6a17af4680695a4bec43b3ace1a",
+    "executionHash": "89de9bc0e9063bc6cda92d180204ed74e8e608283acd787658764ee322aa324a",
     "mutations": {
       "defaults": [
         {
@@ -2477,7 +2808,29 @@
             "kind": "generator"
           },
           "ref": {
+            "entry": "CourseInterest",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
             "entry": "Enrollment",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "LearnerProfile",
             "field": "id",
             "namespace": "public"
           }

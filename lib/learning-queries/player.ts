@@ -114,7 +114,7 @@ const curriculumProjection = `
     title,
     "slug": slug.current,
     accessLevel,
-    "lessons": *[_type == "courseLesson" && module._ref == ^._id && status == "published"] | order(order asc) {
+    "lessons": *[_type == "courseLesson" && module._ref == ^._id && status in $statuses] | order(order asc) {
       _id,
       title,
       "slug": slug.current,
@@ -200,7 +200,7 @@ export const moduleOverviewQuery = `
       moduleAssessment-> { _id, title, passingScore },
       *[_type == "courseAssessment" && module._ref == ^._id][0] { _id, title, passingScore }
     ),
-    "lessons": *[_type == "courseLesson" && module._ref == ^._id && status == "published"] | order(order asc) {
+    "lessons": *[_type == "courseLesson" && module._ref == ^._id && status in $statuses] | order(order asc) {
       _id,
       title,
       "slug": slug.current,
@@ -329,7 +329,7 @@ export const lessonAnswerKeysQuery = `
 export const courseScoringQuery = `
   *[_type == "course" && _id == $courseId][0] {
     "minimumScore": completionRules.minimumAssessmentScore,
-    "lessons": *[_type == "courseLesson" && module->course._ref == ^._id && status == "published"] {
+    "lessons": *[_type == "courseLesson" && module->course._ref == ^._id && status in $statuses] {
       _id,
       "sections": body[] {
         _key,

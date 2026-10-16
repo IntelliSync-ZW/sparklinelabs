@@ -12,7 +12,7 @@ const tiers = [
     note: "Issued on completion",
   },
   {
-    label: "Official certificate",
+    label: "Certificate of Completion",
     value: "US$5",
     note: "Optional, one-time fee",
   },
