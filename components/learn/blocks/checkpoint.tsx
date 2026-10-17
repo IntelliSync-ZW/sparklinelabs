@@ -4,15 +4,16 @@ import { useState } from "react";
 import { CheckCircle2, CircleHelp, RotateCcw, XCircle } from "lucide-react";
 
 type Option = { _key?: string; label?: string; isCorrect?: boolean; feedback?: string };
-type CheckpointValue = { question?: string; options?: Option[] };
+type CheckpointValue = { question?: string; answerType?: "single" | "multiple"; options?: Option[] };
 
 /**
- * A quick, ungraded question inside the reading. One right answer gives instant
- * feedback on click; several right answers use checkboxes and a Check button.
+ * A quick, ungraded question inside the reading. "One answer" gives instant
+ * feedback on click; "Select all that apply" uses checkboxes and a Check button.
+ * Blocks saved before the answer type existed fall back to counting right answers.
  */
 export function CheckpointBlock({ value }: { value: CheckpointValue }) {
   const options = value.options ?? [];
-  const multi = options.filter((o) => o.isCorrect).length > 1;
+  const multi = value.answerType ? value.answerType === "multiple" : options.filter((o) => o.isCorrect).length > 1;
   const [picked, setPicked] = useState<number[]>([]);
   const [checked, setChecked] = useState(false);
 
@@ -42,7 +43,8 @@ export function CheckpointBlock({ value }: { value: CheckpointValue }) {
       <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300">
         <CircleHelp className="size-3.5" /> Quick check
       </p>
-      <p className="mb-4 text-lg font-medium leading-snug text-foreground">{value.question}</p>
+      <p className={`${multi ? "mb-1" : "mb-4"} text-lg font-medium leading-snug text-foreground`}>{value.question}</p>
+      {multi && <p className="mb-4 text-sm text-muted-foreground">Select all that apply.</p>}
 
       <div role={multi ? "group" : "radiogroup"} aria-label={value.question} className="space-y-2.5">
         {options.map((option, i) => {

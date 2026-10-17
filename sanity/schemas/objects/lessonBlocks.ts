@@ -112,15 +112,32 @@ export const checkpointBlock = defineType({
   fields: [
     defineField({ name: "question", title: "Question", type: "text", rows: 2, validation: (Rule) => Rule.required() }),
     defineField({
+      name: "answerType",
+      title: "Answer type",
+      type: "string",
+      options: {
+        list: [
+          { title: "One answer", value: "single" },
+          { title: "Select all that apply", value: "multiple" },
+        ],
+        layout: "radio",
+        direction: "horizontal",
+      },
+      initialValue: "single",
+    }),
+    defineField({
       name: "options",
       title: "Options",
       type: "array",
       validation: (Rule) =>
         Rule.required()
           .min(2)
-          .custom((opts: { isCorrect?: boolean }[] | undefined) =>
-            opts?.some((o) => o.isCorrect) ? true : "Mark at least one option correct"
-          ),
+          .custom((opts: { isCorrect?: boolean }[] | undefined, context) => {
+            const correct = opts?.filter((o) => o.isCorrect).length ?? 0;
+            if (correct === 0) return "Mark at least one option correct";
+            const multi = (context.parent as { answerType?: string } | undefined)?.answerType === "multiple";
+            return multi || correct === 1 ? true : 'Only one option can be correct. Switch to "Select all that apply" for more.';
+          }),
       of: [
         defineArrayMember({
           type: "object",
@@ -139,8 +156,11 @@ export const checkpointBlock = defineType({
     }),
   ],
   preview: {
-    select: { title: "question" },
-    prepare: ({ title }) => ({ title: title || "Checkpoint", subtitle: "❓ Checkpoint" }),
+    select: { title: "question", answerType: "answerType" },
+    prepare: ({ title, answerType }) => ({
+      title: title || "Checkpoint",
+      subtitle: answerType === "multiple" ? "❓ Checkpoint · select all that apply" : "❓ Checkpoint",
+    }),
   },
 });
 
