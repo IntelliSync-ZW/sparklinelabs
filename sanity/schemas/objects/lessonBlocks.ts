@@ -104,63 +104,94 @@ export const keyTermBlock = defineType({
   },
 });
 
-// Ungraded, instant-feedback question inline with the reading.
+// Ungraded, instant-feedback questions inline with the reading. One block can
+// hold several questions; each has its own answer type and feedback.
 export const checkpointBlock = defineType({
   name: "checkpointBlock",
-  title: "Checkpoint (quick question)",
+  title: "Quick check (ungraded questions)",
   type: "object",
   fields: [
-    defineField({ name: "question", title: "Question", type: "text", rows: 2, validation: (Rule) => Rule.required() }),
     defineField({
-      name: "answerType",
-      title: "Answer type",
-      type: "string",
-      options: {
-        list: [
-          { title: "One answer", value: "single" },
-          { title: "Select all that apply", value: "multiple" },
-        ],
-        layout: "radio",
-        direction: "horizontal",
-      },
-      initialValue: "single",
-    }),
-    defineField({
-      name: "options",
-      title: "Options",
+      name: "questions",
+      title: "Questions",
       type: "array",
-      validation: (Rule) =>
-        Rule.required()
-          .min(2)
-          .custom((opts: { isCorrect?: boolean }[] | undefined, context) => {
-            const correct = opts?.filter((o) => o.isCorrect).length ?? 0;
-            if (correct === 0) return "Mark at least one option correct";
-            const multi = (context.parent as { answerType?: string } | undefined)?.answerType === "multiple";
-            return multi || correct === 1 ? true : 'Only one option can be correct. Switch to "Select all that apply" for more.';
-          }),
+      validation: (Rule) => Rule.required().min(1),
       of: [
         defineArrayMember({
           type: "object",
-          name: "checkpointOption",
+          name: "checkpointQuestion",
           fields: [
-            defineField({ name: "label", title: "Label", type: "string", validation: (Rule) => Rule.required() }),
-            defineField({ name: "isCorrect", title: "Correct", type: "boolean", initialValue: false }),
-            defineField({ name: "feedback", title: "Feedback when chosen", type: "text", rows: 2 }),
+            defineField({ name: "question", title: "Question", type: "text", rows: 2, validation: (Rule) => Rule.required() }),
+            defineField({
+              name: "answerType",
+              title: "Answer type",
+              type: "string",
+              options: {
+                list: [
+                  { title: "One answer", value: "single" },
+                  { title: "Select all that apply", value: "multiple" },
+                ],
+                layout: "radio",
+                direction: "horizontal",
+              },
+              initialValue: "single",
+            }),
+            defineField({
+              name: "options",
+              title: "Options",
+              type: "array",
+              validation: (Rule) =>
+                Rule.required()
+                  .min(2)
+                  .custom((opts: { isCorrect?: boolean }[] | undefined, context) => {
+                    const correct = opts?.filter((o) => o.isCorrect).length ?? 0;
+                    if (correct === 0) return "Mark at least one option correct";
+                    const multi = (context.parent as { answerType?: string } | undefined)?.answerType === "multiple";
+                    return multi || correct === 1 ? true : 'Only one option can be correct. Switch to "Select all that apply" for more.';
+                  }),
+              of: [
+                defineArrayMember({
+                  type: "object",
+                  name: "checkpointOption",
+                  fields: [
+                    defineField({ name: "label", title: "Label", type: "string", validation: (Rule) => Rule.required() }),
+                    defineField({ name: "isCorrect", title: "Correct", type: "boolean", initialValue: false }),
+                    defineField({ name: "feedback", title: "Feedback when chosen", type: "text", rows: 2 }),
+                  ],
+                  preview: {
+                    select: { title: "label", isCorrect: "isCorrect" },
+                    prepare: ({ title, isCorrect }) => ({ title, subtitle: isCorrect ? "✓ Correct" : "" }),
+                  },
+                }),
+              ],
+            }),
+            defineField({
+              name: "feedback",
+              title: "Question feedback",
+              type: "text",
+              rows: 3,
+              description: "Shown once the learner answers, right or wrong, under the feedback for the options they chose.",
+              validation: (Rule) => Rule.required().warning("Add feedback that explains the answer"),
+            }),
           ],
           preview: {
-            select: { title: "label", isCorrect: "isCorrect" },
-            prepare: ({ title, isCorrect }) => ({ title, subtitle: isCorrect ? "✓ Correct" : "" }),
+            select: { title: "question", answerType: "answerType", options: "options" },
+            prepare: ({ title, answerType, options }) => {
+              const count = Array.isArray(options) ? options.length : 0;
+              const kind = answerType === "multiple" ? "Select all that apply" : "One answer";
+              return { title: title || "Untitled question", subtitle: `${kind} · ${count} option${count === 1 ? "" : "s"}` };
+            },
           },
         }),
       ],
     }),
   ],
   preview: {
-    select: { title: "question", answerType: "answerType" },
-    prepare: ({ title, answerType }) => ({
-      title: title || "Checkpoint",
-      subtitle: answerType === "multiple" ? "❓ Checkpoint · select all that apply" : "❓ Checkpoint",
-    }),
+    select: { first: "questions.0.question", questions: "questions" },
+    prepare: ({ first, questions }) => {
+      const count = Array.isArray(questions) ? questions.length : 0;
+      return { title: first || "Quick check", subtitle: `❓ Quick check · ${count} question${count === 1 ? "" : "s"}` };
+    },
   },
 });
 

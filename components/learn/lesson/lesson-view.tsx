@@ -13,6 +13,7 @@ import {
   Clock,
   ExternalLink,
   FileText,
+  Flag,
   Lightbulb,
   Lock,
   Award,
@@ -30,13 +31,13 @@ import {
   submitTaskAction,
 } from "@/lib/learning/actions";
 import { track } from "@/lib/analytics";
-import { type CheckAnswers, type EndAnswers, type GradeResult, type PassedGates, type TaskSubmission } from "@/lib/learning/results";
+import { INTRO_KEY, type CheckAnswers, type EndAnswers, type GradeResult, type PassedGates, type TaskSubmission } from "@/lib/learning/results";
 import { EndAssessmentView } from "@/components/learn/assessments/end-assessment";
 import { TaskView } from "@/components/learn/tasks/task-view";
 import { KnowledgeCheckView } from "@/components/learn/assessments/knowledge-check";
 import { formatLessonDuration } from "@/lib/learning/curriculum";
 import { ClaimCertificate } from "@/components/learn/certificate/claim-certificate";
-import type { LessonCertificate, LessonLink, LessonViewData } from "./types";
+import type { LessonCertificate, LessonLink, LessonPartData, LessonSectionData, LessonViewData } from "./types";
 
 const typeMeta = {
   reading: { label: "Reading", Icon: BookOpen },
@@ -73,6 +74,10 @@ export function LessonView({
   certificate?: LessonCertificate | null;
 }) {
   const sections = lesson.sections;
+  // Sections grouped under their part headings; section numbers restart in each part.
+  const parts = useMemo(() => groupByPart(sections, lesson.parts), [sections, lesson.parts]);
+  // The optional section before Part 1, set on the lesson itself.
+  const intro = sections.find((s) => s._key === INTRO_KEY);
   const [completedKeys, setCompletedKeys] = useState<Set<string>>(() => new Set(initialCompletedKeys));
   // Mirrors `completedKeys` so the scroll observer can check it without re-subscribing.
   const completedRef = useRef<Set<string>>(new Set(initialCompletedKeys));
@@ -269,9 +274,77 @@ export function LessonView({
     return () => observer.disconnect();
   }, [sections]);
 
-  // Signed-out visitors read the first section; the rest sits behind the sign-in form.
-  const visibleSections = isSignedIn ? sections : sections.slice(0, 1);
-  const hiddenSections = isSignedIn ? [] : sections.slice(1);
+  // Signed-out visitors read the introduction (or, without one, the first section);
+  // the rest sits behind the sign-in form.
+  const visibleParts = isSignedIn ? parts : intro ? [] : parts.slice(0, 1).map((p) => ({ ...p, sections: p.sections.slice(0, 1) }));
+  const hiddenParts = isSignedIn
+    ? []
+    : intro
+      ? parts
+      : parts.map((p, i) => ({ ...p, sections: i === 0 ? p.sections.slice(1) : p.sections })).filter((p) => p.sections.length > 0);
+
+  /** A section's entry in the "On this page" list. */
+  const tocItem = (section: LessonSectionData, title: string) => {
+    const done = completedKeys.has(section._key);
+    const active = activeKey === section._key;
+    return (
+      <li key={section._key}>
+        <a
+          href={`#${section.sectionId ?? section._key}`}
+          className={`-ml-px flex items-center gap-2 border-l-2 py-1.5 pl-4 pr-2 text-sm transition-colors ${
+            active ? "border-accent font-medium text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          {done ? (
+            <CheckCircle2 className="size-3.5 shrink-0 text-emerald-500" />
+          ) : (
+            <span className="size-3.5 shrink-0 rounded-full border border-border" />
+          )}
+          <span className="truncate">{title}</span>
+        </a>
+      </li>
+    );
+  };
+
+  /** A section on the rail: its blocks, then its practice task and knowledge check. */
+  const renderSection = (
+    section: LessonSectionData,
+    step: { number: React.ReactNode; label?: string; isLast: boolean; title: string; headingAs?: "h2" | "h3" }
+  ) => (
+    <SectionStep
+      key={section._key}
+      {...step}
+      done={completedKeys.has(section._key)}
+      anchor={section.sectionId ?? section._key}
+      minutes={section.estimatedMinutes}
+      registerHeading={(el) => el && headings.current.set(section._key, el)}
+      registerEnd={(el) => el && endMarkers.current.set(section._key, el)}
+      sectionKey={section._key}
+      gateHint={gateHint(section, passedTasks.has(section._key), passedChecks.has(section._key))}
+    >
+      {section.content && section.content.length > 0 && renderBlocks(section.content)}
+      {section.practice?.task && (
+        <TaskView
+          task={section.practice.task}
+          required={Boolean(section.practice.required)}
+          scored={Boolean(section.practice.required && section.practice.scored)}
+          initiallyPassed={passedTasks.has(section._key)}
+          signedIn={isSignedIn}
+          onSubmit={(submission) => handleTask(section._key, submission)}
+        />
+      )}
+      {section.check && (section.check.questions?.length ?? 0) > 0 && (
+        <KnowledgeCheckView
+          check={section.check}
+          required={Boolean(section.check.required)}
+          scored={Boolean(section.check.required && section.check.scored)}
+          initiallyPassed={passedChecks.has(section._key)}
+          signedIn={isSignedIn}
+          onSubmit={(answers) => handleCheck(section._key, answers)}
+        />
+      )}
+    </SectionStep>
+  );
   const completedCount = sections.filter((s) => completedKeys.has(s._key)).length;
 
   const nextBlockedReason = !isSignedIn
@@ -302,7 +375,9 @@ export function LessonView({
             )}
             {sections.length > 0 && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-muted-foreground">
-                <FileText className="size-3.5" /> {sections.length} section{sections.length === 1 ? "" : "s"}
+                <FileText className="size-3.5" />
+                {parts.length > 1 && `${parts.length} parts · `}
+                {sections.length} section{sections.length === 1 ? "" : "s"}
               </span>
             )}
           </div>
@@ -349,75 +424,86 @@ export function LessonView({
           </aside>
         )}
 
-        {/* ── Sections on a numbered rail ─────────────────────────────────── */}
-        <ol className="relative">
-          {visibleSections.map((section, i) => (
-            <SectionStep
-              key={section._key}
-              number={i + 1}
-              isLast={i === visibleSections.length - 1 && hiddenSections.length === 0}
-              done={completedKeys.has(section._key)}
-              title={section.title}
-              anchor={section.sectionId ?? section._key}
-              minutes={section.estimatedMinutes}
-              registerHeading={(el) => el && headings.current.set(section._key, el)}
-              registerEnd={(el) => el && endMarkers.current.set(section._key, el)}
-              sectionKey={section._key}
-              gateHint={gateHint(section, passedTasks.has(section._key), passedChecks.has(section._key))}
-            >
-              {section.content && section.content.length > 0 && renderBlocks(section.content)}
-              {section.practice?.task && (
-                <TaskView
-                  task={section.practice.task}
-                  required={Boolean(section.practice.required)}
-                  scored={Boolean(section.practice.required && section.practice.scored)}
-                  initiallyPassed={passedTasks.has(section._key)}
-                  signedIn={isSignedIn}
-                  onSubmit={(submission) => handleTask(section._key, submission)}
-                />
-              )}
-              {section.check && (section.check.questions?.length ?? 0) > 0 && (
-                <KnowledgeCheckView
-                  check={section.check}
-                  required={Boolean(section.check.required)}
-                  scored={Boolean(section.check.required && section.check.scored)}
-                  initiallyPassed={passedChecks.has(section._key)}
-                  signedIn={isSignedIn}
-                  onSubmit={(answers) => handleCheck(section._key, answers)}
-                />
-              )}
-            </SectionStep>
-          ))}
+        {/* ── Introduction: an optional section before Part 1 ───────────────── */}
+        {intro && (
+          <ol className="relative">
+            {renderSection(intro, {
+              number: <Flag className="size-3.5" />,
+              label: intro.title ? "Introduction" : undefined,
+              isLast: true,
+              title: intro.title || "Introduction",
+              headingAs: "h2",
+            })}
+          </ol>
+        )}
 
-          {/* Signed out: remaining sections stay in the page (for crawlers) behind the form. */}
-          {hiddenSections.length > 0 && (
-            <li className="relative pl-12 pb-4">
-              <div
-                aria-hidden="true"
-                className="relative max-h-64 overflow-hidden select-none pointer-events-none opacity-30 blur-sm"
-              >
-                {hiddenSections.map((section, i) => (
-                  <div key={section._key} className="mb-8">
-                    <h2 className="text-2xl font-semibold tracking-tight mb-4">{section.title}</h2>
-                    {section.content && section.content.length > 0 && renderBlocks(section.content)}
-                    <span className="sr-only">{i}</span>
-                  </div>
-                ))}
+        {/* ── Parts, each with its sections on a numbered rail ────────────── */}
+        {visibleParts.map((part) => (
+          <section key={part.key} id={`part-${part.number}`} aria-labelledby={`part-${part.number}-title`} className="scroll-mt-24">
+            <header className="mb-8 flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-b border-border pb-4">
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Part {part.number}</p>
+                <h2 id={`part-${part.number}-title`} className="mt-1 text-3xl font-semibold tracking-tight text-balance">
+                  {part.title}
+                </h2>
+                {part.intro && <p className="mt-2 text-muted-foreground leading-relaxed">{part.intro}</p>}
               </div>
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-transparent to-background" />
-              <div className="relative -mt-24 flex flex-col items-center text-center">
-                <div className="mb-4 flex size-12 items-center justify-center rounded-full border border-accent/20 bg-accent/10 text-accent">
-                  <Lock className="size-6" />
+              {isSignedIn && (
+                <span className="text-xs font-medium text-muted-foreground">
+                  {part.sections.filter((s) => completedKeys.has(s._key)).length}/{part.sections.length} done
+                </span>
+              )}
+            </header>
+            <ol className="relative">
+              {part.sections.map((section, i) =>
+                renderSection(section, {
+                  number: i + 1,
+                  label: `Part ${part.number} · Section ${i + 1}`,
+                  isLast: i === part.sections.length - 1,
+                  title: section.title,
+                })
+              )}
+            </ol>
+          </section>
+        ))}
+
+        {/* Signed out: remaining sections stay in the page (for crawlers) behind the form. */}
+        {hiddenParts.length > 0 && (
+          <div className="relative pl-12 pb-4">
+            <div
+              aria-hidden="true"
+              className="relative max-h-64 overflow-hidden select-none pointer-events-none opacity-30 blur-sm"
+            >
+              {hiddenParts.map((part) => (
+                <div key={part.key}>
+                  {/* A part whose first section is showing already has its heading above. */}
+                  {!visibleParts.some((v) => v.key === part.key) && (
+                    <h2 className="text-3xl font-semibold tracking-tight mb-6">
+                      Part {part.number}: {part.title}
+                    </h2>
+                  )}
+                  {part.sections.map((section) => (
+                    <div key={section._key} className="mb-8">
+                      <h3 className="text-2xl font-semibold tracking-tight mb-4">{section.title}</h3>
+                      {section.content && section.content.length > 0 && renderBlocks(section.content)}
+                    </div>
+                  ))}
                 </div>
-                <h2 className="mb-2 text-2xl font-bold tracking-tight">Sign in to keep going</h2>
-                <p className="mb-6 max-w-md text-sm text-muted-foreground leading-relaxed">
-                  Free account. Save your progress, complete the practice tasks and earn your certificate.
-                </p>
-                <InlineSignIn />
+              ))}
+            </div>
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-transparent to-background" />
+            <div className="relative -mt-24 flex flex-col items-center text-center">
+              <div className="mb-4 flex size-12 items-center justify-center rounded-full border border-accent/20 bg-accent/10 text-accent">
+                <Lock className="size-6" />
               </div>
-            </li>
-          )}
-        </ol>
+              <h2 className="mb-2 text-2xl font-bold tracking-tight">Sign in to keep going</h2>
+              <p className="mb-6 max-w-md text-sm text-muted-foreground leading-relaxed">
+                Free account. Save your progress, complete the practice tasks and earn your certificate.
+              </p>
+              <InlineSignIn />
+            </div>
+          </div>
+        )}
 
         {/* ── End-of-lesson assessment (scored) ───────────────────────────── */}
         {isSignedIn && lesson.endAssessment && hasEndAssessment && (
@@ -567,28 +653,25 @@ export function LessonView({
       <aside className="hidden xl:block">
         <nav aria-label="On this page" className="sticky top-24 py-10">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">On this page</p>
-          <ol className="space-y-1 border-l border-border">
-            {sections.map((section) => {
-              const done = completedKeys.has(section._key);
-              const active = activeKey === section._key;
-              return (
-                <li key={section._key}>
-                  <a
-                    href={`#${section.sectionId ?? section._key}`}
-                    className={`-ml-px flex items-center gap-2 border-l-2 py-1.5 pl-4 pr-2 text-sm transition-colors ${
-                      active ? "border-accent font-medium text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {done ? (
-                      <CheckCircle2 className="size-3.5 shrink-0 text-emerald-500" />
-                    ) : (
-                      <span className="size-3.5 shrink-0 rounded-full border border-border" />
-                    )}
-                    <span className="truncate">{section.title}</span>
-                  </a>
-                </li>
-              );
-            })}
+          <ol className="space-y-5">
+            {intro && (
+              <li>
+                <ol className="space-y-1 border-l border-border">{tocItem(intro, intro.title || "Introduction")}</ol>
+              </li>
+            )}
+            {parts.map((part) => (
+              <li key={part.key}>
+                <a
+                  href={`#part-${part.number}`}
+                  className="mb-1.5 block truncate text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Part {part.number}: {part.title}
+                </a>
+                <ol className="space-y-1 border-l border-border">
+                  {part.sections.map((section) => tocItem(section, section.title))}
+                </ol>
+              </li>
+            ))}
           </ol>
         </nav>
       </aside>
@@ -661,6 +744,8 @@ export function LessonView({
 
 function SectionStep({
   number,
+  label,
+  headingAs: Heading = "h3",
   isLast,
   done,
   title,
@@ -672,7 +757,12 @@ function SectionStep({
   registerEnd,
   children,
 }: {
-  number: number;
+  /** A number, or an icon for the introduction. */
+  number: React.ReactNode;
+  /** e.g. "Part 1 · Section 2", shown above the title. */
+  label?: string;
+  /** h2 for the introduction (it sits beside the parts), h3 for a section inside a part. */
+  headingAs?: "h2" | "h3";
   isLast: boolean;
   done: boolean;
   title: string;
@@ -687,11 +777,13 @@ function SectionStep({
 }) {
   return (
     <li className="relative pl-12 pb-12">
-      {/* Rail */}
-      {!isLast && <span aria-hidden="true" className="absolute left-[15px] top-9 bottom-0 w-px bg-border" />}
+      {/* Rail: the number sits level with the title, below the label when there is one. */}
+      {!isLast && (
+        <span aria-hidden="true" className={`absolute left-[15px] bottom-0 w-px bg-border ${label ? "top-14" : "top-9"}`} />
+      )}
       <span
         aria-hidden="true"
-        className={`absolute left-0 top-0 grid size-8 place-items-center rounded-full border text-sm font-semibold transition-colors ${
+        className={`absolute left-0 grid size-8 ${label ? "top-5" : "top-0"} place-items-center rounded-full border text-sm font-semibold transition-colors ${
           done ? "border-emerald-500 bg-emerald-500 text-white" : "border-border bg-background text-muted-foreground"
         }`}
       >
@@ -699,15 +791,18 @@ function SectionStep({
       </span>
 
       <section id={anchor} className="scroll-mt-24" aria-labelledby={`${anchor}-title`}>
-        <div ref={registerHeading} data-section-heading={sectionKey} className="mb-4 flex flex-wrap items-baseline gap-x-3">
-          <h2 id={`${anchor}-title`} className="text-2xl font-semibold tracking-tight">
-            {title}
-          </h2>
-          {minutes ? (
-            <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-              <Clock className="size-3" /> {minutes} min
-            </span>
-          ) : null}
+        <div ref={registerHeading} data-section-heading={sectionKey} className="mb-4">
+          {label && <p className="mb-1 text-xs font-semibold uppercase leading-4 tracking-wider text-muted-foreground">{label}</p>}
+          <div className="flex flex-wrap items-baseline gap-x-3">
+            <Heading id={`${anchor}-title`} className="text-2xl font-semibold tracking-tight">
+              {title}
+            </Heading>
+            {minutes ? (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="size-3" /> {minutes} min
+              </span>
+            ) : null}
+          </div>
         </div>
         {children}
         {gateHint && !done && (
@@ -719,6 +814,17 @@ function SectionStep({
       </section>
     </li>
   );
+}
+
+type PartGroup = { key: string; number: number; title: string; intro?: string | null; sections: LessonSectionData[] };
+
+/** Attach each part's sections in reading order and number the parts, skipping empty ones. */
+function groupByPart(sections: LessonSectionData[], parts: LessonPartData[]): PartGroup[] {
+  const byKey = new Map(sections.map((s) => [s._key, s]));
+  return parts
+    .map((part) => ({ part, sections: part.sectionKeys.flatMap((key) => byKey.get(key) ?? []) }))
+    .filter((group) => group.sections.length > 0)
+    .map(({ part, sections: list }, i) => ({ key: part._key, number: i + 1, title: part.title, intro: part.intro, sections: list }));
 }
 
 /** What a learner still has to pass to finish a gated section. */

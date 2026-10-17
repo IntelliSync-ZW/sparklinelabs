@@ -1,115 +1,158 @@
 "use client";
 
-import { useState } from "react";
-import { CheckCircle2, CircleHelp, RotateCcw, XCircle } from "lucide-react";
+import { useId, useState } from "react";
+import { CircleHelp, RotateCcw } from "lucide-react";
+import {
+  Aside,
+  buttonPrimary,
+  buttonQuiet,
+  ChoiceList,
+  practiceFrame,
+  PracticeHeader,
+  ResultNote,
+} from "@/components/learn/interactive/practice-ui";
 
 type Option = { _key?: string; label?: string; isCorrect?: boolean; feedback?: string };
-type CheckpointValue = { question?: string; answerType?: "single" | "multiple"; options?: Option[] };
+type Question = {
+  _key?: string;
+  question?: string;
+  answerType?: "single" | "multiple";
+  options?: Option[];
+  /** Shown once the question is answered, right or wrong. */
+  feedback?: string;
+};
+type CheckpointValue = { questions?: Question[] };
 
 /**
- * A quick, ungraded question inside the reading. "One answer" gives instant
- * feedback on click; "Select all that apply" uses checkboxes and a Check button.
- * Blocks saved before the answer type existed fall back to counting right answers.
+ * A quick, ungraded check inside the reading: one or more questions with instant
+ * feedback. "One answer" questions use radios, "Select all that apply" ones use
+ * checkboxes; either way the learner picks, then checks.
  */
 export function CheckpointBlock({ value }: { value: CheckpointValue }) {
-  const options = value.options ?? [];
-  const multi = value.answerType ? value.answerType === "multiple" : options.filter((o) => o.isCorrect).length > 1;
-  const [picked, setPicked] = useState<number[]>([]);
+  const questions = (value.questions ?? []).filter((q) => (q.options?.length ?? 0) > 0);
+  // Right/wrong per answered question, by index. Cleared when the learner tries again.
+  const [results, setResults] = useState<Record<number, boolean>>({});
+  if (questions.length === 0) return null;
+
+  const many = questions.length > 1;
+  const answered = Object.keys(results).length;
+  const right = Object.values(results).filter(Boolean).length;
+
+  function record(index: number, correct: boolean | null) {
+    setResults((r) => {
+      const next = { ...r };
+      if (correct === null) delete next[index];
+      else next[index] = correct;
+      return next;
+    });
+  }
+
+  return (
+    <section data-practice aria-label="Quick check" className={practiceFrame}>
+      <PracticeHeader icon={CircleHelp} label="Quick check" meta={[many && `${questions.length} questions`]} />
+
+      <div className="divide-y divide-border">
+        {questions.map((q, i) => (
+          <div key={q._key ?? i} className="py-6 first:pt-0 last:pb-0">
+            <CheckpointQuestion
+              question={q}
+              position={many ? `Question ${i + 1} of ${questions.length}` : undefined}
+              onResult={(correct) => record(i, correct)}
+            />
+          </div>
+        ))}
+      </div>
+
+      {many && answered === questions.length && (
+        <p className="mt-6 text-sm font-medium text-foreground" aria-live="polite">
+          You got {right} of {questions.length} right.
+        </p>
+      )}
+    </section>
+  );
+}
+
+function CheckpointQuestion({
+  question,
+  position,
+  onResult,
+}: {
+  question: Question;
+  /** "Question 2 of 3", when the check has more than one question. */
+  position?: string;
+  /** Right or wrong once checked; null when the learner resets to try again. */
+  onResult: (correct: boolean | null) => void;
+}) {
+  const name = useId();
+  const options = question.options ?? [];
+  const ids = options.map((o, i) => o._key ?? String(i));
+  // Questions saved before the answer type existed fall back to counting right answers.
+  const multi = question.answerType ? question.answerType === "multiple" : options.filter((o) => o.isCorrect).length > 1;
+  const [picked, setPicked] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
 
-  const answered = multi ? checked : picked.length > 0;
-  const allCorrect =
-    answered &&
-    options.every((o, i) => Boolean(o.isCorrect) === picked.includes(i)) &&
-    picked.length === options.filter((o) => o.isCorrect).length;
+  const isCorrect = (id: string) => Boolean(options[ids.indexOf(id)]?.isCorrect);
+  const allCorrect = checked && ids.every((id) => isCorrect(id) === picked.includes(id));
 
-  function choose(i: number) {
-    if (answered && !multi) return;
-    if (multi) {
-      if (checked) return;
-      setPicked((p) => (p.includes(i) ? p.filter((x) => x !== i) : [...p, i]));
-    } else {
-      setPicked([i]);
-    }
+  function toggle(id: string) {
+    setPicked((p) => (multi ? (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]) : [id]));
+  }
+
+  function check() {
+    const correct = ids.every((id) => isCorrect(id) === picked.includes(id));
+    setChecked(true);
+    onResult(correct);
   }
 
   function reset() {
     setPicked([]);
     setChecked(false);
+    onResult(null);
   }
 
   return (
-    <section className="my-10 rounded-2xl border border-sky-500/30 bg-sky-500/5 p-5">
-      <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300">
-        <CircleHelp className="size-3.5" /> Quick check
-      </p>
-      <p className={`${multi ? "mb-1" : "mb-4"} text-lg font-medium leading-snug text-foreground`}>{value.question}</p>
-      {multi && <p className="mb-4 text-sm text-muted-foreground">Select all that apply.</p>}
+    <div>
+      {position && <p className="mb-1 text-xs text-muted-foreground">{position}</p>}
+      <p className="text-[1.0625rem] font-medium leading-snug text-foreground">{question.question}</p>
+      {multi && <p className="mt-0.5 text-sm text-muted-foreground">Select all that apply.</p>}
 
-      <div role={multi ? "group" : "radiogroup"} aria-label={value.question} className="space-y-2.5">
-        {options.map((option, i) => {
-          const isPicked = picked.includes(i);
-          const show = answered && (isPicked || (multi && option.isCorrect));
-          const correct = Boolean(option.isCorrect);
-          const tone = !show
-            ? "border-border bg-background hover:border-sky-500/50"
-            : correct
-              ? "border-emerald-500 bg-emerald-500/10"
-              : "border-red-500 bg-red-500/10";
-          return (
-            <div key={option._key ?? i}>
-              <button
-                type="button"
-                role={multi ? "checkbox" : "radio"}
-                aria-checked={isPicked}
-                onClick={() => choose(i)}
-                className={`flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${tone}`}
-              >
-                <span
-                  className={`mt-0.5 grid size-5 shrink-0 place-items-center border-2 ${
-                    multi ? "rounded" : "rounded-full"
-                  } ${isPicked ? "border-sky-500 bg-sky-500 text-white" : "border-muted-foreground/40"}`}
-                >
-                  {show ? (
-                    correct ? <CheckCircle2 className="size-4 text-emerald-500" /> : <XCircle className="size-4 text-red-500" />
-                  ) : isPicked ? (
-                    <span className="size-2 rounded-full bg-white" />
-                  ) : null}
-                </span>
-                <span className="text-foreground">{option.label}</span>
-              </button>
-              {show && isPicked && option.feedback && (
-                <p className="ml-12 mt-1.5 text-sm leading-relaxed text-muted-foreground">{option.feedback}</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <ChoiceList
+        className="mt-3"
+        name={name}
+        multiple={multi}
+        label={question.question}
+        options={options.map((o, i) => ({ id: ids[i], label: o.label }))}
+        selected={picked}
+        onToggle={toggle}
+        disabled={checked}
+        statusOf={(id) => (checked && picked.includes(id) ? (isCorrect(id) ? "correct" : "wrong") : undefined)}
+        noteOf={(id) => (checked && picked.includes(id) ? options[ids.indexOf(id)]?.feedback : undefined)}
+      />
 
-      <div className="mt-4 flex flex-wrap items-center gap-3" aria-live="polite">
-        {multi && !checked && (
-          <button
-            type="button"
-            disabled={picked.length === 0}
-            onClick={() => setChecked(true)}
-            className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sky-700 disabled:opacity-40"
-          >
+      <div className="mt-3 flex min-h-9 flex-wrap items-center gap-x-4 gap-y-2" aria-live="polite">
+        {!checked ? (
+          <button type="button" disabled={picked.length === 0} onClick={check} className={buttonPrimary}>
             Check answer
           </button>
-        )}
-        {answered && (
+        ) : (
           <>
-            <span className={`text-sm font-semibold ${allCorrect ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
-              {allCorrect ? "Correct!" : "Not quite. Have another look."}
-            </span>
+            <ResultNote tone={allCorrect ? "success" : "error"}>{allCorrect ? "Correct." : "Not quite."}</ResultNote>
             {!allCorrect && (
-              <button type="button" onClick={reset} className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground">
+              <button type="button" onClick={reset} className={buttonQuiet}>
                 <RotateCcw className="size-3.5" /> Try again
               </button>
             )}
           </>
         )}
       </div>
-    </section>
+
+      {checked && question.feedback && (
+        <div className="mt-3">
+          <Aside>
+            <p className="whitespace-pre-line">{question.feedback}</p>
+          </Aside>
+        </div>
+      )}
+    </div>
   );
 }

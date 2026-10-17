@@ -1,3 +1,4 @@
+import { INTRO_KEY } from "@/lib/learning/results";
 import { learningSeoProjection } from "./fragments";
 
 // ---------------------------------------------------------------------------
@@ -19,6 +20,15 @@ const taskInUse = (slot: string) =>
   `((${slot}.source == "library" && defined(${slot}.ref)) || (!(${slot}.source == "library") && defined(${slot}.inline.title)))`;
 const checkInUse = (slot: string) =>
   `((${slot}.source == "library" && defined(${slot}.ref)) || (!(${slot}.source == "library") && coalesce(count(${slot}.questions), 0) > 0))`;
+
+// Progress, gating and grading work on one flat, ordered list of sections: the
+// optional introduction (a field on the lesson, so it gets a fixed key), then every
+// part's sections in order.
+const lessonSections = `([select(count(introduction.content) > 0 => introduction {
+  ...,
+  "_key": "${INTRO_KEY}",
+  "sectionId": { "current": "introduction" }
+})] + body[defined(sections)].sections[])[defined(_key)]`;
 
 /** Task fields safe to send to the browser. */
 const publicTaskFields = `
@@ -144,7 +154,7 @@ export const lessonPageQuery = `
     videoUrl,
     transcript,
     "image": { "url": image.asset->url, "alt": image.alt, "caption": image.caption },
-    "sections": body[] {
+    "sections": ${lessonSections} {
       _key,
       title,
       "sectionId": sectionId.current,
@@ -153,6 +163,7 @@ export const lessonPageQuery = `
       "practice": select(${taskInUse("practice")} => practice ${publicTaskSlot}),
       "check": select(${checkInUse("check")} => check ${publicCheck})
     },
+    "parts": body[defined(sections)] { _key, title, intro, "sectionKeys": sections[]._key },
     "endAssessment": endAssessment {
       title,
       instructions,
@@ -228,8 +239,8 @@ export const moduleOverviewQuery = `
 export const lessonProgressContextQuery = `
   *[_type == "courseLesson" && _id == $lessonId][0] {
     _id,
-    "sectionKeys": body[]._key,
-    "sections": body[] {
+    "sectionKeys": ${lessonSections}._key,
+    "sections": ${lessonSections} {
       _key,
       "needsTask": ${taskInUse("practice")} && practice.required == true,
       "needsCheck": ${checkInUse("check")} && check.required == true
@@ -292,7 +303,7 @@ export const lessonAnswerKeysQuery = `
   *[_type == "courseLesson" && _id == $lessonId][0] {
     _id,
     "courseId": module->course._ref,
-    "sections": body[] {
+    "sections": ${lessonSections} {
       _key,
       "practice": select(${taskInUse("practice")} => practice ${answerKeyTaskSlot}),
       "check": select(${checkInUse("check")} => check {
@@ -333,7 +344,7 @@ export const courseScoringQuery = `
     "minimumScore": completionRules.minimumAssessmentScore,
     "lessons": *[_type == "courseLesson" && module->course._ref == ^._id && status in $statuses] {
       _id,
-      "sections": body[] {
+      "sections": ${lessonSections} {
         _key,
         "task": select(${taskInUse("practice")} && practice.required == true && practice.scored == true => {
           "points": select(practice.source == "library" => practice.ref->points, practice.inline.points),

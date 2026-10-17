@@ -273,12 +273,19 @@ export default async function LessonPage({
     endAssessment: prepared.endAssessment,
     sections: (prepared.sections ?? []).map((s) => ({
       _key: s._key,
-      title: s.title,
+      // The introduction's heading is optional; the view falls back to "Introduction".
+      title: s.title ?? "",
       sectionId: s.sectionId,
       estimatedMinutes: s.estimatedMinutes,
       content: s.content,
       practice: s.practice,
       check: s.check,
+    })),
+    parts: (lesson.parts ?? []).map((p) => ({
+      _key: p._key,
+      title: p.title,
+      intro: p.intro,
+      sectionKeys: p.sectionKeys ?? [],
     })),
   };
 

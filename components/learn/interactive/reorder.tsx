@@ -15,8 +15,8 @@ export function moveItem<T>(list: readonly T[], from: number, to: number): T[] {
 export type CellStatus = "correct" | "wrong" | undefined;
 
 const statusClass: Record<string, string> = {
-  correct: "border-emerald-500 bg-emerald-500/10",
-  wrong: "border-red-500 bg-red-500/10",
+  correct: "border-emerald-500/60 bg-emerald-500/[0.06]",
+  wrong: "border-red-500/60 bg-red-500/[0.06]",
   none: "border-border bg-background",
 };
 
@@ -72,9 +72,9 @@ export function ReorderCell({
           // Not one of ours (e.g. a file dragged in) - ignore.
         }
       }}
-      className={`flex h-full min-w-0 items-stretch gap-1 rounded-lg border p-1.5 transition-colors ${
+      className={`flex h-full min-w-0 items-stretch gap-1 rounded-md border p-1.5 transition-colors ${
         statusClass[status ?? "none"]
-      } ${over ? "ring-2 ring-accent" : ""} ${disabled ? "" : "cursor-grab active:cursor-grabbing"}`}
+      } ${over ? "border-accent ring-1 ring-accent" : ""} ${disabled ? "" : "cursor-grab active:cursor-grabbing"}`}
     >
       <GripVertical aria-hidden="true" className="my-auto size-4 shrink-0 text-muted-foreground/60" />
       <div className="min-w-0 flex-1 self-center px-1 text-sm leading-snug text-foreground break-words">{children}</div>
@@ -120,7 +120,7 @@ export function ReorderList({
     <ol className="space-y-2">
       {items.map((item, i) => (
         <li key={item.id} className="flex items-stretch gap-3">
-          <span className="grid w-7 shrink-0 place-items-center text-sm font-semibold text-muted-foreground">{i + 1}</span>
+          <span className="grid w-6 shrink-0 place-items-center text-sm tabular-nums text-muted-foreground">{i + 1}</span>
           <div className="min-w-0 flex-1">
             <ReorderCell
               column="list"

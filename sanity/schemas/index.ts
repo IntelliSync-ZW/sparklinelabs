@@ -20,7 +20,8 @@ import { courseSession } from "./courseSession";
 import { callout } from "./objects/callout";
 import { promptBlock } from "./objects/promptBlock";
 import { assessmentQuestionRef } from "./objects/assessmentQuestionRef";
-import { lessonSection } from "./objects/lessonSection";
+import { lessonIntro, lessonSection } from "./objects/lessonSection";
+import { lessonPart } from "./objects/lessonPart";
 import { inlineTask } from "./objects/inlineTask";
 import { taskSlot } from "./objects/taskSlot";
 import { knowledgeCheck } from "./objects/knowledgeCheck";
@@ -53,7 +54,9 @@ export const schemaTypes = [
   knowledgeCheck,
   assessmentTaskItem,
   lessonAssessment,
+  lessonPart,
   lessonSection,
+  lessonIntro,
   // Documents
   authorSchema,
   categorySchema,

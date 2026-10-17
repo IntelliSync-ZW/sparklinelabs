@@ -42,7 +42,7 @@ export function PromptBlock({ value }: { value: PromptValue }) {
   }
 
   return (
-    <figure className="my-9 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 text-zinc-100 shadow-lg">
+    <figure className="my-9 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 text-zinc-100">
       <figcaption className="flex items-center justify-between gap-3 border-b border-zinc-800 px-4 py-3">
         <span className="flex min-w-0 items-center gap-2 text-sm font-medium text-zinc-200">
           <MessageSquareText className="size-4 shrink-0 text-zinc-400" />
@@ -63,7 +63,7 @@ export function PromptBlock({ value }: { value: PromptValue }) {
           <button
             type="button"
             onClick={copy}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-900 transition-colors hover:bg-white"
+            className="inline-flex items-center gap-1.5 rounded-md bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-900 transition-colors hover:bg-white"
           >
             {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
             <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
@@ -73,7 +73,7 @@ export function PromptBlock({ value }: { value: PromptValue }) {
               href={openHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 px-3 py-1.5 text-xs font-semibold text-zinc-200 transition-colors hover:bg-zinc-800"
+              className="inline-flex items-center gap-1.5 rounded-md border border-zinc-700 px-3 py-1.5 text-xs font-semibold text-zinc-200 transition-colors hover:bg-zinc-800"
             >
               Open in {tool.label} <ExternalLink className="size-3.5" />
             </a>
@@ -88,7 +88,7 @@ export function PromptBlock({ value }: { value: PromptValue }) {
             What a good response looks like
             <span className="ml-auto text-xs text-zinc-500 group-open:hidden">Show</span>
           </summary>
-          <div className="mx-4 mb-4 rounded-xl rounded-tl-sm bg-zinc-800/70 px-4 py-3 text-sm leading-relaxed text-zinc-200">
+          <div className="mx-4 mb-4 rounded-md bg-zinc-800/70 px-4 py-3 text-sm leading-relaxed text-zinc-200">
             {value.expectedOutput}
           </div>
         </details>

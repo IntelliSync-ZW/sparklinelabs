@@ -119,7 +119,7 @@ export const moduleWithLessonsBySlugQuery = `
         "alt": image.alt,
         "caption": image.caption
       },
-      "sections": body[] {
+      "sections": body[defined(sections)].sections[] {
         _key,
         title,
         "sectionId": sectionId.current,

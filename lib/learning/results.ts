@@ -78,3 +78,6 @@ export type PassedGates = {
 
 /** Stands in for a section key on attempts at the end-of-lesson assessment. */
 export const END_KEY = "__lesson_end";
+
+/** The section key of a lesson's optional introduction, which is a field rather than an array item. */
+export const INTRO_KEY = "__intro";

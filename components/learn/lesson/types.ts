@@ -15,6 +15,14 @@ export type LessonSectionData = {
   check?: PublicCheck | null;
 };
 
+/** A headed group of sections ("Part 1"). Sections themselves live in `LessonViewData.sections`. */
+export type LessonPartData = {
+  _key: string;
+  title: string;
+  intro?: string | null;
+  sectionKeys: string[];
+};
+
 export type LessonResource = {
   _id: string;
   title: string;
@@ -42,7 +50,9 @@ export type LessonViewData = {
   keyTakeaways?: string[] | null;
   videoUrl?: string | null;
   image?: { url?: string | null; alt?: string | null; caption?: string | null } | null;
+  /** Every section across all parts, in reading order. */
   sections: LessonSectionData[];
+  parts: LessonPartData[];
   /** The scored assessment every lesson ends with. */
   endAssessment?: PublicEndAssessment | null;
   resources?: LessonResource[] | null;

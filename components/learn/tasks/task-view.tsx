@@ -2,11 +2,10 @@
 
 import { useMemo, useState } from "react";
 import {
-  AlertCircle,
   CheckCircle2,
   CheckSquare,
+  ChevronRight,
   ClipboardList,
-  Clock,
   ListChecks,
   ListOrdered,
   Lightbulb,
@@ -20,6 +19,15 @@ import {
 } from "lucide-react";
 import type { GradeResult, ItemFeedback, TaskSubmission } from "@/lib/learning/results";
 import { Prose } from "@/components/learn/blocks/prose";
+import {
+  Aside,
+  buttonPrimary,
+  buttonQuiet,
+  buttonSecondary,
+  practiceFrame,
+  PracticeHeader,
+  ResultNote,
+} from "@/components/learn/interactive/practice-ui";
 import { taskKinds, type Feedback } from "./task-bodies";
 import type { PublicTask } from "./types";
 
@@ -91,78 +99,49 @@ export function TaskView({
     setHintsShown(0);
   }
 
+  const selfChecked = task.taskType === "written" || task.taskType === "prompt_practice" || task.taskType === "checklist";
+
   return (
-    <section className="my-10 overflow-hidden rounded-2xl border-2 border-accent/30 bg-card shadow-sm" aria-label={`${heading}: ${task.title ?? meta.label}`}>
-      {/* Header */}
-      <header className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-accent/20 bg-accent/10 px-5 py-3">
-        <span className="grid size-9 place-items-center rounded-lg bg-accent text-accent-foreground">
-          <meta.Icon className="size-5" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-accent">
-            {heading} · {meta.label}
-          </p>
-          <h3 className="truncate text-lg font-semibold leading-tight text-foreground">{task.title}</h3>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
-          <span
-            className={`rounded-full px-2.5 py-1 ${
-              required ? "bg-accent text-accent-foreground" : "bg-secondary text-muted-foreground"
-            }`}
-          >
-            {required ? "Required" : "Optional"}
-          </span>
-          {scored && <span className="rounded-full border border-accent/40 px-2.5 py-1 text-accent">Scored</span>}
-          {task.estimatedMinutes ? (
-            <span className="inline-flex items-center gap-1 text-muted-foreground">
-              <Clock className="size-3.5" /> {task.estimatedMinutes} min
-            </span>
-          ) : null}
-          {initiallyPassed && !passed && (
+    <section data-practice className={practiceFrame} aria-label={`${heading}: ${task.title ?? meta.label}`}>
+      <PracticeHeader
+        icon={meta.Icon}
+        label={`${heading} · ${meta.label}`}
+        meta={[
+          required ? "Required" : "Optional",
+          scored && "Scored",
+          task.estimatedMinutes ? `${task.estimatedMinutes} min` : null,
+          initiallyPassed && !passed && (
             <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-              <CheckCircle2 className="size-3.5" /> Completed
+              <CheckCircle2 className="size-3.5" aria-hidden="true" /> Completed
             </span>
-          )}
-        </div>
-      </header>
+          ),
+        ]}
+        title={task.title}
+        subtitle={task.objective}
+      />
 
-      <div className="space-y-5 px-5 py-5">
-        {task.objective && (
-          <p className="text-base font-medium leading-snug text-foreground">
-            <span className="text-accent">Goal · </span>
-            {task.objective}
-          </p>
-        )}
-
+      <div className="space-y-5">
         {task.context && (
-          <div className="text-[0.97rem] [&_p]:text-[0.97rem] [&_p]:leading-7">
+          <div className="[&_p]:text-[0.97rem] [&_p]:leading-7">
             <Prose value={task.context} />
           </div>
         )}
 
         {task.steps && task.steps.length > 0 && (
-          <ol className="space-y-2.5 rounded-xl bg-secondary/50 p-4">
-            {task.steps.map((step, i) => (
-              <li key={step._key} className="flex gap-3">
-                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-xs font-bold text-accent-foreground">
-                  {i + 1}
-                </span>
-                <span className="text-sm leading-relaxed">
-                  <span className="font-medium text-foreground">{step.title}</span>
-                  {step.detail && <span className="block text-muted-foreground">{step.detail}</span>}
-                </span>
+          <ol className="list-decimal space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed marker:text-muted-foreground">
+            {task.steps.map((step) => (
+              <li key={step._key} className="pl-1">
+                <span className="text-foreground">{step.title}</span>
+                {step.detail && <span className="block text-sm text-muted-foreground">{step.detail}</span>}
               </li>
             ))}
           </ol>
         )}
 
         {task.deliverable && (
-          <p className="flex gap-2 rounded-lg border border-dashed border-border px-4 py-2.5 text-sm">
-            <ClipboardList className="mt-0.5 size-4 shrink-0 text-accent" />
-            <span>
-              <span className="font-semibold">You&apos;ll hand in: </span>
-              {task.deliverable}
-            </span>
+          <p className="text-sm leading-relaxed">
+            <span className="font-medium text-foreground">You&apos;ll hand in: </span>
+            <span className="text-muted-foreground">{task.deliverable}</span>
           </p>
         )}
 
@@ -173,89 +152,65 @@ export function TaskView({
         {hints.length > 0 && !passed && (
           <div className="space-y-2">
             {hints.slice(0, hintsShown).map((hint, i) => (
-              <p key={i} className="flex gap-2 rounded-lg bg-amber-500/10 px-4 py-2.5 text-sm leading-relaxed">
-                <Lightbulb className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
-                <span>
-                  <span className="font-semibold">Hint {i + 1}: </span>
-                  {hint}
-                </span>
-              </p>
+              <Aside key={i} tone="hint">
+                <span className="font-medium text-foreground">Hint {i + 1}. </span>
+                {hint}
+              </Aside>
             ))}
             {hintsShown < hints.length && (
-              <button
-                type="button"
-                onClick={() => setHintsShown((n) => n + 1)}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
-              >
-                <Lightbulb className="size-4" /> Show hint {hintsShown + 1} of {hints.length}
+              <button type="button" onClick={() => setHintsShown((n) => n + 1)} className={buttonQuiet}>
+                <Lightbulb className="size-3.5" /> Show hint {hintsShown + 1} of {hints.length}
               </button>
             )}
           </div>
         )}
 
-        {/* Result */}
-        <div aria-live="polite" className="space-y-3">
-          {result && !result.ok && (
-            <p className="flex items-start gap-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm">
-              <AlertCircle className="mt-0.5 size-4 shrink-0 text-red-500" />
-              {result.message ?? "That didn't work. Please try again."}
-            </p>
-          )}
-          {result?.ok && !result.passed && (
-            <p className="flex items-start gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm">
-              <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
-              <span>
-                <span className="font-semibold">{result.score}%: </span>
+        {/* Actions, then the result below them */}
+        <div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {passed ? (
+              <button type="button" onClick={reset} className={buttonSecondary}>
+                <RotateCcw className="size-4" /> Practise again
+              </button>
+            ) : signedIn ? (
+              <button type="button" onClick={submit} disabled={!ready || pending} className={buttonPrimary}>
+                {pending ? "Checking…" : selfChecked ? "Submit" : "Check answers"}
+              </button>
+            ) : (
+              <a href="#sign-in" className={buttonSecondary}>
+                <Lock className="size-4" /> Sign in to submit
+              </a>
+            )}
+            {!ready && !passed && signedIn && <span className="text-xs text-muted-foreground">Finish the task to submit it.</span>}
+          </div>
+          <div aria-live="polite" className="space-y-3 [&:not(:empty)]:mt-4">
+            {result && !result.ok && <ResultNote tone="error">{result.message ?? "That didn't work. Please try again."}</ResultNote>}
+            {result?.ok && !result.passed && (
+              <ResultNote tone="warning">
+                <span className="font-medium">{result.score}%. </span>
                 {result.message ?? "Not quite. Adjust your answers and try again."}
-              </span>
-            </p>
-          )}
-          {passed && result?.ok && (
-            <div className="space-y-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3">
-              <p className="flex items-center gap-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-                <CheckCircle2 className="size-5" />
-                {task.taskType === "written" || task.taskType === "prompt_practice" || task.taskType === "checklist"
-                  ? "Task complete"
-                  : `Task passed: ${result.score}%`}
-                {result.attempt > 1 && <span className="font-normal text-muted-foreground">· attempt {result.attempt}</span>}
-              </p>
-              {result.modelAnswer && (
-                <details className="rounded-lg border border-border bg-background">
-                  <summary className="cursor-pointer px-4 py-2.5 text-sm font-medium">Compare with the model answer</summary>
-                  <div className="px-4 pb-4">
-                    <Prose value={result.modelAnswer} />
-                  </div>
-                </details>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-wrap items-center gap-3">
-          {passed ? (
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
-            >
-              <RotateCcw className="size-4" /> Practise again
-            </button>
-          ) : signedIn ? (
-            <button
-              type="button"
-              onClick={submit}
-              disabled={!ready || pending}
-              className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {pending ? "Checking…" : task.taskType === "written" || task.taskType === "prompt_practice" || task.taskType === "checklist" ? "Submit" : "Check answers"}
-            </button>
-          ) : (
-            <a href="#sign-in" className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 text-sm font-semibold hover:bg-secondary/70">
-              <Lock className="size-4" /> Sign in to submit
-            </a>
-          )}
-          {!ready && !passed && signedIn && <span className="text-xs text-muted-foreground">Finish the task to submit it.</span>}
+              </ResultNote>
+            )}
+            {passed && result?.ok && (
+              <>
+                <ResultNote tone="success">
+                  <span className="font-medium">{selfChecked ? "Task complete" : `Task passed with ${result.score}%`}</span>
+                  {result.attempt > 1 && <span className="text-muted-foreground"> · attempt {result.attempt}</span>}
+                </ResultNote>
+                {result.modelAnswer && (
+                  <details className="group border-t border-border pt-3">
+                    <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden">
+                      <ChevronRight className="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden="true" />
+                      Compare with the model answer
+                    </summary>
+                    <div className="mt-3 pl-5.5">
+                      <Prose value={result.modelAnswer} />
+                    </div>
+                  </details>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </section>

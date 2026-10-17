@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, X } from "lucide-react";
+import { StatusMark } from "./practice-ui";
 import { moveItem, ReorderCell } from "./reorder";
 
 export type MatchingState = { keys: string[]; options: string[] };
@@ -39,12 +39,12 @@ export function MatchingBoard({
   return (
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground">
-        Reorder <strong className="text-foreground">both</strong> columns (drag a card, or use its arrows) until each
-        row pairs the right key with its option.
+        Reorder <strong className="font-medium text-foreground">both</strong> columns (drag an item, or use its arrows)
+        until each row pairs the right key with its option.
       </p>
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-x-2 gap-y-2 sm:gap-x-4">
-        <p className="px-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">{columns?.keyLabel || "Term"}</p>
-        <p className="px-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">{columns?.optionLabel || "Meaning"}</p>
+        <p className="px-2 text-xs font-medium text-muted-foreground">{columns?.keyLabel || "Term"}</p>
+        <p className="px-2 text-xs font-medium text-muted-foreground">{columns?.optionLabel || "Meaning"}</p>
 
         {state.keys.map((keyId, i) => {
           const status = rowStatus?.(keyId);
@@ -61,17 +61,8 @@ export function MatchingBoard({
                 onMove={(from, to) => onChange({ ...state, keys: moveItem(state.keys, from, to) })}
               >
                 <span className="flex items-start gap-2">
-                  {status && (
-                    <span
-                      className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded-full text-white ${
-                        status === "correct" ? "bg-emerald-500" : "bg-red-500"
-                      }`}
-                    >
-                      {status === "correct" ? <Check className="size-3" strokeWidth={3} /> : <X className="size-3" strokeWidth={3} />}
-                      <span className="sr-only">{status === "correct" ? "Correct match" : "Wrong match"}</span>
-                    </span>
-                  )}
-                  {keyLabels[keyId]}
+                  <span className="min-w-0 flex-1">{keyLabels[keyId]}</span>
+                  <StatusMark status={status} />
                 </span>
               </ReorderCell>
               <ReorderCell

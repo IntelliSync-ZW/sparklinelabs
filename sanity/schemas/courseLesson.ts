@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { removableObjectInput } from "../components/removable-object-input";
 
 export const courseLesson = defineType({
   name: "courseLesson",
@@ -153,12 +154,21 @@ export const courseLesson = defineType({
     }),
 
     defineField({
-      name: "body",
-      title: "Lesson Sections",
+      name: "introduction",
+      title: "Introduction (optional)",
       description:
-        "The lesson body is composed of ordered sections. Students progress through the lesson section by section. Each section title renders as an H2, with internal headings starting strictly at H3.",
+        "A section before Part 1, written here on the lesson. It takes the same blocks as any section and can have its own practice task and knowledge check.",
+      type: "lessonIntro",
+      components: { input: removableObjectInput("introduction") },
+    }),
+
+    defineField({
+      name: "body",
+      title: "Lesson Parts",
+      description:
+        "The lesson body is split into parts, each with a heading (H2) and its own ordered sections (H3). Learners see them as \"Part 1 · Section 1\" and progress section by section.",
       type: "array",
-      of: [{ type: "lessonSection" }],
+      of: [{ type: "lessonPart" }],
       validation: (Rule) => Rule.required().min(1),
     }),
 

@@ -18,7 +18,7 @@ function AnchoredHeading({
   className,
   children,
 }: {
-  as: "h3" | "h4";
+  as: "h4" | "h5";
   value: unknown;
   className: string;
   children: React.ReactNode;
@@ -40,23 +40,26 @@ function AnchoredHeading({
   );
 }
 
-/** Rich text for lesson bodies. Headings start at H3 (the section title is the H2). */
+/**
+ * Rich text for lesson bodies. The part title is the H2 and the section title the
+ * H3, so the editor's h3-h6 styles render one level lower (h6 is the floor).
+ */
 export const proseComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
       <p className="mb-5 text-[1.0625rem] leading-8 text-foreground/80 last:mb-0">{children}</p>
     ),
     h3: ({ children, value }) => (
-      <AnchoredHeading as="h3" value={value} className="mt-10 mb-3 text-xl font-semibold tracking-tight text-foreground">
+      <AnchoredHeading as="h4" value={value} className="mt-10 mb-3 text-xl font-semibold tracking-tight text-foreground">
         {children}
       </AnchoredHeading>
     ),
     h4: ({ children, value }) => (
-      <AnchoredHeading as="h4" value={value} className="mt-8 mb-2 text-lg font-semibold text-foreground">
+      <AnchoredHeading as="h5" value={value} className="mt-8 mb-2 text-lg font-semibold text-foreground">
         {children}
       </AnchoredHeading>
     ),
-    h5: ({ children }) => <h5 className="mt-6 mb-1 text-base font-semibold text-foreground">{children}</h5>,
+    h5: ({ children }) => <h6 className="mt-6 mb-1 text-base font-semibold text-foreground">{children}</h6>,
     h6: ({ children }) => (
       <h6 className="mt-6 mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{children}</h6>
     ),

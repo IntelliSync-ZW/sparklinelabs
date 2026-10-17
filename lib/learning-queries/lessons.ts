@@ -25,7 +25,7 @@ export const courseLessonBySlugQuery = `
     },
     videoUrl,
     transcript,
-    "sections": body[] {
+    "sections": body[defined(sections)].sections[] {
       ${lessonSectionProjection}
     },
     module-> {

@@ -5,7 +5,7 @@ import { TrashIcon } from "@sanity/icons";
 
 /**
  * Studio input for an optional object field (a section's task or knowledge check,
- * a lesson's project). Adds a "Remove" button that clears just this field, so an
+ * a lesson's introduction). Adds a "Remove" button that clears just this field, so an
  * author who starts one and changes their mind doesn't have to delete the whole
  * section. Studio has no built-in way to clear a nested object.
  */
@@ -16,7 +16,7 @@ export function removableObjectInput(label: string) {
     const hasValue = Boolean(value && Object.keys(value).some((key) => !key.startsWith("_")));
 
     const remove = useCallback(() => {
-      if (window.confirm(`Remove this ${label}? Everything entered in it will be cleared. The rest of the section stays.`)) {
+      if (window.confirm(`Remove this ${label}? Everything entered in it will be cleared; nothing else changes.`)) {
         onChange(unset());
       }
     }, [onChange]);
