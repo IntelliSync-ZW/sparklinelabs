@@ -33,6 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
+    ...(data.seo?.noIndex && { robots: { index: false, follow: true } }),
     alternates: { canonical: canonicalUrl },
     openGraph: {
       title,

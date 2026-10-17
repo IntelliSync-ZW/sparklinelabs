@@ -40,6 +40,12 @@ export function Header() {
               Services
             </Link>
             <Link
+              href="/pricing"
+              className="text-base text-foreground/80 hover:text-foreground transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
               href="/products"
               className="text-base text-foreground/80 hover:text-foreground transition-colors"
             >
@@ -110,6 +116,13 @@ export function Header() {
                 onClick={() => setIsOpen(false)}
               >
                 Services
+              </Link>
+              <Link
+                href="/pricing"
+                className="text-base text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Pricing
               </Link>
               <Link
                 href="/products"

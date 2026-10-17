@@ -12,8 +12,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.sparklinelabs.co.zw";
   const now = new Date();
 
-  let posts: { slug: string; category?: string; _updatedAt: string }[] = [];
-  let caseStudies: { slug: string; _updatedAt: string }[] = [];
+  let posts: { slug: string; category?: string; _updatedAt: string; noIndex?: boolean | null }[] = [];
+  let caseStudies: { slug: string; _updatedAt: string; noIndex?: boolean | null }[] = [];
   let categories: { slug: { current: string } }[] = [];
   let authors: { slug: string; _updatedAt: string }[] = [];
   let courses: {
@@ -24,12 +24,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     [posts, caseStudies, categories, authors] = await Promise.all([
-      sanityFetch<{ slug: string; category?: string; _updatedAt: string }[]>({
+      sanityFetch<typeof posts>({
         query: allPostSlugsWithCategoryQuery,
         tags: ["post"],
         revalidate: 3600,
       }),
-      sanityFetch<{ slug: string; _updatedAt: string }[]>({
+      sanityFetch<typeof caseStudies>({
         query: allCaseStudySlugsQuery,
         tags: ["caseStudy"],
         revalidate: 3600,
@@ -132,6 +132,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     },
     {
+      url: `${baseUrl}/pricing`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
       url: `${baseUrl}/work`,
       lastModified: now,
       changeFrequency: "weekly",
@@ -184,7 +190,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const caseStudyRoutes = caseStudies
-    .filter((c) => c.slug !== "propertyzone")
+    .filter((c) => c.slug !== "propertyzone" && !c.noIndex)
     .map((c) => ({
       url: `${baseUrl}/work/${c.slug}`,
       lastModified: new Date(c._updatedAt),
@@ -192,7 +198,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }));
 
-  const postRoutes = posts.map((p) => ({
+  const postRoutes = posts.filter((p) => !p.noIndex).map((p) => ({
     url: `${baseUrl}/blog/${p.category ?? "uncategorised"}/${p.slug}`,
     lastModified: new Date(p._updatedAt),
     changeFrequency: "monthly" as const,

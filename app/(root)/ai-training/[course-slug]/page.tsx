@@ -76,7 +76,7 @@ type Course = {
     allRequiredTasksPassed?: boolean;
   };
   modules?: Module[];
-  seo?: { title?: string; description?: string; ogImage?: string };
+  seo?: { title?: string; description?: string; ogImage?: string; noIndex?: boolean | null };
 };
 
 // ─── Rendering ───────────────────────────────────────────────────────────────
@@ -98,8 +98,10 @@ export async function generateMetadata({
   return {
     title: course.seo?.title ?? `${course.title || FALLBACK_COURSE_TITLE} | AI Training`,
     description,
-    // A course that isn't live yet shouldn't be indexed.
-    ...(course.status !== "published" && { robots: { index: false, follow: true } }),
+    // A course that isn't live yet, or is marked noIndex in Sanity, shouldn't be indexed.
+    ...((course.status !== "published" || course.seo?.noIndex) && {
+      robots: { index: false, follow: true },
+    }),
     alternates: {
       canonical: `https://www.sparklinelabs.co.zw/ai-training/${slug}`,
     },

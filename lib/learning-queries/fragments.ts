@@ -2,7 +2,7 @@
 // Reusable Learning & Course Projections
 // ---------------------------------------------------------------------------
 
-export const learningSeoProjection = `"seo": seo { title, description, "ogImage": ogImage.asset->url }`;
+export const learningSeoProjection = `"seo": seo { title, description, "ogImage": ogImage.asset->url, noIndex }`;
 
 export const learningHeroImageProjection = `"heroImage": { "url": heroImage.asset->url, "alt": heroImage.alt }`;
 

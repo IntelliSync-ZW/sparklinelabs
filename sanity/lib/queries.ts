@@ -2,7 +2,7 @@
 // Shared projection fragments
 // ---------------------------------------------------------------------------
 
-const seoProjection = `"seo": seo { title, description, "ogImage": ogImage.asset->url }`;
+const seoProjection = `"seo": seo { title, description, "ogImage": ogImage.asset->url, noIndex }`;
 
 const heroImageProjection = `"heroImage": { "url": heroImage.asset->url, "alt": heroImage.alt }`;
 
@@ -144,7 +144,8 @@ export const allCaseStudiesQuery = `
 export const allCaseStudySlugsQuery = `
   *[_type == "caseStudy" && defined(slug.current)] {
     "slug": slug.current,
-    _updatedAt
+    _updatedAt,
+    "noIndex": seo.noIndex
   }`;
 
 export const caseStudyBySlugQuery = `
@@ -207,7 +208,8 @@ export const allPostSlugsWithCategoryQuery = `
   *[_type == "post" && defined(slug.current) && defined(category)] {
     "slug": slug.current,
     "category": category->slug.current,
-    _updatedAt
+    _updatedAt,
+    "noIndex": seo.noIndex
   }`;
 
 /** Legacy redirect: minimal fetch to resolve category from slug only */

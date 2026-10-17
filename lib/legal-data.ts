@@ -37,6 +37,7 @@ export type LegalPageData = {
     description?: string;
 
     ogImage?: string;
+    noIndex?: boolean | null;
   };
 };
 

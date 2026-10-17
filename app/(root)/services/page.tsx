@@ -8,6 +8,7 @@ import { servicesPageQuery } from "@/sanity/lib/queries";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 import { FaqSection } from "@/components/faq";
 import { servicesFaqs } from "@/lib/constants";
+import { ENGAGEMENTS } from "@/lib/pricing";
 
 type ServiceItem = {
   stepNumber: string;
@@ -27,6 +28,7 @@ type ServicesPageData = {
     title?: string;
     description?: string;
     ogImage?: string;
+    noIndex?: boolean | null;
   };
 };
 
@@ -136,6 +138,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
+    ...(seo?.noIndex && { robots: { index: false, follow: true } }),
     alternates: { canonical: "https://www.sparklinelabs.co.zw/services" },
     openGraph: {
       title,
@@ -281,6 +284,7 @@ export default async function ServicesPage() {
                 service.id,
                 service.stepNumber,
               );
+              const engagement = ENGAGEMENTS.find((e) => e.href === detailHref);
 
               return (
                 <div
@@ -312,6 +316,19 @@ export default async function ServicesPage() {
                       className="text-base md:text-lg text-muted-foreground leading-relaxed typeset"
                       dangerouslySetInnerHTML={{ __html: service.description }}
                     />
+                    {engagement && (
+                      <p className="mt-6 pt-5 border-t border-border flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                        <span className="text-xl font-semibold tracking-tight text-foreground tabular-nums">
+                          {engagement.startingPrice}
+                        </span>
+                        <Link
+                          href={`/pricing#${engagement.id}`}
+                          className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+                        >
+                          See what affects the price
+                        </Link>
+                      </p>
+                    )}
                     {detailHref && (
                       <div className="mt-6">
                         <Button
@@ -364,6 +381,37 @@ export default async function ServicesPage() {
         </div>
       </section>
 
+      {/* Paid marketing */}
+      <section className="py-20 md:py-28 px-6 border-t border-border">
+        <div className="container mx-auto max-w-3xl space-y-6">
+          <p className="text-base uppercase tracking-widest text-muted-foreground">
+            On paid marketing
+          </p>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-balance">
+            We do not run your ads. We make them measurable.
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+            We do not currently offer Google Ads or other paid content
+            marketing. What our systems engineering provides is the foundation
+            paid marketing needs to be sound: campaign and platform attribution,
+            so every enquiry can be traced back to the campaign and platform it
+            came from.
+          </p>
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+            Whether the ads are run by your internal marketing team or a
+            third-party agency, the business can see which campaigns and
+            platforms are producing results, and decide where to spend more.
+          </p>
+          <Link
+            href="/blog/seo-and-digital-strategy/seo-reporting-zimbabwe-decision-support-ga4-search-console"
+            className="text-base md:text-lg text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 inline-flex items-start gap-2"
+          >
+            The Measurement Stack That Connects Rankings to Revenue
+            <ArrowRight className="h-4 w-4 mt-1.5 shrink-0" />
+          </Link>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 md:py-32 px-6 bg-foreground text-background">
         <div className="max-w-4xl mx-auto text-center">
@@ -385,6 +433,17 @@ export default async function ServicesPage() {
                 Tell us what isn&apos;t working
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="group text-base px-8 bg-transparent border-background/30 text-background hover:bg-background/10"
+              asChild
+            >
+              <Link href="/pricing">
+                See pricing
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
             </Button>
             <Button
               size="lg"

@@ -179,6 +179,7 @@ export const lessonPageQuery = `
       "slug": slug.current,
       status,
       accessLevel,
+      "noIndex": seo.noIndex,
       ${curriculumProjection}
     },
     ${learningSeoProjection}
@@ -214,6 +215,7 @@ export const moduleOverviewQuery = `
       "slug": slug.current,
       status,
       accessLevel,
+      "noIndex": seo.noIndex,
       ${curriculumProjection}
     }
   }
@@ -356,14 +358,18 @@ export const courseScoringQuery = `
   }
 `;
 
-/** Published courses, modules and lessons - for the sitemap. */
+/**
+ * Published, indexable courses, modules and lessons - for the sitemap.
+ * A noIndex course drops its modules and lessons with it; a noIndex lesson
+ * drops only itself. Modules have no SEO settings, so they follow their course.
+ */
 export const learningSitemapQuery = `
-  *[_type == "course" && status == "published" && defined(slug.current)] {
+  *[_type == "course" && status == "published" && defined(slug.current) && seo.noIndex != true] {
     "slug": slug.current,
     _updatedAt,
     "modules": *[_type == "courseModule" && course._ref == ^._id && defined(slug.current)] | order(number asc) {
       "slug": slug.current,
-      "lessons": *[_type == "courseLesson" && module._ref == ^._id && status == "published" && defined(slug.current)] | order(order asc) {
+      "lessons": *[_type == "courseLesson" && module._ref == ^._id && status == "published" && defined(slug.current) && seo.noIndex != true] | order(order asc) {
         "slug": slug.current,
         _updatedAt
       }

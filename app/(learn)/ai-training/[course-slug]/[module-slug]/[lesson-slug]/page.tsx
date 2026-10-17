@@ -42,9 +42,10 @@ type LessonPageData = LessonViewData & {
     title: string;
     slug: string;
     status?: string | null;
+    noIndex?: boolean | null;
     modules: CurriculumModule[];
   };
-  seo?: { title?: string; description?: string } | null;
+  seo?: { title?: string; description?: string; noIndex?: boolean | null } | null;
 };
 
 async function loadLesson(params: Params) {
@@ -82,6 +83,10 @@ export async function generateMetadata({
   return {
     title: lesson.seo?.title ?? `${lesson.title} | ${lesson.course.title}`,
     description,
+    // A noIndex course hides all of its lessons; a lesson can also opt out on its own.
+    ...((lesson.seo?.noIndex || lesson.course.noIndex) && {
+      robots: { index: false, follow: true },
+    }),
     alternates: { canonical: url },
     openGraph: {
       title: `${lesson.title} | ${lesson.course.title}`,

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/hero";
 import { Problem } from "@/components/problem";
 import { Services } from "@/components/services";
+import { PricingSnapshot } from "@/components/pricing-snapshot";
 import { Products } from "@/components/products";
 import { Process } from "@/components/process";
 import { WhySparkline } from "@/components/why-sparkline";
@@ -153,6 +154,7 @@ export default function Home() {
       <Hero />
       <Problem />
       <Services />
+      <PricingSnapshot />
       <Suspense fallback={<ProductsSkeleton />}>
         <Products />
       </Suspense>

@@ -57,7 +57,7 @@ export const servicesFaqs = [
     answer: `
       <p>You do not need to know which service you need before speaking to us. The starting point is the business problem, not the name of the technology you think will solve it.</p>
 
-      <p>If an existing process is being held together by spreadsheets, WhatsApp messages and manual work, we may recommend <a href="/services#integrations-automation">integration and automation</a>. If the business needs a system that existing software cannot provide, we may recommend a <a href="/services#systems-engineering">custom platform</a>. If you already have software that works but has become difficult to maintain or extend, <a href="/services#technical-modernisation">technical modernisation</a> may be more appropriate. And where the problem is still unclear, we start with <a href="/services#solution-architecture">solution architecture</a> to understand the workflow and determine what should actually be built.</p>
+      <p>If an existing process is being held together by spreadsheets, WhatsApp messages and manual work, we may recommend <a href="/services#integration-automation">integration and automation</a>. If the business needs a system that existing software cannot provide, we may recommend a <a href="/services#systems-engineering">custom platform</a>. If you already have software that works but has become difficult to maintain or extend, <a href="/services#technical-modernisation">technical modernisation</a> may be more appropriate. And where the problem is still unclear, we start with <a href="/services#solution-architecture">solution architecture</a> to understand the workflow and determine what should actually be built.</p>
 
       <p>That is intentional. We would rather recommend the smallest intervention that solves the actual problem than start with a predetermined technology package.</p>
     `,
@@ -144,6 +144,26 @@ export const servicesFaqs = [
     <p>The same principle applies to pricing. We do not add a discovery fee simply because it is our standard process. The cost and structure of an engagement depend on the amount of uncertainty, the complexity of the problem and the work required before implementation can be properly defined.</p>
 
     <p>Our approach is therefore <strong>proportionate to the problem</strong>: understand what needs to be understood, prove what needs to be proven, and only spend time on discovery where it creates genuine value. This is consistent with our broader <a href="/services">solutions engineering approach</a>, where we determine whether a project needs architecture work, a pilot, integration, custom development or technical modernisation before deciding how the engagement should proceed.</p>
+  `,
+  },
+  {
+    question: "Do you run Google Ads or other paid marketing?",
+    answer: `
+    <p>Not currently. What we do is build the foundation that paid marketing depends on. Every system we build includes campaign and platform attribution, so each enquiry can be traced back to the campaign and platform that produced it.</p>
+
+    <p>That means whether your own marketing team or a third-party agency runs the ads, the business can see which campaigns and platforms are working and decide where to spend more. We explain the measurement side in <a href="/blog/seo-and-digital-strategy/seo-reporting-zimbabwe-decision-support-ga4-search-console">The Measurement Stack That Connects Rankings to Revenue</a>.</p>
+  `,
+  },
+  {
+    question: "How much do Sparkline Labs services cost?",
+    answer: `
+    <p>Every engagement has a starting price, but the final figure depends on system complexity, how well existing systems are documented and what the business actually needs.</p>
+
+    <p>As a guide, solution architecture starts at $300, websites at $350, websites with a lead system at $750, internal business systems at $1,000, integration and automation at $500, and technical modernisation at $750. Search visibility and AI discovery starts at $250 a month plus an agreed budget for activities such as link building, and team training starts at $150 per one-hour session.</p>
+
+    <p>Build prices are once off and include two months of free support and bug fixes. Ongoing maintenance starts at $150 a month after that. Domains, hosting and email are not included; they are registered in the business's name and paid to the providers directly.</p>
+
+    <p>The <a href="/pricing">pricing page</a> sets out what each starting price covers and what moves it higher.</p>
   `,
   },
 ];

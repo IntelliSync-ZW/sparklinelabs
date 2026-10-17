@@ -47,6 +47,12 @@ export function Footer() {
                 Services
               </Link>
               <Link
+                href="/pricing"
+                className="hover:text-accent transition-colors"
+              >
+                Pricing
+              </Link>
+              <Link
                 href="/products"
                 className="hover:text-accent transition-colors"
               >
@@ -57,12 +63,6 @@ export function Footer() {
                 className="hover:text-accent transition-colors"
               >
                 Work
-              </Link>
-              <Link
-                href="/blog"
-                className="hover:text-accent transition-colors"
-              >
-                Blog
               </Link>
               <Link
                 href="/blog/authors"
@@ -84,6 +84,12 @@ export function Footer() {
                 className="hover:text-accent transition-colors"
               >
                 AI Training
+              </Link>
+              <Link
+                href="/blog"
+                className="hover:text-accent transition-colors"
+              >
+                Blog
               </Link>
             </div>
           </div>

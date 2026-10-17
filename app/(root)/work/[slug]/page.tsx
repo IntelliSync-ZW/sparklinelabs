@@ -57,7 +57,7 @@ type CaseStudy = {
   testimonialAuthor?: string;
   productRef?: { name: string; slug: { current: string }; href: string };
   authors?: ArticleAuthor[];
-  seo?: { title?: string; description?: string; ogImage?: string };
+  seo?: { title?: string; description?: string; ogImage?: string; noIndex?: boolean | null };
 };
 
 type Props = { params: Promise<{ slug: string }> };
@@ -96,6 +96,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: study.seo?.title ?? study.title,
     description: study.seo?.description ?? study.summary,
+    ...(study.seo?.noIndex && { robots: { index: false, follow: true } }),
     alternates: { canonical: `${baseUrl}/work/${slug}` },
     openGraph: {
       title: study.seo?.title ?? study.title,

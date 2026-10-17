@@ -66,7 +66,7 @@ type Post = {
   }[];
   body?: unknown[];
   authors?: ArticleAuthor[];
-  seo?: { title?: string; description?: string; ogImage?: string };
+  seo?: { title?: string; description?: string; ogImage?: string; noIndex?: boolean | null };
 };
 
 type Props = { params: Promise<{ category: string; slug: string }> };
@@ -112,6 +112,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.seo?.title ?? `${post.title}`,
     description: post.seo?.description ?? post.excerpt,
+    ...(post.seo?.noIndex && { robots: { index: false, follow: true } }),
     alternates: { canonical: canonicalUrl },
     openGraph: {
       title: post.seo?.title ?? post.title,

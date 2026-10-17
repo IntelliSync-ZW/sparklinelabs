@@ -58,6 +58,9 @@ function buildMessage(
   return lines.join("\n");
 }
 
+const inputClass =
+  "mt-1.5 block w-full rounded-lg border border-input bg-background px-3.5 py-3 text-base font-normal outline-none ring-offset-background placeholder:text-muted-foreground/60 focus:ring-2 focus:ring-ring aria-invalid:border-destructive";
+
 export function WhatsAppLeadCapture() {
   const [context, setContext] = useState<LeadContext | null>(null);
   const [name, setName] = useState("");
@@ -65,6 +68,7 @@ export function WhatsAppLeadCapture() {
   const [company, setCompany] = useState("");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
 
   useEffect(() => {
     const whatsappLinks =
@@ -86,6 +90,7 @@ export function WhatsAppLeadCapture() {
         originalMessage,
       });
       setError("");
+      setShowErrors(false);
       setName("");
       setPhone("");
       setCompany("");
@@ -182,6 +187,7 @@ export function WhatsAppLeadCapture() {
     event.preventDefault();
     if (!context) return;
     if (!name.trim() || !phone.trim()) {
+      setShowErrors(true);
       setError("Please enter your name and phone number to continue.");
       return;
     }
@@ -210,6 +216,8 @@ export function WhatsAppLeadCapture() {
 
   if (!context) return null;
 
+  const channelName = context.channel === "email" ? "email" : "WhatsApp";
+
   return (
     <div
       className="fixed inset-0 z-100 flex items-center justify-center bg-foreground/50 px-4 py-6"
@@ -229,8 +237,8 @@ export function WhatsAppLeadCapture() {
         >
           <X className="h-5 w-5" />
         </button>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Before {context.channel === "email" ? "email" : "WhatsApp"}
+        <p className="mb-2 text-base uppercase tracking-widest text-muted-foreground">
+          Before {channelName}
         </p>
         <h2
           id="lead-capture-title"
@@ -238,12 +246,47 @@ export function WhatsAppLeadCapture() {
         >
           How can we address you?
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Share your details and we&apos;ll be able to assist you better.
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+          So we know who we are speaking to when your message arrives.{" "}
+          {context.channel === "email"
+            ? "Your email app opens next."
+            : "WhatsApp opens next with your message ready to send."}
         </p>
 
-        <form onSubmit={saveAndContinue} className="mt-6 space-y-4">
-          <label className="block text-sm font-medium text-foreground">
+        <form onSubmit={saveAndContinue} noValidate className="mt-6 space-y-5">
+          <label className="block text-base font-medium text-foreground">
+            Your name
+            <input
+              required
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              autoComplete="name"
+              aria-invalid={showErrors && !name.trim()}
+              className={inputClass}
+            />
+          </label>
+          <label className="block text-base font-medium text-foreground">
+            Phone number
+            <input
+              required
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              autoComplete="tel"
+              type="tel"
+              inputMode="tel"
+              placeholder="+263 77 123 4567"
+              aria-invalid={showErrors && !phone.trim()}
+              aria-describedby="lead-phone-hint"
+              className={inputClass}
+            />
+            <span
+              id="lead-phone-hint"
+              className="mt-1.5 block text-base font-normal text-muted-foreground"
+            >
+              Include your country code so we can call back if needed.
+            </span>
+          </label>
+          <label className="block text-base font-medium text-foreground">
             Company{" "}
             <span className="font-normal text-muted-foreground">
               (optional)
@@ -252,59 +295,47 @@ export function WhatsAppLeadCapture() {
               value={company}
               onChange={(event) => setCompany(event.target.value)}
               autoComplete="organization"
-              className="mt-1.5 block w-full rounded-lg border border-input bg-background px-3.5 py-3 text-base outline-none ring-offset-background focus:ring-2 focus:ring-ring"
-            />
-          </label>
-          <label className="block text-sm font-medium text-foreground">
-            Name
-            <input
-              required
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              autoComplete="name"
-              className="mt-1.5 block w-full rounded-lg border border-input bg-background px-3.5 py-3 text-base outline-none ring-offset-background focus:ring-2 focus:ring-ring"
-            />
-          </label>
-          <label className="block text-sm font-medium text-foreground">
-            Phone number
-            <input
-              required
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              autoComplete="tel"
-              type="tel"
-              className="mt-1.5 block w-full rounded-lg border border-input bg-background px-3.5 py-3 text-base outline-none ring-offset-background focus:ring-2 focus:ring-ring"
+              className={inputClass}
             />
           </label>
           {error && (
-            <p role="alert" className="text-sm text-destructive">
+            <p role="alert" className="text-base text-destructive">
               {error}
             </p>
           )}
-          <div className="flex items-center justify-between gap-4 pt-2">
+          <div className="flex flex-col-reverse gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="button"
               onClick={skip}
-              className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
+              disabled={isSaving}
+              className="text-base text-muted-foreground underline underline-offset-4 hover:text-foreground disabled:opacity-50"
             >
-              Skip and continue directly
+              Skip and open {channelName}
             </button>
             <Button
               type="submit"
               size="lg"
               disabled={isSaving}
-              className="group bg-accent text-accent-foreground hover:bg-accent/90"
+              className="group w-full text-base bg-accent text-accent-foreground hover:bg-accent/90 sm:w-auto"
             >
-              {isSaving
-                ? "Saving..."
-                : context.channel === "email"
-                  ? "Save and email"
-                  : "Save and continue"}
+              {isSaving ? `Opening ${channelName}...` : "Continue"}
               {!isSaving && (
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               )}
             </Button>
           </div>
+          <p className="text-base text-muted-foreground">
+            We use these details to follow up on your enquiry. See our{" "}
+            <a
+              href="/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              privacy policy
+            </a>
+            .
+          </p>
         </form>
       </div>
     </div>

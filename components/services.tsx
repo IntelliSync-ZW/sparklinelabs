@@ -31,7 +31,7 @@ const STATIC_SERVICES: ServiceItem[] = [
   {
     stepNumber: "02",
     title: "Systems engineering",
-    href: "/services#systems-engineering",
+    href: "/services/systems-engineering",
     description:
       "We design and build the platforms, internal tools and business applications required to put the solution into operation.",
     color: "bg-neutral-200/80",
@@ -42,7 +42,7 @@ const STATIC_SERVICES: ServiceItem[] = [
   {
     stepNumber: "03",
     title: "Integration & automation",
-    href: "/services#integration-automation",
+    href: "/services/integration-automation",
     description:
       "We connect the tools you already use and automate repetitive work across WhatsApp, payments, spreadsheets, CRMs, email and other business systems.",
     color: "bg-neutral-800/80",
@@ -74,22 +74,22 @@ const getStyleForIndex = (index: number) => {
   return styles[index % styles.length];
 };
 
-const getServiceHref = (stepNumber: string, fallbackHref?: string) => {
-  if (fallbackHref) return fallbackHref;
-  switch (stepNumber) {
-    case "01":
-      return "/services/solution-architecture";
-    case "02":
-      return "/services#systems-engineering";
-    case "03":
-      return "/services#integration-automation";
-    case "04":
-      return "/services/search-visibility-ai-discovery";
-    case "05":
-      return "/services#technical-modernisation";
-    default:
-      return "/services";
-  }
+const DETAIL_HREF_BY_STEP: Record<string, string> = {
+  "01": "/services/solution-architecture",
+  "02": "/services/systems-engineering",
+  "03": "/services/integration-automation",
+  "04": "/services/search-visibility-ai-discovery",
+  "05": "/services/technical-modernisation",
+};
+
+// Every card goes straight to its service detail page. Older hrefs from Sanity
+// that point at an anchor on /services (e.g. /services#systems-engineering) are
+// rewritten to the matching detail page.
+const getServiceHref = (stepNumber: string, href?: string) => {
+  if (href?.startsWith("/services/")) return href;
+  const anchor = href?.match(/^\/services#(.+)$/)?.[1];
+  if (anchor) return `/services/${anchor}`;
+  return DETAIL_HREF_BY_STEP[stepNumber] ?? "/services";
 };
 
 export async function Services() {

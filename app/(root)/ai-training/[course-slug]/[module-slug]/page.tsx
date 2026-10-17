@@ -47,6 +47,7 @@ type ModuleOverview = {
     title: string;
     slug: string;
     status?: string | null;
+    noIndex?: boolean | null;
     modules: CurriculumModule[];
   };
 };
@@ -79,6 +80,8 @@ export async function generateMetadata({
   return {
     title: `${mod.title} | ${mod.course.title}`,
     description,
+    // Modules have no SEO settings of their own; they follow their course.
+    ...(mod.course.noIndex && { robots: { index: false, follow: true } }),
     alternates: { canonical: url },
     openGraph: {
       title: `${mod.title} | ${mod.course.title}`,
