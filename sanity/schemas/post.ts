@@ -1,5 +1,7 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
-import { DocumentTextIcon } from "@sanity/icons";
+import { CommentIcon, DocumentTextIcon, LinkIcon } from "@sanity/icons";
+import { REVIEW_COMMENT, countReviewComments } from "../../lib/member-posts/review-comments";
+import { ReviewCommentAnnotation } from "../components/review-comment-annotation";
 
 export const postSchema = defineType({
   name: "post",
@@ -99,8 +101,55 @@ export const postSchema = defineType({
       name: "body",
       title: "Body",
       type: "array",
+      // Review comments are notes to the author, never part of a published post
+      validation: (r) =>
+        r.custom((blocks) => {
+          const n = countReviewComments(blocks);
+          return n === 0
+            ? true
+            : `Remove the ${n} review comment${n === 1 ? "" : "s"} in the body before publishing.`;
+        }),
       of: [
-        { type: "block" },
+        defineArrayMember({
+          type: "block",
+          marks: {
+            annotations: [
+              // Sanity's default link, restated because listing annotations replaces the defaults
+              {
+                name: "link",
+                type: "object",
+                title: "Link",
+                icon: LinkIcon,
+                fields: [
+                  defineField({
+                    name: "href",
+                    title: "Link",
+                    type: "url",
+                    validation: (r) =>
+                      r.uri({ scheme: ["http", "https", "tel", "mailto"], allowRelative: true }),
+                  }),
+                ],
+              },
+              // Inline review notes for authors (Sanity's own comments need a paid plan)
+              {
+                name: REVIEW_COMMENT,
+                type: "object",
+                title: "Review comment",
+                icon: CommentIcon,
+                components: { annotation: ReviewCommentAnnotation },
+                fields: [
+                  defineField({
+                    name: "comment",
+                    title: "Comment for the author",
+                    type: "text",
+                    rows: 3,
+                    validation: (r) => r.required().max(2000),
+                  }),
+                ],
+              },
+            ],
+          },
+        }),
         {
           type: "image",
           options: { hotspot: true },
@@ -204,6 +253,40 @@ export const postSchema = defineType({
       type: "datetime",
     }),
     defineField({ name: "seo", title: "SEO", type: "seo" }),
+
+    // ── Author review (only shown on posts started from the author dashboard) ──
+    defineField({
+      name: "reviewStatus",
+      title: "Author review status",
+      description:
+        "Set to “Changes requested” (with a note) to hand the post back to its author.",
+      type: "string",
+      hidden: ({ document }) => !document?.reviewStatus,
+      options: {
+        list: [
+          { title: "Author is editing", value: "editing" },
+          { title: "Submitted for review", value: "submitted" },
+          { title: "Changes requested", value: "changes_requested" },
+        ],
+        layout: "radio",
+      },
+    }),
+    defineField({
+      name: "reviewNote",
+      title: "Note to author",
+      description:
+        "General feedback. To comment on specific text, select it in the body and use the comment button.",
+      type: "text",
+      rows: 3,
+      hidden: ({ document }) => !document?.reviewStatus,
+    }),
+    defineField({
+      name: "submittedAt",
+      title: "Submitted at",
+      type: "datetime",
+      readOnly: true,
+      hidden: ({ document }) => !document?.submittedAt,
+    }),
 
     // ── Analytics (Studio-only, not projected in frontend queries) ────────────
     defineField({

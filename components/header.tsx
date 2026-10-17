@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { SignInButton, Show, UserButton } from "@clerk/nextjs";
+import { SignInButton, Show } from "@clerk/nextjs";
+import { AccountMenu } from "@/components/account-menu";
 import { WHATSAPP_NUMBER, WHATSAPP_PROJECT_MESSAGE } from "@/lib/config";
 
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_PROJECT_MESSAGE}`;
@@ -83,7 +84,7 @@ export function Header() {
               </SignInButton>
             </Show>
             <Show when="signed-in">
-              <UserButton />
+              <AccountMenu />
             </Show>
 
             <Button
@@ -164,7 +165,7 @@ export function Header() {
                 </Show>
                 <Show when="signed-in">
                   <div className="flex items-center gap-2">
-                    <UserButton />
+                    <AccountMenu />
                     <span className="text-sm text-foreground/80">Account</span>
                   </div>
                 </Show>

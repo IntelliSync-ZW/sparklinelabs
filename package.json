@@ -16,6 +16,7 @@
     "@clerk/nextjs": "^7.9.10",
     "@clerk/ui": "^1.38.1",
     "@neondatabase/serverless": "^1.2.0",
+    "@portabletext/editor": "8.2.4",
     "@portabletext/react": "^6.2.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
@@ -34,8 +35,8 @@
     "next": "16.1.1",
     "next-sanity": "^12.4.5",
     "pg": "^8.23.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react": "19.2.9",
+    "react-dom": "19.2.9",
     "sanity": "^5.25.1",
     "sanity-plugin-stl-table": "^0.3.0",
     "server-only": "^0.0.1",
@@ -43,9 +44,11 @@
     "structured-table-cli": "^0.2.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "temporal-polyfill": "^1.0.6"
+    "temporal-polyfill": "^1.0.6",
+    "zod": "4.6.7"
   },
   "devDependencies": {
+    "@clerk/backend": "3.22.0",
     "@prisma/cli-engine": "0.6.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^20",

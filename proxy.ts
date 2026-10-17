@@ -1,5 +1,7 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
+// Auth checks live with the resources: dashboard pages (getAuthorAccessForPage),
+// server actions and the upload route (requireAuthor / getAuthorAccess).
 export default clerkMiddleware();
 
 export const config = {

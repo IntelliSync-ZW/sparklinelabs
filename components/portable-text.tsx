@@ -120,6 +120,8 @@ const components: Partial<PortableTextReactComponents> = {
         {children}
       </code>
     ),
+    // Editors' notes to the author: never shown to readers
+    reviewComment: ({ children }) => <>{children}</>,
     link: ({ value, children }) => {
       const href: string = value?.href ?? "#";
       const isExternal = href.startsWith("http") || href.startsWith("//");
